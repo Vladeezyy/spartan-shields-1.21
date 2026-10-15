@@ -47,8 +47,12 @@ public record ShieldBashPacket(InteractionHand hand, int entityId, boolean attac
 	public static void handle(final ShieldBashPacket packet, IPayloadContext ctx)
 	{
 		// Payload handlers run on the server thread
-		if(!(ctx.player() instanceof ServerPlayer player))
-			return;
+		if(ctx.player() instanceof ServerPlayer player)
+			handle(packet, player);
+	}
+	
+	public static void handle(final ShieldBashPacket packet, ServerPlayer player)
+	{
 		Entity victim = player.level().getEntity(packet.entityId);
 		
 		if(player.isBlocking())

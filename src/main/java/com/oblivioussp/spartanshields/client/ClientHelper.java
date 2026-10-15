@@ -38,7 +38,7 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
-@EventBusSubscriber(modid = ModSpartanShields.ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ModSpartanShields.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientHelper 
 {
 	// 1.20.1 registered the item properties from the item constructors; 1.21 wants them in client setup
