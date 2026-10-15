@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[4,)"
 license="${mod_license}"
-issueTrackerURL="https://github.com/ObliviousSpartan/SpartanShields/issues"
+issueTrackerURL="https://github.com/Vladeezyy/spartan-shields-1.21/issues"
 
 [[mods]]
 modId="${mod_id}"
