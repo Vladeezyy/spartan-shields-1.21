@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded"
+      ]
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/refined_obsidian"
+      }
+    }
+  ],
+  "group": "spartanshields:refined_obsidian_shields",
+  "key": {
+    "#": {
+      "tag": "c:ingots/refined_obsidian"
+    },
+    "O": {
+      "item": "spartanshields:wooden_basic_shield"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#O#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:refined_obsidian_basic_shield"
+  }
+}

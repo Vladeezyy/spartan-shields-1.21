@@ -1,0 +1,6 @@
+{
+  "parent": "spartanshields:item/basic_shield_base_blocking",
+  "textures": {
+    "layer0": "spartanshields:item/mekanism/osmium_basic_shield"
+  }
+}

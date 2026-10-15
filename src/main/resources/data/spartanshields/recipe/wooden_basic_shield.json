@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [],
+  "group": "spartanshields:wood_shields",
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "/": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#/#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:wooden_basic_shield"
+  }
+}

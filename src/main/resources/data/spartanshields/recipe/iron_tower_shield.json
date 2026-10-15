@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [],
+  "group": "spartanshields:iron_shields",
+  "key": {
+    "#": {
+      "tag": "c:ingots/iron"
+    },
+    "O": {
+      "item": "spartanshields:wooden_tower_shield"
+    }
+  },
+  "pattern": [
+    "###",
+    "#O#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:iron_tower_shield"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "values": [
+    "spartanshields:wooden_tower_shield",
+    "spartanshields:stone_tower_shield",
+    "spartanshields:copper_tower_shield",
+    "spartanshields:iron_tower_shield",
+    "spartanshields:golden_tower_shield",
+    "spartanshields:diamond_tower_shield",
+    "spartanshields:netherite_tower_shield",
+    "spartanshields:obsidian_tower_shield",
+    "spartanshields:tin_tower_shield",
+    "spartanshields:bronze_tower_shield",
+    "spartanshields:steel_tower_shield",
+    "spartanshields:silver_tower_shield",
+    "spartanshields:electrum_tower_shield",
+    "spartanshields:lead_tower_shield",
+    "spartanshields:nickel_tower_shield",
+    "spartanshields:invar_tower_shield",
+    "spartanshields:constantan_tower_shield",
+    "spartanshields:platinum_tower_shield",
+    "spartanshields:aluminum_tower_shield",
+    "spartanshields:signalum_tower_shield",
+    "spartanshields:lumium_tower_shield",
+    "spartanshields:enderium_tower_shield",
+    "spartanshields:manasteel_tower_shield",
+    "spartanshields:terrasteel_tower_shield",
+    "spartanshields:elementium_tower_shield",
+    "spartanshields:basic_mekanists_tower_shield",
+    "spartanshields:advanced_mekanists_tower_shield",
+    "spartanshields:elite_mekanists_tower_shield",
+    "spartanshields:ultimate_mekanists_tower_shield",
+    "spartanshields:dark_steel_riot_tower_shield",
+    {
+      "id": "mekanismtools:bronze_shield",
+      "required": false
+    },
+    {
+      "id": "mekanismtools:steel_shield",
+      "required": false
+    },
+    {
+      "id": "mekanismtools:lapis_lazuli_shield",
+      "required": false
+    },
+    {
+      "id": "mekanismtools:osmium_shield",
+      "required": false
+    },
+    {
+      "id": "mekanismtools:refined_glowstone_shield",
+      "required": false
+    },
+    {
+      "id": "mekanismtools:refined_obsidian_shield",
+      "required": false
+    }
+  ]
+}

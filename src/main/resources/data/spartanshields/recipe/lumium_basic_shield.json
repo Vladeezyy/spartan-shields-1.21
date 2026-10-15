@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "lumium"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/lumium"
+      }
+    }
+  ],
+  "group": "spartanshields:lumium_shields",
+  "key": {
+    "#": {
+      "tag": "c:ingots/lumium"
+    },
+    "O": {
+      "item": "spartanshields:wooden_basic_shield"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#O#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:lumium_basic_shield"
+  }
+}

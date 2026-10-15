@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [],
+  "group": "spartanshields:gold_shields",
+  "key": {
+    "#": {
+      "tag": "c:ingots/gold"
+    },
+    "O": {
+      "item": "spartanshields:wooden_basic_shield"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#O#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:golden_basic_shield"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "spartanshields:item/basic_shield_base_blocking",
+  "textures": {
+    "layer0": "spartanshields:item/invar_basic_shield"
+  }
+}

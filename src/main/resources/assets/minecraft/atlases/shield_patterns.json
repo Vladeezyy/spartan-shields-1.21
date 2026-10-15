@@ -1,0 +1,220 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/aluminum_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/aluminum_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/botania/elementium_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/botania/elementium_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/botania/manasteel_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/botania/manasteel_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/botania/terrasteel_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/botania/terrasteel_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/bronze_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/bronze_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/constantan_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/constantan_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/copper_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/copper_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/diamond_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/diamond_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/electrum_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/electrum_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/enderio/dark_steel_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/enderio/dark_steel_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/enderium_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/enderium_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/golden_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/golden_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/invar_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/invar_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/iron_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/iron_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/lead_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/lead_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/lumium_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/lumium_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/mekanism/mekanists_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/mekanism/mekanists_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/netherite_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/netherite_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/nickel_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/nickel_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/obsidian_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/obsidian_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/platinum_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/platinum_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/signalum_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/signalum_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/silver_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/silver_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/steel_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/steel_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/stone_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/stone_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/tin_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/tin_tower_shield_pattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/wooden_tower_shield_nopattern"
+    },
+    {
+      "type": "single",
+      "resource": "spartanshields:entity/wooden_tower_shield_pattern"
+    }
+  ]
+}

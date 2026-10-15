@@ -1,0 +1,7 @@
+{
+  "parent": "spartanshields:item/basic_shield_base",
+  "textures": {
+    "layer0": "spartanshields:item/enderio/dark_steel_riot_basic_shield_base",
+    "layer1": "spartanshields:item/enderio/dark_steel_riot_basic_shield_deactivated"
+  }
+}
