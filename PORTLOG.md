@@ -96,3 +96,18 @@ config file and textures are unchanged.
 - Spikes and Payback also trigger when the hit comes from behind (1.20.1 ran them on any attack while the shield was
   raised); Payback stores 50 % of the damage, at most 2 per level.
 - Item models keep the `minecraft:blocking` / `minecraft:disabled` property names.
+
+## Verified (2026-10-15)
+
+- `./gradlew build`: compiles without errors; jar `SpartanShields-neoforge-3.1.1+1.21.1.jar` (with the Apache license).
+- Dev server, fresh world: starts clean, no recipe / advancement / tag / enchantment errors; same with `-Pwith_mods`
+  (Mekanism 10.7.19, Ender IO 8.2.12: every item of their shield recipes exists).
+- Client scene (`tools/scenetest.sh`, 21 checks, 22 with Mekanism, all pass): shield bash through the real packet
+  (damage, stat, cooldown), bash out of reach refused, Spikes and Payback on a blocking survival player, banner recipe
+  and no second banner, shaped recipes, tin / Mekanism recipes only with their material / mod, enchanting table offers
+  Spikes / Firebrand / Payback / Unbreaking (not on the vanilla shield), powered shield charge rate and energy per damage,
+  durability from the config, Mekanism upgrade recipe carrying the energy over (1 600 000 / 1 600 000 FE).
+  Screenshots: all 64 shields in item frames, tower shields with banners on armor stands, creative tab and tooltip,
+  first-person blocking and a bash.
+- Release jar on real NeoForge servers 21.1.259 and 21.1.197 (`prodtest/serve.sh`): starts clean.
+- Not run: Botania (no 1.21.1 build), the alternate bash key, a dedicated client joining the server.
