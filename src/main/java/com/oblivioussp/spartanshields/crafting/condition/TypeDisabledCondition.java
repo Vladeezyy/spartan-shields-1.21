@@ -58,6 +58,11 @@ public record TypeDisabledCondition(List<String> types) implements ICondition
 		return CODEC;
 	}
 	
+	public static boolean isDisabled(String type)
+	{
+		return disabledRecipeTypes.contains(type);
+	}
+	
 	public static void clear()
 	{
 		disabledRecipeTypes.clear();

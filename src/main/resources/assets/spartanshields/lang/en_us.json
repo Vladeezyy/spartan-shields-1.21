@@ -95,7 +95,7 @@
   "tooltip.spartanshields.dev.unimplemented": "Not Yet Implemented!",
   "tooltip.spartanshields.protection": "Max Protection: %d",
   "tooltip.spartanshields.shield_bash": "Shield Bash: %s",
-  "tooltip.spartanshields.shield_bash.value": "Block + [%s]",
+  "tooltip.spartanshields.shield_bash.value": "Block + %s [%s]",
   "tooltip.spartanshields.shield_bash_target_single": "Target: Single",
   "tooltip.spartanshields.shield_bash_target_multiple": "Target: Sweep",
   "tooltip.spartanshields.payback_bonus": "Payback Damage Bonus: %f",

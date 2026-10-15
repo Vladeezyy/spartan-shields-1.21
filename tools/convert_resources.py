@@ -159,10 +159,25 @@ def main(upstream, out):
     gen_data = os.path.join(gen_res, 'data')
     recipe_conditions = {}
     rdir = os.path.join(gen_data, MOD, 'recipes')
-    for name in sorted(os.listdir(rdir)):
-        d = recipe(load(os.path.join(rdir, name)))
-        recipe_conditions[MOD + ':' + name[:-5]] = d.get('neoforge:conditions')
-        dump(os.path.join(out, 'data', MOD, 'recipe', name), d)
+    recipes = {name[:-5]: recipe(load(os.path.join(rdir, name))) for name in sorted(os.listdir(rdir))}
+    # 1.20.1 had no banner recipe for the Dark Steel Riot Tower Shield, although its renderer has a pattern texture
+    recipes['dark_steel_riot_tower_shield_banner'] = {'type': MOD + ':apply_banner', 'shield': MOD + ':dark_steel_riot_tower_shield'}
+    for name, d in recipes.items():
+        conds = d.get('neoforge:conditions')
+        # Issue #1 (vanilla_only has no effect): the Botania and Ender IO recipes lacked the "modded" type, so
+        # vanilla_only left them on
+        if conds and any(c['type'] == 'neoforge:mod_loaded' for c in conds) and not any(c['type'] == MOD + ':type_disabled' for c in conds):
+            conds.insert(0, {'type': MOD + ':type_disabled', 'disabled': ['modded']})
+    for name, d in recipes.items():
+        if d['type'] == MOD + ':apply_banner':
+            # Issue #6: the banner recipe of a shield that cannot be made (mod missing, material missing, type disabled)
+            # stayed in the game and in JEI; it now has the conditions of the shield's own recipe
+            shield = d['shield'].split(':', 1)[1]
+            own = recipes.get(shield) or recipes.get(shield + '_smithing')
+            if own and own.get('neoforge:conditions'):
+                d = {'type': d['type'], 'neoforge:conditions': own['neoforge:conditions'], 'shield': d['shield']}
+        recipe_conditions[MOD + ':' + name] = d.get('neoforge:conditions')
+        dump(os.path.join(out, 'data', MOD, 'recipe', name + '.json'), d)
 
     adir = os.path.join(gen_data, MOD, 'advancements')
     for root, _, files in os.walk(adir):

@@ -154,7 +154,8 @@ public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield
 	public int receiveFE(ItemStack container, int maxReceive, boolean simulate) 
 	{
 		int energy = getFEStored(container);
-		int energyReceived = Math.min(energyCapacity - energy, Math.min(this.maxEnergyReceive, maxReceive));
+		// 1.20.1 took a negative amount too, which drained the shield (the energy API only promises non-negative values)
+		int energyReceived = Math.max(0, Math.min(energyCapacity - energy, Math.min(this.maxEnergyReceive, maxReceive)));
 
 		if (!simulate)
 		{

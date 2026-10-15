@@ -1,4 +1,5 @@
 {
   "key.spartanshields.alt_shield_bash": "Alternate Shield Bash",
-  "key.spartanshields.category": "Spartan Shields"
+  "key.spartanshields.category": "Spartan Shields",
+  "tooltip.spartanshields.shield_bash.value": "Block + %s [%s]"
 }

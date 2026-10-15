@@ -173,10 +173,11 @@ public class ClientEventHandler
 		ItemStack stack = ev.getItemStack();
 		if(!stack.isEmpty() && !Config.INSTANCE.disableShieldBash.get() && stack.is(ModItemTags.SHIELDS_WITH_BASH) && stack.canPerformAction(ItemAbilities.SHIELD_BLOCK))
 		{
+			// Issue #4: "Block + [LEFT BUTTON]" did not say which action that was; it now names the key binding and its key
 			KeyMapping boundKey = ModKeyBinds.KEY_ALT_SHIELD_BASH.isUnbound() ? Minecraft.getInstance().options.keyAttack : ModKeyBinds.KEY_ALT_SHIELD_BASH;
 			ev.getToolTip().add(1, Component.translatable("tooltip." + ModSpartanShields.ID + ".shield_bash", 
 					Component.translatable("tooltip." + ModSpartanShields.ID + ".shield_bash.value", 
-					Component.translatable(boundKey.getTranslatedKeyMessage().getString().toUpperCase()).withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.GOLD));
+					Component.translatable(boundKey.getName()).withStyle(ChatFormatting.AQUA), boundKey.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.GOLD));
 		}
 	}
 }

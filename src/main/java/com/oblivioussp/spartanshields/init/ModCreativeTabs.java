@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.oblivioussp.spartanshields.ModSpartanShields;
 import com.oblivioussp.spartanshields.item.FEPoweredShieldItem;
 import com.oblivioussp.spartanshields.item.ShieldBaseItem;
+import com.oblivioussp.spartanshields.util.ShieldAvailability;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -66,7 +67,7 @@ public class ModCreativeTabs
 						toItemStack(ModItems.LUMIUM_BASIC_SHIELD), toItemStack(ModItems.LUMIUM_TOWER_SHIELD),
 						toItemStack(ModItems.ENDERIUM_BASIC_SHIELD), toItemStack(ModItems.ENDERIUM_TOWER_SHIELD));
 				
-				output.acceptAll(shields);
+				output.acceptAll(shields.stream().filter(stack -> !ShieldAvailability.isUnavailable(stack.getItem())).toList());
 			}).build());
 	
 	private static ItemStack toItemStack(DeferredItem<ShieldBaseItem> item)

@@ -2,6 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "neoforge:conditions": [
     {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded"
+      ]
+    },
+    {
       "type": "neoforge:mod_loaded",
       "modid": "botania"
     }

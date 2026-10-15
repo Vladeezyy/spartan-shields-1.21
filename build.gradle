@@ -14,6 +14,11 @@ base {
 repositories {
     maven { url = 'https://modmaven.dev/' } // Mekanism (dev runs only)
     maven { url = 'https://maven.rover656.dev/releases' } // Ender IO (dev runs only)
+    maven { url = 'https://maven.blamejared.com/' } // JEI (compatibility runs only)
+    maven {
+        url = 'https://api.modrinth.com/maven' // compatibility runs only
+        content { includeGroup 'maven.modrinth' }
+    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -34,6 +39,11 @@ neoForge {
         scene {
             client()
             systemProperty 'spartanshields.scene', 'true'
+        }
+        // Functional and stress tests (port/StressScene): world run/saves/ss_stress, run/screenshots/stress_*.png
+        stress {
+            client()
+            systemProperty 'spartanshields.stress', 'true'
         }
         server {
             server()
@@ -60,6 +70,16 @@ dependencies {
     if (project.hasProperty('with_mods')) {
         localRuntime "mekanism:Mekanism:${mekanism_version}"
         localRuntime "com.enderio:enderio:${enderio_version}"
+    }
+    // Popular client / performance mods for compatibility runs (-Pwith_compat); none is a dependency
+    if (project.hasProperty('with_compat')) {
+        localRuntime "maven.modrinth:sodium:${compat_sodium}"
+        localRuntime "maven.modrinth:iris:${compat_iris}"
+        localRuntime "maven.modrinth:lithium:${compat_lithium}"
+        localRuntime "maven.modrinth:ferrite-core:${compat_ferritecore}"
+        localRuntime "maven.modrinth:modernfix:${compat_modernfix}"
+        localRuntime "maven.modrinth:jade:${compat_jade}"
+        localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${compat_jei}"
     }
 }
 
