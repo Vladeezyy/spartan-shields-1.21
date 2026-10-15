@@ -9,7 +9,7 @@
 [![Minecraft 1.21.1](https://img.shields.io/badge/Minecraft-1.21.1-3c8527)](https://www.minecraft.net)
 [![NeoForge 21.1](https://img.shields.io/badge/NeoForge-21.1.197%2B-e0682b)](https://neoforged.net)
 [![No dependencies](https://img.shields.io/badge/dependencies-none-lightgrey)](#-installation)
-[![License Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![License LGPL-3.0](https://img.shields.io/badge/license-LGPL--3.0-blue)](LICENSE)
 
 An unofficial port of **[Spartan Shields](https://www.curseforge.com/minecraft/mc-mods/spartan-shields)** 3.1.1
 by **ObliviousSpartan** from Minecraft 1.20.1 to **NeoForge 1.21.1**, with all of its content.
@@ -35,6 +35,8 @@ energy-powered riot shields — and turns blocking into an attack.
 - **Special shields**: silver hurts the undead, signalum weakens, lumium makes foes glow, enderium slows them, obsidian
   is heavy but nearly unmovable, and the powered shields run on energy instead of durability
 - **Configurable**: durability of every material, bash cooldowns, energy use, disable any modded material or all of them
+- **Six languages**: English, Russian, Ukrainian, German, Spanish, Brazilian Portuguese (all but English are machine
+  translations, corrections welcome)
 
 ## 📸 Screenshots
 
@@ -70,7 +72,7 @@ upgraded.
 ## 📦 Installation
 
 1. Install **NeoForge 21.1.197** or newer for Minecraft **1.21.1**.
-2. Put `SpartanShields-neoforge-3.1.1.1+1.21.1.jar` from the [releases](../../releases) into `mods`.
+2. Put `SpartanShields-neoforge-3.1.1.2+1.21.1.jar` from the [releases](../../releases) into `mods`.
 
 No other mods needed. Required on both the client and the server.
 Settings: `config/spartanshields-common.toml`.
@@ -116,7 +118,14 @@ The full list, with the reasons and what 1.21 changed, is in **[PORTLOG.md](PORT
 - **Port** to NeoForge 1.21.1 — [Vladeezyy](https://github.com/Vladeezyy).
 - Bugs of **this port**: [issues](../../issues). Please don't report port bugs to the original author.
 
-Apache License 2.0, like the original ([LICENSE](LICENSE)).
+### License
+
+The port is licensed under the **GNU LGPL 3.0 only** ([LICENSE](LICENSE), with the GPL 3.0 it refers to in
+[licenses/COPYING](licenses/COPYING)). Copyright (c) 2026 Vladeezyy for the port.
+The original Spartan Shields is © ObliviousSpartan under the **Apache License 2.0**, kept in
+[licenses/LICENSE-APACHE](licenses/LICENSE-APACHE); its code and art stay under that license.
+Forks are welcome: they must stay open, under the same license, and credit the authors.
+Please download the mod only from the official pages.
 
 ---
 
@@ -148,6 +157,8 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
   тяжёлый, но почти не сдвигается, а энергетические щиты тратят энергию вместо прочности
 - **Настройки**: прочность каждого материала, перезарядка удара, расход энергии, отключение любого модового материала
   или всех сразу
+- **Шесть языков**: английский, русский, украинский, немецкий, испанский, бразильский португальский (все, кроме
+  английского, — машинный перевод, исправления приветствуются)
 
 </details>
 
@@ -180,7 +191,7 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 <summary><b>📦 Установка</b></summary>
 
 1. Установите **NeoForge 21.1.197** или новее для Minecraft **1.21.1**.
-2. Положите `SpartanShields-neoforge-3.1.1.1+1.21.1.jar` из [релизов](../../releases) в папку `mods`.
+2. Положите `SpartanShields-neoforge-3.1.1.2+1.21.1.jar` из [релизов](../../releases) в папку `mods`.
 
 Других модов не нужно. Нужен и на клиенте, и на сервере.
 Настройки: `config/spartanshields-common.toml`.
@@ -235,7 +246,12 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 - **Порт** на NeoForge 1.21.1 — [Vladeezyy](https://github.com/Vladeezyy).
 - Ошибки **этого порта**: [issues](../../issues). Пожалуйста, не сообщайте об ошибках порта автору оригинала.
 
-Лицензия Apache 2.0, как у оригинала ([LICENSE](LICENSE)).
+**Лицензия.** Порт выходит под **GNU LGPL 3.0 only** ([LICENSE](LICENSE), и GPL 3.0, на которую она ссылается,
+в [licenses/COPYING](licenses/COPYING)). Copyright (c) 2026 Vladeezyy за порт.
+Оригинальный Spartan Shields © ObliviousSpartan под **Apache License 2.0**, её текст сохранён в
+[licenses/LICENSE-APACHE](licenses/LICENSE-APACHE); код и графика оригинала остаются под ней.
+Форки приветствуются: они должны оставаться открытыми, под той же лицензией и с указанием авторов.
+Пожалуйста, скачивайте мод только с официальных страниц.
 
 </details>
 

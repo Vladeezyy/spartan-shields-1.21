@@ -1,0 +1,28 @@
+exit 0
+CHECK OK   shield bash (accepted only while blocking) hurts the husk (20.0 -> 19.06)
+CHECK OK   shield bash counted in the stat (1)
+CHECK OK   shield bash puts the shield on cooldown ()
+CHECK OK   shield bash out of reach is refused (20.0 -> 20.0)
+CHECK OK   player blocks with the enchanted shield (1 spartanshields:diamond_basic_shield)
+CHECK OK   Payback stores half the blocked damage, max 2 per level (8.0)
+CHECK OK   Spikes hurts the attacker (60% per hit at level III, 6 hits) (20.0 -> 17.14)
+CHECK OK   Spikes wears the shield (72)
+CHECK OK   blocked hits do not hurt the player (20.0)
+CHECK OK   recipes loaded (24 recipes)
+CHECK OK   banner applies to a tower shield (spartanshields:golden_tower_shield_banner)
+CHECK OK   no second banner ()
+CHECK OK   stone shield recipe ()
+CHECK OK   tin shield recipe only with tin ingots (recipe false, ingots false)
+CHECK OK   Mekanism recipes only with Mekanism (recipe false, mekanism false)
+CHECK OK   enchanting table: Spikes, Firebrand, Payback, Unbreaking on a shield ([minecraft:unbreaking, spartanshields:spikes, spartanshields:firebrand, spartanshields:payback])
+CHECK OK   the vanilla shield does not take Spikes ()
+CHECK OK   powered shield charges (4000 FE/t) (4000)
+CHECK OK   blocking 4 damage uses 4 * 50 FE (3800)
+CHECK OK   durability from the config (538 / 672)
+DONE, failed checks: 0
+scene_bash.png
+scene_blocking.png
+scene_collection.png
+scene_creative_tab.png
+scene_stands.png
+--- errors
