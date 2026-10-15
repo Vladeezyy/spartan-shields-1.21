@@ -89,6 +89,30 @@ config file and textures are unchanged.
 - **Advancements for mod recipes** referenced items of Mekanism / Ender IO / Botania without a condition and failed to
   load when the mod was missing. They now carry the conditions of their recipe.
 
+## Issues of the original (port 3.1.1.1)
+
+All open issues of github.com/ObliviousSpartan/SpartanShields (2026-10-15; CurseForge comments could not be read, Modrinth
+has none):
+
+- [#10](https://github.com/ObliviousSpartan/SpartanShields/issues/10) out-of-memory on launch in big packs, "absurd sized texture for banner patterns": the shield atlas bug
+  above (every entity texture of every namespace in the shield atlas). Fixed.
+- [#1](https://github.com/ObliviousSpartan/SpartanShields/issues/1) `vanilla_only` has no effect: the Botania and Ender IO recipes had no `modded` type, so they stayed on.
+  The converter adds it to every recipe with a mod condition. Shields disabled in the config (vanilla_only or a
+  per-material switch) are also left out of the creative tab (`util/ShieldAvailability`).
+- [#6](https://github.com/ObliviousSpartan/SpartanShields/issues/6) uncraftable shields should have all their recipes disabled (JEI clutter): the 29 banner recipes had no
+  conditions; they now carry the conditions of the shield's own recipe (mod, material tag, type). Shields of a mod that
+  is not loaded and disabled shields are left out of the creative tab, which is where JEI takes its item list from
+  (JEI 19 only reads the registry with `ShowHiddenItems`). Shields that only lack their material (tin without a tin mod)
+  stay visible with the red tooltip, as in 1.20.1: a pack can add a recipe for them.
+- [#4](https://github.com/ObliviousSpartan/SpartanShields/issues/4) "Block + [LEFT BUTTON]" was unclear: the tooltip now names the key binding and its key
+  ("Block + Attack/Destroy [Left Button]", or the alternate bash key when it is bound).
+- [#7](https://github.com/ObliviousSpartan/SpartanShields/issues/7) "shields only block one time" (closed upstream without an answer): not reproducible. The stress scene
+  lets a husk with its AI attack a blocking survival player for 30 s: every hit from the front is blocked (28-30 per run);
+  the only unblocked hits came from the side or behind (more than 90° from the view, the vanilla shield rule).
+- [#9](https://github.com/ObliviousSpartan/SpartanShields/issues/9) 1.21.1: this port. [#5](https://github.com/ObliviousSpartan/SpartanShields/issues/5), [#8](https://github.com/ObliviousSpartan/SpartanShields/issues/8) (French and Chinese translations) are requests, not bugs.
+- Also new in 3.1.1.1: powered shields no longer accept a negative energy amount (1.20.1 drained them), and the Dark
+  Steel Riot Tower Shield got the banner recipe the other tower shields have (its renderer has the pattern texture).
+
 ## Not changed on purpose
 
 - Shield bash: damage 1 (+ Payback), knockback 1 + Knockback level, 5 durability, tower shields hit the foes around
@@ -97,9 +121,9 @@ config file and textures are unchanged.
   raised); Payback stores 50 % of the damage, at most 2 per level.
 - Item models keep the `minecraft:blocking` / `minecraft:disabled` property names.
 
-## Verified (2026-10-15)
+## Verified (2026-10-15, 3.1.1.1)
 
-- `./gradlew build`: compiles without errors; jar `SpartanShields-neoforge-3.1.1+1.21.1.jar` (with the Apache license).
+- `./gradlew build`: compiles without errors; jar `SpartanShields-neoforge-3.1.1.1+1.21.1.jar` (with the Apache license).
 - Dev server, fresh world: starts clean, no recipe / advancement / tag / enchantment errors; same with `-Pwith_mods`
   (Mekanism 10.7.19, Ender IO 8.2.12: every item of their shield recipes exists).
 - Client scene (`tools/scenetest.sh`, 21 checks, 22 with Mekanism, all pass): shield bash through the real packet
@@ -107,7 +131,16 @@ config file and textures are unchanged.
   and no second banner, shaped recipes, tin / Mekanism recipes only with their material / mod, enchanting table offers
   Spikes / Firebrand / Payback / Unbreaking (not on the vanilla shield), powered shield charge rate and energy per damage,
   durability from the config, Mekanism upgrade recipe carrying the energy over (1 600 000 / 1 600 000 FE).
-  Screenshots: all 64 shields in item frames, tower shields with banners on armor stands, creative tab and tooltip,
-  first-person blocking and a bash.
+- Functional / stress scene (`tools/stresstest.sh`, 22 checks, all pass): leave and rejoin the world keeps energy,
+  banners, enchantments, Payback charge and damage in the inventory and in a chest; a real husk for 30 s (issue #7);
+  100 bash packets in one tick land once, bad entity ids (-1, MAX, MIN, the player) do nothing; config extremes
+  (durability 0 breaks on the first hit, 100000 x tower multiplier 10 = 1000000, FE multiplier 1000000 with huge damage,
+  negative energy); 800 tower shields on 400 armor stands, half with banners: 60-69 FPS, server tick 3-4 ms; 60 husks
+  against a blocking player with Spikes III for 40 s: 111-128 hits blocked, 12-23 husks killed by Spikes, server tick
+  2-3 ms; 30 teleports of 2000 to 60000 blocks while blocking: fine, server tick 15 ms while generating 7000 chunks.
+- Compatibility (`-Pwith_compat`: Sodium 0.6.13, Iris 1.8.12 with Complementary Reimagined r5.9.3, Lithium 0.15.4,
+  FerriteCore 7.0.3, ModernFix 5.27.26, JEI 19.64, Jade 15.10.6): client scene 21/21, tower shields, banners and the
+  glowing layers render under shaders, JEI shows the recipes. The only errors in that log are the shader pack's own
+  (1.21.4 biome variables) and Iris' optional mixins for other mods.
 - Release jar on real NeoForge servers 21.1.259 and 21.1.197 (`prodtest/serve.sh`): starts clean.
 - Not run: Botania (no 1.21.1 build), the alternate bash key, a dedicated client joining the server.

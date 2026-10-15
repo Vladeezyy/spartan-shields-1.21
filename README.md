@@ -43,6 +43,8 @@ energy-powered riot shields — and turns blocking into an attack.
   <img src="docs/images/stands.jpg" width="49%" alt="Tower shields, some with banners">
   <img src="docs/images/creative_tab.jpg" width="49%" alt="The Spartan Shields creative tab">
   <img src="docs/images/bash.jpg" width="49%" alt="A Shield Bash knocking a husk back">
+  <img src="docs/images/shaders.jpg" width="49%" alt="Tower shields under Iris shaders">
+  <img src="docs/images/stress_render.jpg" width="49%" alt="800 tower shields on armor stands">
 </p>
 
 ## ⚔️ Shield Bash
@@ -61,13 +63,14 @@ Works with the vanilla shield too (`#spartanshields:shields_with_bash`).
 The modded shields appear only when their material exists: a shield made of tin needs a mod that adds tin ingots
 (`c:ingots/tin`), the Mekanist's shields need **Mekanism**, the Dark Steel Riot Shields need **Ender IO**, the
 Manasteel, Terrasteel and Elementium shields need **Botania**. Until then their recipe is off and the tooltip says what is
-missing. Powered shields are charged like any other energy item (Mekanism, Ender IO, …) and keep their charge when
+missing. Shields of a mod that is not installed, and shields you disable in the config, are left out of the creative tab
+and JEI. Powered shields are charged like any other energy item (Mekanism, Ender IO, …) and keep their charge when
 upgraded.
 
 ## 📦 Installation
 
 1. Install **NeoForge 21.1.197** or newer for Minecraft **1.21.1**.
-2. Put `SpartanShields-neoforge-3.1.1+1.21.1.jar` from the [releases](../../releases) into `mods`.
+2. Put `SpartanShields-neoforge-3.1.1.1+1.21.1.jar` from the [releases](../../releases) into `mods`.
 
 No other mods needed. Required on both the client and the server.
 Settings: `config/spartanshields-common.toml`.
@@ -76,14 +79,33 @@ Settings: `config/spartanshields-common.toml`.
 
 Content, recipes and numbers are those of 3.1.1. Bugs of the original that the port fixes:
 
+| Original issue | Fix |
+| --- | --- |
+| [#10](https://github.com/ObliviousSpartan/SpartanShields/issues/10) Out-of-memory crash on launch in big packs, "absurd sized texture for banner patterns" | The shield texture atlas took every entity texture of every mod; it now only holds the 58 shield textures |
+| [#1](https://github.com/ObliviousSpartan/SpartanShields/issues/1) `vanilla_only` has no effect | It now also turns off the Botania and Ender IO shields, and the disabled shields leave the creative tab |
+| [#6](https://github.com/ObliviousSpartan/SpartanShields/issues/6) Uncraftable shields keep recipes and clutter JEI | Banner recipes follow the shield's own recipe; shields of missing mods and disabled shields are hidden from the creative tab and JEI |
+| [#4](https://github.com/ObliviousSpartan/SpartanShields/issues/4) "Block + [LEFT BUTTON]" — which button? | The tooltip names the action and its key: "Block + Attack/Destroy [Left Button]" |
+| [#7](https://github.com/ObliviousSpartan/SpartanShields/issues/7) Shields only block once | Not reproducible in the port: a real attacker for 30 s, every hit from the front blocked |
+
+Found while porting:
+
 - Powered shields now use the configured energy per point of blocked damage (50 FE), as their tooltip always said —
-  since 1.16 they only used 1 FE.
-- The server checks the reach of a Shield Bash (before, a modified client could bash any entity anywhere).
-- The shield texture atlas only holds the shield textures (before, every entity texture of every mod was copied into it).
-- Spikes always works with two Spikes shields; the "uncraftable" tooltip is no longer stuck after a data pack reload;
-  the alternate bash key has a name.
+  since 1.16 they only used 1 FE. They no longer accept negative energy (which drained them).
+- The server checks the reach of a Shield Bash (a modified client could bash any entity anywhere).
+- Spikes always works with two Spikes shields; the "uncraftable" tooltip follows data pack reloads; the alternate bash key
+  has a name; the Dark Steel Riot Tower Shield takes banners like the other tower shields.
 
 The full list, with the reasons and what 1.21 changed, is in **[PORTLOG.md](PORTLOG.md)**.
+
+## ✅ Tested
+
+- **Functional**: all recipes, Shield Bash, the three enchantments, banners, energy, config; saving and rejoining keeps
+  every shield's data; dedicated servers NeoForge 21.1.197 and 21.1.259.
+- **Stress**: 100 bash packets in one tick and bad entity ids, extreme config values, 800 tower shields on screen
+  (60 FPS), 60 mobs against a Spikes shield (server tick 2 ms), 30 teleports up to 60 000 blocks.
+- **Compatibility**: Mekanism 10.7, Ender IO 8, Sodium 0.6 + Iris 1.8 with Complementary shaders, Lithium, FerriteCore,
+  ModernFix, JEI, Jade.
+- Not tested: Botania (no 1.21.1 release yet; its shields use the mana API when it is installed).
 
 ## ❤️ Credits
 
@@ -149,7 +171,8 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 Модовые щиты доступны, только когда есть их материал: оловянному щиту нужен мод с оловянными слитками (`c:ingots/tin`),
 щитам механика — **Mekanism**, щитам спецназа из тёмной стали — **Ender IO**, щитам из манастали, террастали и
 элементиума — **Botania**. До этого их рецепт выключен, а в подсказке написано, чего не хватает. Энергетические щиты
-заряжаются как любой энергетический предмет (Mekanism, Ender IO, …) и сохраняют заряд при улучшении.
+заряжаются как любой энергетический предмет (Mekanism, Ender IO, …) и сохраняют заряд при улучшении. Щиты
+неустановленных модов и щиты, отключённые в конфиге, не показываются в творческой вкладке и в JEI.
 
 </details>
 
@@ -157,7 +180,7 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 <summary><b>📦 Установка</b></summary>
 
 1. Установите **NeoForge 21.1.197** или новее для Minecraft **1.21.1**.
-2. Положите `SpartanShields-neoforge-3.1.1+1.21.1.jar` из [релизов](../../releases) в папку `mods`.
+2. Положите `SpartanShields-neoforge-3.1.1.1+1.21.1.jar` из [релизов](../../releases) в папку `mods`.
 
 Других модов не нужно. Нужен и на клиенте, и на сервере.
 Настройки: `config/spartanshields-common.toml`.
@@ -167,16 +190,38 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 <details>
 <summary><b>🔧 Что изменилось в порте</b></summary>
 
-Содержимое, рецепты и числа — как в 3.1.1. Ошибки оригинала, которые исправлены в порте:
+Содержимое, рецепты и числа — как в 3.1.1. Ошибки оригинала, исправленные в порте:
 
-- Энергетические щиты теперь тратят настроенное количество энергии на единицу заблокированного урона (50 FE), как и
-  писала их подсказка, — с версии 1.16 они тратили всего 1 FE.
-- Сервер проверяет дальность удара щитом (раньше изменённый клиент мог ударить любую сущность где угодно).
-- В атлас текстур щитов попадают только текстуры щитов (раньше туда копировались все текстуры сущностей всех модов).
-- Spikes всегда работает с двумя щитами со Spikes; подсказка «нельзя скрафтить» не залипает после перезагрузки датапаков;
-  у дополнительной клавиши удара есть название.
+| Issue оригинала | Исправление |
+| --- | --- |
+| [#10](https://github.com/ObliviousSpartan/SpartanShields/issues/10) Вылет из-за нехватки памяти при запуске больших сборок, «огромная текстура баннеров» | В атлас текстур щитов попадали все текстуры сущностей всех модов; теперь там только 58 текстур щитов |
+| [#1](https://github.com/ObliviousSpartan/SpartanShields/issues/1) `vanilla_only` не действует | Теперь отключает и щиты Botania и Ender IO, а отключённые щиты пропадают из творческой вкладки |
+| [#6](https://github.com/ObliviousSpartan/SpartanShields/issues/6) У некрафтабельных щитов остаются рецепты, они засоряют JEI | Рецепты баннера следуют за рецептом самого щита; щиты отсутствующих модов и отключённые щиты скрыты из творческой вкладки и JEI |
+| [#4](https://github.com/ObliviousSpartan/SpartanShields/issues/4) «Block + [LEFT BUTTON]» — какая кнопка? | Подсказка называет действие и клавишу: «Block + Attack/Destroy [Left Button]» |
+| [#7](https://github.com/ObliviousSpartan/SpartanShields/issues/7) Щит блокирует только один раз | В порте не воспроизводится: настоящий противник 30 секунд, все удары спереди заблокированы |
+
+Найдено при портировании:
+
+- Энергетические щиты тратят настроенное количество энергии на единицу заблокированного урона (50 FE), как и писала их
+  подсказка, — с версии 1.16 они тратили всего 1 FE. Отрицательную энергию (которая их разряжала) больше не принимают.
+- Сервер проверяет дальность удара щитом (изменённый клиент мог ударить любую сущность где угодно).
+- Spikes всегда работает с двумя щитами со Spikes; подсказка «нельзя скрафтить» обновляется после перезагрузки датапаков;
+  у дополнительной клавиши удара есть название; башенный щит спецназа из тёмной стали принимает баннеры, как остальные.
 
 Полный список, с причинами и изменениями 1.21, — в **[PORTLOG.md](PORTLOG.md)** (на английском).
+
+</details>
+
+<details>
+<summary><b>✅ Проверено</b></summary>
+
+- **Функционально**: все рецепты, удар щитом, три зачарования, баннеры, энергия, конфиг; сохранение и перезаход
+  сохраняют данные всех щитов; выделенные серверы NeoForge 21.1.197 и 21.1.259.
+- **Нагрузка**: 100 пакетов удара за тик и неверные id сущностей, крайние значения конфига, 800 башенных щитов на экране
+  (60 FPS), 60 мобов против щита со Spikes (тик сервера 2 мс), 30 телепортов на расстояние до 60 000 блоков.
+- **Совместимость**: Mekanism 10.7, Ender IO 8, Sodium 0.6 + Iris 1.8 с шейдерами Complementary, Lithium, FerriteCore,
+  ModernFix, JEI, Jade.
+- Не проверено: Botania (под 1.21.1 ещё не вышла; когда она установлена, её щиты используют API маны).
 
 </details>
 
