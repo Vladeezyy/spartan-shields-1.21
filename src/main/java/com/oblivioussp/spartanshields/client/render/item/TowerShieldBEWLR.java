@@ -22,6 +22,8 @@ import com.oblivioussp.spartanshields.item.ShieldBaseItem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.resources.ResourceLocation;
+import com.oblivioussp.spartanshields.ModSpartanShields;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BannerRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -112,6 +114,18 @@ public class TowerShieldBEWLR extends BlockEntityWithoutLevelRenderer implements
 		elementiumShield = new ElementiumTowerShieldModel(mc.getEntityModels().bakeLayer(ModelLayers.ELEMENTIUM_SHIELD));
 		mekanismShield = new MekanismTowerShieldModel(mc.getEntityModels().bakeLayer(ModelLayers.MEKANISM_SHIELD));
 		darkSteelShield = new DarkSteelTowerShieldModel(mc.getEntityModels().bakeLayer(ModelLayers.DARK_STEEL_SHIELD));
+		// the second (light) pass draws only the faces that show in the light textures
+		boolean[] lightsOnOff = {true, false};
+		// -Dspartanshields.fullGlow=true: the whole model, as before (dev check of the picture)
+		if(!Boolean.getBoolean("spartanshields.fullGlow"))
+		{
+		mekanismShield.setGlow(com.oblivioussp.spartanshields.client.model.GlowLayer.of(mekanismShield.root(), p_172555_, new ResourceLocation[] {
+				ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/mekanism/mekanists_tower_shield_lights_on.png"),
+				ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/mekanism/mekanists_tower_shield_lights_off.png")}, lightsOnOff));
+		darkSteelShield.setGlow(com.oblivioussp.spartanshields.client.model.GlowLayer.of(darkSteelShield.root(), p_172555_, new ResourceLocation[] {
+				ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/enderio/dark_steel_tower_shield_lights_on.png"),
+				ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/enderio/dark_steel_tower_shield_lights_off.png")}, lightsOnOff));
+		}
 		
 		Builder<Item, ShieldBaseModel> modelMapBuilder = ImmutableMap.builder();
 		modelMapBuilder.put(ModItems.WOODEN_TOWER_SHIELD.get(), baseShield);

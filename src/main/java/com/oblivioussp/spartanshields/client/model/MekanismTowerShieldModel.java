@@ -82,6 +82,10 @@ public class MekanismTowerShieldModel extends ShieldBaseModel
     		int color)
     {
     	VertexConsumer consumer = bufferIn.getBuffer(renderTypeIn);
-    	root.render(mStack, consumer, packedLightIn, packedOverlayIn, color);
+    	// only the faces that show in the light textures (see GlowLayer); the whole model if that could not be set up
+    	if(glow != null)
+    		glow.render(root, mStack, consumer, packedLightIn, packedOverlayIn, color);
+    	else
+    		root.render(mStack, consumer, packedLightIn, packedOverlayIn, color);
     }
 }

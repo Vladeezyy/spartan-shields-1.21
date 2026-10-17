@@ -96,6 +96,11 @@ public final class DevScene
 		at(270, mc -> shot(mc, "collection"));
 		at(280, mc -> server(mc, DevScene::closeUp));
 		at(340, mc -> shot(mc, "stands"));
+		// The light layers up close (powered and unpowered Mekanist and Dark Steel tower shields): compared with
+		// -Dspartanshields.fullGlow=true, which draws the whole model in the light pass as before (port/GlowLayer check)
+		at(341, mc -> server(mc, DevScene::glowCloseUp));
+		at(346, mc -> shot(mc, "glow"));
+		at(348, mc -> server(mc, p -> p.teleportTo(p.serverLevel(), stage.getX() + 0.5, stage.getY() + 1.2, stage.getZ() + 1.5, 0.0F, 15.0F)));
 		// Creative tab
 		at(350, mc -> {
 			mc.options.hideGui = false;
@@ -279,6 +284,22 @@ public final class DevScene
 				charged(ModItems.DARK_STEEL_RIOT_TOWER_SHIELD.get()));
 		row(level, tower, 6);
 		player.teleportTo(player.serverLevel(), stage.getX() + 0.5, stage.getY() + 1.2, stage.getZ() + 1.5, 0.0F, 15.0F);
+	}
+
+	private static void glowCloseUp(ServerPlayer player)
+	{
+		ServerLevel level = player.serverLevel();
+		for(int i = 0; i < 2; i++)
+		{
+			ArmorStand stand = EntityType.ARMOR_STAND.create(level);
+			stand.moveTo(stage.getX() + 12.5 + i * 2.0 - 2.0, stage.getY(), stage.getZ() + 6.5, 0.0F, 0.0F);
+			stand.setYBodyRot(0.0F);
+			stand.setShowArms(true);
+			stand.setNoBasePlate(true);
+			stand.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(i == 0 ? ModItems.ULTIMATE_MEKANISTS_TOWER_SHIELD.get() : ModItems.DARK_STEEL_RIOT_TOWER_SHIELD.get()));
+			level.addFreshEntity(stand);
+		}
+		player.teleportTo(level, stage.getX() + 10.5, stage.getY() + 1.2, stage.getZ() + 3.0, 0.0F, 12.0F);
 	}
 
 	private static void firstPerson(ServerPlayer player)

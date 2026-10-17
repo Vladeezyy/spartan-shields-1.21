@@ -121,18 +121,22 @@ public final class StressScene
 		SECOND.add(Pair.of(740, mc -> server(mc, StressScene::renderStress)));
 		SECOND.add(Pair.of(800, mc -> fps(mc, "400 tower shields + 64 item frames on screen")));
 		SECOND.add(Pair.of(860, mc -> { fps(mc, "400 tower shields + 64 item frames on screen"); shot(mc, "render"); }));
-		SECOND.add(Pair.of(870, mc -> server(mc, StressScene::combatStress)));
-		SECOND.add(Pair.of(880, mc -> mc.options.keyUse.setDown(true)));
-		SECOND.add(Pair.of(1280, mc -> { fps(mc, "60 husks attacking"); shot(mc, "combat"); }));
-		SECOND.add(Pair.of(1680, mc -> server(mc, StressScene::checkCombatStress)));
-		SECOND.add(Pair.of(1690, mc -> mc.options.keyUse.setDown(false)));
+		// The same stands with vanilla shields (the same banners): the baseline for the FPS above
+		SECOND.add(Pair.of(865, mc -> server(mc, StressScene::vanillaBaseline)));
+		SECOND.add(Pair.of(925, mc -> fps(mc, "the same stands with vanilla shields (baseline)")));
+		SECOND.add(Pair.of(980, mc -> fps(mc, "the same stands with vanilla shields (baseline)")));
+		SECOND.add(Pair.of(990, mc -> server(mc, StressScene::combatStress)));
+		SECOND.add(Pair.of(1000, mc -> mc.options.keyUse.setDown(true)));
+		SECOND.add(Pair.of(1400, mc -> { fps(mc, "60 husks attacking"); shot(mc, "combat"); }));
+		SECOND.add(Pair.of(1800, mc -> server(mc, StressScene::checkCombatStress)));
+		SECOND.add(Pair.of(1810, mc -> mc.options.keyUse.setDown(false)));
 		for(int i = 0; i < 30; i++)
 		{
 			int n = i;
-			SECOND.add(Pair.of(1700 + i * 5, mc -> server(mc, p -> teleport(p, n))));
+			SECOND.add(Pair.of(1820 + i * 5, mc -> server(mc, p -> teleport(p, n))));
 		}
 		// The far teleports generate chunks, so the server falls behind the client: the end waits for the server
-		SECOND.add(Pair.of(1900, mc -> server(mc, StressScene::checkTeleports)));
+		SECOND.add(Pair.of(2020, mc -> server(mc, StressScene::checkTeleports)));
 	}
 
 	@SubscribeEvent
@@ -445,6 +449,26 @@ public final class StressScene
 			}
 		player.teleportTo(level, stage.getX() + 0.5, stage.getY() + 3.0, stage.getZ() - 2.0, 0.0F, 25.0F);
 		stat("armor stands with tower shields", n * 2 + " shields");
+	}
+
+	/** Every shield on the stands becomes a vanilla shield, with the same banner where there was one. */
+	private static void vanillaBaseline(ServerPlayer player)
+	{
+		ServerLevel level = player.serverLevel();
+		for(int id : mobs)
+		{
+			if(level.getEntity(id) instanceof ArmorStand stand)
+				for(EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND})
+				{
+					ItemStack old = stand.getItemBySlot(slot);
+					ItemStack shield = new ItemStack(net.minecraft.world.item.Items.SHIELD);
+					if(old.has(net.minecraft.core.component.DataComponents.BANNER_PATTERNS))
+						shield.set(net.minecraft.core.component.DataComponents.BANNER_PATTERNS, old.get(net.minecraft.core.component.DataComponents.BANNER_PATTERNS));
+					if(old.has(net.minecraft.core.component.DataComponents.BASE_COLOR))
+						shield.set(net.minecraft.core.component.DataComponents.BASE_COLOR, old.get(net.minecraft.core.component.DataComponents.BASE_COLOR));
+					stand.setItemSlot(slot, shield);
+				}
+		}
 	}
 
 	private static void fps(Minecraft mc, String what)

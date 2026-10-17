@@ -157,3 +157,18 @@ Checked with modding-kb `scripts/langcheck.py` (145/145 keys, placeholders) and 
   (1.21.4 biome variables) and Iris' optional mixins for other mods.
 - Release jar on real NeoForge servers 21.1.259 and 21.1.197 (`prodtest/serve.sh`): starts clean.
 - Not run: Botania (no 1.21.1 build), the alternate bash key, a dedicated client joining the server.
+
+## Performance check (2026-10-17)
+
+- The stress scene has a baseline now: the same 400 armor stands with vanilla shields (the same banners). Tower
+  shields 60-64 FPS, vanilla shields 80 (64 item frames with Spartan shields in both).
+- JFR (render thread): the light layer of the Mekanist and Dark Steel tower shields drew the whole model a second time,
+  while their light textures light up 2-9 % of their area; the other faces were fully transparent ("lights off",
+  translucent) or black ("lights on", additive) and left no trace. `client/model/GlowLayer` picks the faces that show
+  something once per resource reload (31 of 120 for the Mekanist shield, 13 of 72 for Dark Steel) and the light pass
+  draws only those. `ModelPart.Cube` keeps its faces private: they are read once through reflection; if that fails
+  the whole model is drawn as before.
+- Result: tower shields 66-67 FPS (vanilla shields 80). Picture check: the client scene has a close-up of powered and
+  unpowered Mekanist and Dark Steel tower shields (`scene_glow`); with `-Dspartanshields.fullGlow=true` (the old full
+  light pass) and without it the shields are the same pixels (differences only in the animated water and leaves).
+- The FE shield bars read a plain component, nothing to change. Client scene and stress scene: all checks pass.

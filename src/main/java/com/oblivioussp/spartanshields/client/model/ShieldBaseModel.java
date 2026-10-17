@@ -25,6 +25,18 @@ public class ShieldBaseModel extends Model
 	protected static final String PART_HANDLE = "handle";
 	
 	protected ModelPart root;
+	/** The faces of the light layer to draw, set by the tower shield renderer on resource reload (null: all) */
+	protected GlowLayer glow;
+
+	public ModelPart root()
+	{
+		return root;
+	}
+
+	public void setGlow(GlowLayer glowIn)
+	{
+		glow = glowIn;
+	}
 	protected ModelPart plate;
 	protected ModelPart handle;
 	
