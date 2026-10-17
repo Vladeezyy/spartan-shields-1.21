@@ -72,7 +72,7 @@ upgraded.
 ## 📦 Installation
 
 1. Install **NeoForge 21.1.197** or newer for Minecraft **1.21.1**.
-2. Put `SpartanShields-neoforge-3.1.1.2+1.21.1.jar` from the [releases](../../releases) into `mods`.
+2. Put `SpartanShields-neoforge-3.1.1.3+1.21.1.jar` from the [releases](../../releases) into `mods`.
 
 No other mods needed. Required on both the client and the server.
 Settings: `config/spartanshields-common.toml`.
@@ -191,7 +191,7 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 <summary><b>📦 Установка</b></summary>
 
 1. Установите **NeoForge 21.1.197** или новее для Minecraft **1.21.1**.
-2. Положите `SpartanShields-neoforge-3.1.1.2+1.21.1.jar` из [релизов](../../releases) в папку `mods`.
+2. Положите `SpartanShields-neoforge-3.1.1.3+1.21.1.jar` из [релизов](../../releases) в папку `mods`.
 
 Других модов не нужно. Нужен и на клиенте, и на сервере.
 Настройки: `config/spartanshields-common.toml`.
