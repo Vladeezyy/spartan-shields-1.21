@@ -1,0 +1,35 @@
+{
+  "type": "spartanshields:apply_banner",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "silver"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/silver"
+      }
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "silver"
+      ]
+    },
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:ingots/silver"
+      ]
+    }
+  ],
+  "shield": "spartanshields:silver_tower_shield"
+}

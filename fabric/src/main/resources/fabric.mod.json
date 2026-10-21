@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "Spartan Shields adds a variety of new shields to Minecraft.\nUnofficial port of Spartan Shields 3.1.1 (ObliviousSpartan, LGPL-3.0) to Minecraft ${minecraft_version} / Fabric.",
+  "authors": ["${mod_authors}"],
+  "contributors": ["Vladeezyy (port)"],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/spartan-shields",
+    "sources": "https://github.com/Vladeezyy/spartan-shields-1.21",
+    "issues": "https://github.com/Vladeezyy/spartan-shields-1.21/issues"
+  },
+  "license": "${license}",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.oblivioussp.spartanshields.fabric.SpartanShieldsFabric"],
+    "client": ["com.oblivioussp.spartanshields.fabric.SpartanShieldsFabricClient"]
+  },
+  "mixins": ["spartanshields.fabric.mixins.json"],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "forgeconfigapiport": ">=${forgeconfigapiport_version}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

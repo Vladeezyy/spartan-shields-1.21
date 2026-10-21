@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded"
+      ]
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botania"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded"
+      ]
+    },
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "botania"
+      ]
+    }
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/elementium"
+    },
+    "/": {
+      "item": "botania:dreamwood_twig"
+    },
+    "m": {
+      "item": "botania:rune_mana"
+    },
+    "s": {
+      "item": "botania:rune_summer"
+    }
+  },
+  "pattern": [
+    "#s#",
+    "#/#",
+    "#m#"
+  ],
+  "result": {
+    "id": "spartanshields:elementium_tower_shield"
+  }
+}

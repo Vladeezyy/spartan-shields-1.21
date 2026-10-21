@@ -1,0 +1,54 @@
+{
+  "type": "spartanshields:upgrade_powered_shield",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded"
+      ]
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded"
+      ]
+    },
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mekanism"
+      ]
+    }
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/steel"
+    },
+    "O": {
+      "item": "spartanshields:basic_mekanists_basic_shield"
+    },
+    "a": {
+      "item": "mekanism:alloy_reinforced"
+    },
+    "b": {
+      "item": "mekanism:energy_tablet"
+    },
+    "c": {
+      "item": "mekanism:advanced_control_circuit"
+    }
+  },
+  "pattern": [
+    "a a",
+    "bOb",
+    "#c#"
+  ],
+  "result": {
+    "id": "spartanshields:advanced_mekanists_basic_shield"
+  }
+}

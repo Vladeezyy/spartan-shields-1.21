@@ -1,0 +1,35 @@
+{
+  "type": "spartanshields:apply_banner",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "tin"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/tin"
+      }
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "tin"
+      ]
+    },
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:ingots/tin"
+      ]
+    }
+  ],
+  "shield": "spartanshields:tin_tower_shield"
+}

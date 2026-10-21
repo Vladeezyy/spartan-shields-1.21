@@ -1,0 +1,62 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "obsidian"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:obsidians"
+      }
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "obsidian"
+      ]
+    },
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:obsidians"
+      ]
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_obsidian": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:obsidians"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "spartanshields:obsidian_basic_shield"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_obsidian",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "spartanshields:obsidian_basic_shield"
+    ]
+  },
+  "sends_telemetry_event": true
+}

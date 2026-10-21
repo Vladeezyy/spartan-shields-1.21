@@ -1,0 +1,35 @@
+{
+  "type": "spartanshields:apply_banner",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "enderium"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/enderium"
+      }
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "enderium"
+      ]
+    },
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:ingots/enderium"
+      ]
+    }
+  ],
+  "shield": "spartanshields:enderium_tower_shield"
+}

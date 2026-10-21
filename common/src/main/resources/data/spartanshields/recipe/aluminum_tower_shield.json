@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "aluminum"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/aluminum"
+      }
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "aluminum"
+      ]
+    },
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:ingots/aluminum"
+      ]
+    }
+  ],
+  "group": "spartanshields:aluminum_shields",
+  "key": {
+    "#": {
+      "tag": "c:ingots/aluminum"
+    },
+    "O": {
+      "item": "spartanshields:wooden_tower_shield"
+    }
+  },
+  "pattern": [
+    "###",
+    "#O#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:aluminum_tower_shield"
+  }
+}

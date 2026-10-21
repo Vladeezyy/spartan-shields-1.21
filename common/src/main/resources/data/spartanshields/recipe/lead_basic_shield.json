@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "lead"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/lead"
+      }
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "lead"
+      ]
+    },
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:ingots/lead"
+      ]
+    }
+  ],
+  "group": "spartanshields:lead_shields",
+  "key": {
+    "#": {
+      "tag": "c:ingots/lead"
+    },
+    "O": {
+      "item": "spartanshields:wooden_basic_shield"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#O#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:lead_basic_shield"
+  }
+}

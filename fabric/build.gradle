@@ -1,0 +1,65 @@
+plugins {
+    id 'multiloader-loader'
+    id 'fabric-loom'
+}
+
+repositories {
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    // NeoForge's config API (the config of the NeoForge version) on Fabric; a required mod
+    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+    // Energy of the powered shields (Team Reborn Energy, the FE of Fabric tech mods), bundled in the jar
+    modApi include("teamreborn:energy:${team_reborn_energy_version}")
+    // Mod Menu (opens the config screen) in the dev runs only
+    modLocalRuntime "maven.modrinth:modmenu:11.0.3"
+}
+
+loom {
+    runs {
+        client {
+            client()
+            runDir('run')
+        }
+        server {
+            server()
+            runDir('run')
+        }
+        scene {
+            client()
+            name 'Scene'
+            vmArg '-Dspartanshields.scene=true'
+            runDir('run')
+        }
+        stress {
+            client()
+            name 'Stress'
+            vmArg '-Dspartanshields.stress=true'
+            runDir('run')
+        }
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    exclude 'com/oblivioussp/spartanshields/port/**'
+}
+
+// The release jar on a real (intermediary-mapped) Fabric server
+configurations {
+    productionMods { transitive = false }
+}
+dependencies {
+    productionMods "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    productionMods "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+}

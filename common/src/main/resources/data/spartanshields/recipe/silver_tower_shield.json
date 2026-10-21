@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "silver"
+      ]
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/silver"
+      }
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "spartanshields:type_disabled",
+      "disabled": [
+        "modded",
+        "silver"
+      ]
+    },
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:ingots/silver"
+      ]
+    }
+  ],
+  "group": "spartanshields:silver_shields",
+  "key": {
+    "#": {
+      "tag": "c:ingots/silver"
+    },
+    "O": {
+      "item": "spartanshields:wooden_tower_shield"
+    }
+  },
+  "pattern": [
+    "###",
+    "#O#",
+    " # "
+  ],
+  "result": {
+    "id": "spartanshields:silver_tower_shield"
+  }
+}
