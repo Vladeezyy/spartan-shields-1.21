@@ -25,10 +25,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/aluminum"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/aluminum"
     }
   ],
   "shield": "spartanshields:aluminum_tower_shield"

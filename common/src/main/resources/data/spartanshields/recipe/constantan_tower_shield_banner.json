@@ -25,10 +25,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/constantan"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/constantan"
     }
   ],
   "shield": "spartanshields:constantan_tower_shield"

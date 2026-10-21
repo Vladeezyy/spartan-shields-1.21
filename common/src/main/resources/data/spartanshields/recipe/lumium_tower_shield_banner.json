@@ -25,10 +25,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/lumium"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/lumium"
     }
   ],
   "shield": "spartanshields:lumium_tower_shield"

@@ -33,9 +33,11 @@ public class SpartanShieldsFabric implements ModInitializer
 		registerAll();
 		ModSpartanShields.setup();
 
-		NeoForgeConfigRegistry.INSTANCE.register(ModSpartanShields.ID, ModConfig.Type.COMMON, Config.CONFIG_SPEC);
+		// Forge Config API Port loads a common config right in register(): the listeners come first
 		NeoForgeModConfigEvents.loading(ModSpartanShields.ID).register(config -> Config.onConfigChanged(config.getFileName(), config.getSpec()));
 		NeoForgeModConfigEvents.reloading(ModSpartanShields.ID).register(config -> Config.onConfigChanged(config.getFileName(), config.getSpec()));
+		NeoForgeConfigRegistry.INSTANCE.register(ModSpartanShields.ID, ModConfig.Type.COMMON, Config.CONFIG_SPEC);
+		Config.apply();
 
 		PayloadTypeRegistry.playC2S().register(ShieldBashPacket.TYPE, ShieldBashPacket.STREAM_CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(ShieldBashPacket.TYPE, (packet, ctx) -> ShieldBashPacket.handle(packet, ctx.player()));
@@ -57,6 +59,7 @@ public class SpartanShieldsFabric implements ModInitializer
 		EnergyStorage.ITEM.registerForItems((stack, ctx) -> new PoweredShieldEnergyStorage(ctx), powered.toArray(Item[]::new));
 
 		ResourceConditions.register(TypeDisabledResourceCondition.TYPE);
+		ResourceConditions.register(TagNotEmptyResourceCondition.TYPE);
 	}
 
 	/** Registers every registrar, registry by registry in the order of BuiltInRegistries.REGISTRY (as NeoForge does). */

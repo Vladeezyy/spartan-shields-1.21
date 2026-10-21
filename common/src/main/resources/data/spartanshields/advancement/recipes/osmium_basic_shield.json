@@ -32,10 +32,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/osmium"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/osmium"
     }
   ],
   "parent": "minecraft:recipes/root",

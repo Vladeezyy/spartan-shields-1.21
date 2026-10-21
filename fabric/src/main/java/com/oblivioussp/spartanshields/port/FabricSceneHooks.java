@@ -13,6 +13,13 @@ public final class FabricSceneHooks
 			DevScene.onTick();
 			StressScene.onTick();
 		});
-		ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> StressScene.Counter.onBlock(entity, source, blocked));
+		// NeoForge's LivingShieldBlockEvent comes for every hit with damage, after the same early checks as ALLOW_DAMAGE
+		// (AFTER_DAMAGE misses the hits that end early, e.g. inside the invulnerability frames)
+		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) ->
+		{
+			if(amount > 0.0F)
+				StressScene.Counter.onBlock(entity, source, entity.isDamageSourceBlocked(source));
+			return true;
+		});
 	}
 }

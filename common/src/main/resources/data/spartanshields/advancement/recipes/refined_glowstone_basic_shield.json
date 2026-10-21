@@ -32,10 +32,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/refined_glowstone"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/refined_glowstone"
     }
   ],
   "parent": "minecraft:recipes/root",

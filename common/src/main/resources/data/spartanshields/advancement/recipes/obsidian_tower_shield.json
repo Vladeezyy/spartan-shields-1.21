@@ -22,10 +22,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:obsidians"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:obsidians"
     }
   ],
   "parent": "minecraft:recipes/root",

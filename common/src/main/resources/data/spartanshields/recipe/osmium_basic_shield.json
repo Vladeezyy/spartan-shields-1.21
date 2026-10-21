@@ -33,10 +33,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/osmium"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/osmium"
     }
   ],
   "group": "spartanshields:osmium_shields",

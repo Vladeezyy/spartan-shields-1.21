@@ -25,10 +25,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/invar"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/invar"
     }
   ],
   "shield": "spartanshields:invar_tower_shield"

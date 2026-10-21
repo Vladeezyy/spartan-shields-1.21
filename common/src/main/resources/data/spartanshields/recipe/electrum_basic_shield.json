@@ -25,10 +25,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/electrum"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/electrum"
     }
   ],
   "group": "spartanshields:electrum_shields",

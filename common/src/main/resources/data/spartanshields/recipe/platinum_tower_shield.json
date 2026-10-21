@@ -25,10 +25,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/platinum"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/platinum"
     }
   ],
   "group": "spartanshields:platinum_shields",

@@ -6,7 +6,8 @@
   "mixins": [
     "AxeItemMixin",
     "ItemStackMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "TagLoadResultMixin"
   ],
   "injectors": {
     "defaultRequire": 1

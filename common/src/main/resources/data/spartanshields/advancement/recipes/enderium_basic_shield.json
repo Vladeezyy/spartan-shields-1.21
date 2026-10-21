@@ -24,10 +24,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/enderium"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/enderium"
     }
   ],
   "parent": "minecraft:recipes/root",

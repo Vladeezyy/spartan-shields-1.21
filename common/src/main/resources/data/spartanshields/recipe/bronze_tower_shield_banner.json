@@ -25,10 +25,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/bronze"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/bronze"
     }
   ],
   "shield": "spartanshields:bronze_tower_shield"

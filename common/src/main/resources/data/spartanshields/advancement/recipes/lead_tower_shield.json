@@ -24,10 +24,8 @@
       ]
     },
     {
-      "condition": "fabric:tags_populated",
-      "values": [
-        "c:ingots/lead"
-      ]
+      "condition": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/lead"
     }
   ],
   "parent": "minecraft:recipes/root",

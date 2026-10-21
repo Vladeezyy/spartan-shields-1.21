@@ -57,23 +57,30 @@ public class FabricPlatform implements Platform
 	@Override
 	public ItemEnergy getItemEnergy(ItemStack stack)
 	{
-		// A slot over the stack itself, so that charging changes the stack (as the NeoForge capability does)
+		// A slot over a copy of the stack; a committed change is copied back to the stack (as the NeoForge capability
+		// changes it). The slot must not hold the stack itself: an exchange shrinks the old stack to 0 first.
 		SingleStackStorage slot = new SingleStackStorage()
 		{
+			private ItemStack current = stack.copy();
+
 			@Override
 			protected ItemStack getStack()
 			{
-				return stack;
+				return current;
 			}
 
 			@Override
 			protected void setStack(ItemStack newStack)
 			{
-				if(newStack.getItem() == stack.getItem())
-				{
-					stack.applyComponents(newStack.getComponentsPatch());
-					stack.setCount(newStack.getCount());
-				}
+				current = newStack;
+			}
+
+			@Override
+			protected void onFinalCommit()
+			{
+				super.onFinalCommit();
+				if(current.getItem() == stack.getItem())
+					stack.applyComponents(current.getComponentsPatch());
 			}
 		};
 		EnergyStorage storage = EnergyStorage.ITEM.find(stack, ContainerItemContext.ofSingleSlot(slot));
