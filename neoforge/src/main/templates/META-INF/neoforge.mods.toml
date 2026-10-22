@@ -15,6 +15,9 @@ description='''
 Spartan Shields adds a variety of new shields to Minecraft.
 '''
 
+[[mixins]]
+config="spartanshields.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"

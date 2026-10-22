@@ -242,3 +242,10 @@ without those mods.
   - NeoForge: 20/20 with the shader pack off. With it on, Iris 1.10.8 for NeoForge crashes in its shadow pass ("Missing
     sampler Sampler1") as soon as an enchanted item is in hand, the vanilla shield as well (checked).
   - no stress scene and no FPS measurements (owner's call).
+
+### 3.1.1.5+1.21.11 (2026-10-22)
+
+- **Recipes with the mod's `tag_not_empty` never loaded in 3.1.1.4+1.21.11**, also for tags the game fills (obsidian
+  shields: c:obsidians). On a first load the named tag sets are unbound while the recipe conditions run, so their size
+  is not known there (asking for it threw for a tag nobody declares). The condition now reads the tags of the reload,
+  kept by a mixin into MappedRegistry#prepareTagReload (both loaders); the scene checks the obsidian shield recipes.

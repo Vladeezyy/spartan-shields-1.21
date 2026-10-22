@@ -1,0 +1,9 @@
+{
+	"required": true,
+	"package": "com.oblivioussp.spartanshields.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"MappedRegistryMixin"
+	],
+	"minVersion": "0.8"
+}

@@ -405,6 +405,9 @@ public final class DevScene
 		boolean tin = recipes.byKey(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "tin_basic_shield"))).isPresent();
 		boolean tinIngots = BuiltInRegistries.ITEM.get(com.oblivioussp.spartanshields.tags.ModItemTags.TIN_INGOT).map(t -> t.size() > 0).orElse(false);
 		check("tin shield recipe only with tin ingots", tin == tinIngots, "recipe " + tin + ", ingots " + tinIngots);
+		// tag_not_empty with a tag the game fills (c:obsidians, c:gems/lapis): the recipes are there
+		for(String id : List.of("obsidian_basic_shield", "obsidian_tower_shield"))
+			check("recipe with a filled tag_not_empty tag: " + id, recipes.byKey(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, id))).isPresent(), "");
 		boolean mekanism = Platform.INSTANCE.isModLoaded("mekanism");
 		boolean mekRecipe = recipes.byKey(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "advanced_mekanists_basic_shield"))).isPresent();
 		check("Mekanism recipes only with Mekanism", mekRecipe == mekanism, "recipe " + mekRecipe + ", mekanism " + mekanism);

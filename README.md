@@ -76,14 +76,14 @@ powered shields take the energy of other tech mods (NeoForge energy, on Fabric T
 **NeoForge**
 
 1. Install **NeoForge 21.11.48** or newer for Minecraft **1.21.11**.
-2. Put `spartanshields-neoforge-3.1.1.4+1.21.11.jar` from the [releases](../../releases) into `mods`.
+2. Put `spartanshields-neoforge-3.1.1.5+1.21.11.jar` from the [releases](../../releases) into `mods`.
 
 No other mods needed.
 
 **Fabric**
 
 1. Install **Fabric Loader 0.19.5** or newer for Minecraft **1.21.11**.
-2. Put into `mods`: `spartanshields-fabric-3.1.1.4+1.21.11.jar` from the [releases](../../releases),
+2. Put into `mods`: `spartanshields-fabric-3.1.1.5+1.21.11.jar` from the [releases](../../releases),
    **[Fabric API](https://modrinth.com/mod/fabric-api)** and
    **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 or newer (the settings).
 
@@ -115,7 +115,7 @@ The full list, with the reasons and what 1.21 changed, is in **[PORTLOG.md](PORT
 
 ## ✅ Tested
 
-- **Functional** (20 checks, on NeoForge 21.11.48 and Fabric Loader 0.19.5 with Fabric API 0.141.6): all recipes, Shield
+- **Functional** (22 checks, on NeoForge 21.11.48 and Fabric Loader 0.19.5 with Fabric API 0.141.6): all recipes, Shield
   Bash, the three enchantments, banners, energy, config; tower shields with banners and light layers look as on 1.21.1.
 - **Release jar** on a real NeoForge 21.11.48 server and a dedicated Fabric server; the scene on a Fabric production
   client.
@@ -212,14 +212,14 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 **NeoForge**
 
 1. Установите **NeoForge 21.11.48** или новее для Minecraft **1.21.11**.
-2. Положите `spartanshields-neoforge-3.1.1.4+1.21.11.jar` из [релизов](../../releases) в папку `mods`.
+2. Положите `spartanshields-neoforge-3.1.1.5+1.21.11.jar` из [релизов](../../releases) в папку `mods`.
 
 Других модов не нужно.
 
 **Fabric**
 
 1. Установите **Fabric Loader 0.19.5** или новее для Minecraft **1.21.11**.
-2. Положите в `mods`: `spartanshields-fabric-3.1.1.4+1.21.11.jar` из [релизов](../../releases),
+2. Положите в `mods`: `spartanshields-fabric-3.1.1.5+1.21.11.jar` из [релизов](../../releases),
    **[Fabric API](https://modrinth.com/mod/fabric-api)** и
    **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 или новее (настройки).
 
@@ -257,7 +257,7 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 <details>
 <summary><b>✅ Проверено</b></summary>
 
-- **Функционально** (20 проверок, на NeoForge 21.11.48 и Fabric Loader 0.19.5 с Fabric API 0.141.6): все рецепты, удар
+- **Функционально** (22 проверки, на NeoForge 21.11.48 и Fabric Loader 0.19.5 с Fabric API 0.141.6): все рецепты, удар
   щитом, три зачарования, баннеры, энергия, конфиг; башенные щиты, баннеры и световые слои выглядят как на 1.21.1.
 - **Release jar** на настоящем сервере NeoForge 21.11.48 и выделенном сервере Fabric; сцена на production-клиенте Fabric.
 - **Совместимость**: Sodium 0.8.14, Iris 1.10.8, Lithium 0.21.4, FerriteCore 8.2.0, Jade 21.1. На Fabric — с шейдерами

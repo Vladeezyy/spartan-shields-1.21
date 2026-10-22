@@ -1,5 +1,6 @@
 package com.oblivioussp.spartanshields.fabric;
 
+import com.oblivioussp.spartanshields.util.LoadedTags;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
@@ -30,10 +31,9 @@ public record TagNotEmptyResourceCondition(Identifier tag) implements ResourceCo
 	@Override
 	public boolean test(@Nullable RegistryOps.RegistryInfoLookup registryInfo)
 	{
-		// 1.21.2+: the tags are loaded before the recipes and come with the lookup (1.21.1 kept the tags of the reload
-		// through a mixin into TagManager.LoadResult)
-		if(registryInfo == null)
-			return false;
-		return registryInfo.lookup(Registries.ITEM).flatMap(info -> info.getter().get(TagKey.create(Registries.ITEM, tag))).map(set -> set.size() > 0).orElse(false);
+		// The entries come from the tags of the reload (LoadedTags): the lookup's named sets of a first load are
+		// unbound until the reload applies them (1.21.1 kept them through a mixin into TagManager.LoadResult)
+		Boolean populated = LoadedTags.isPopulated(TagKey.create(Registries.ITEM, tag));
+		return populated != null && populated;
 	}
 }
