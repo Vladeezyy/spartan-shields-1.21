@@ -63,10 +63,12 @@ public class SpartanShieldsNeoForge
                     ev.register((net.minecraft.resources.ResourceKey<? extends Registry<Object>>)registrar.registryKey(), entry.getId(), () -> Registrar.create(entry));
             }
         }
-        // The recipe condition spartanshields:type_disabled (a NeoForge registry)
+        // The recipe conditions spartanshields:type_disabled and tag_not_empty (a NeoForge registry)
         if(ev.getRegistryKey().equals(NeoForgeRegistries.Keys.CONDITION_CODECS))
+        {
             ev.register(NeoForgeRegistries.Keys.CONDITION_CODECS, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "type_disabled"), () -> TypeDisabledConditionNeoForge.CODEC);
             ev.register(NeoForgeRegistries.Keys.CONDITION_CODECS, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "tag_not_empty"), () -> TagNotEmptyConditionNeoForge.CODEC);
+        }
     }
 
     private static void registerPayloads(RegisterPayloadHandlersEvent ev)
