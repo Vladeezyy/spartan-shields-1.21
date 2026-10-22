@@ -30,7 +30,8 @@ grep -E 'Done \(|Crash report|crash report|BUILD FAILED' "$LOG" | head -3
 grep -E '/(ERROR|FATAL)\]|Caused by|Exception' "$LOG" | grep -vE 'server.properties|No data fixer registered' | cut -c1-250 | sort | uniq -c | sort -rn | head -10
 mkdir -p fabric/run-prod
 [ -f fabric/run-prod/options.txt ] || cp fabric/run/options.txt fabric/run-prod/ 2>/dev/null
-for t in Scene Stress; do
+# NO_STRESS=1: the client scene only
+for t in Scene $([ -n "$NO_STRESS" ] || echo Stress); do
 	for s in $SAVES; do rm -rf "fabric/run-prod/saves/$s"; done
 	rm -rf fabric/run-prod/screenshots "fabric/run-prod/config/$MOD-common.toml"
 	LOG=build-prod$(echo $t | tr 'A-Z' 'a-z')-fabric.log

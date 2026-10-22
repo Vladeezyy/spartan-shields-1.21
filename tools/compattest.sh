@@ -9,9 +9,12 @@ cp run/shaderpacks/*.zip "$RUN/shaderpacks/" 2>/dev/null
 OUT=build-compat-$LOADER
 tools/scenetest.sh -Pwith_compat > $OUT-scene.out 2>&1
 rm -rf build/compat-$LOADER-scene && mkdir -p build/compat-$LOADER-scene && cp "$RUN"/screenshots/scene_*.png build/compat-$LOADER-scene/ 2>/dev/null
+# NO_STRESS=1: the scenes only
+if [ -z "$NO_STRESS" ]; then
 tools/stresstest.sh -Pwith_compat > $OUT-stress.out 2>&1
 rm -rf build/compat-$LOADER-stress && mkdir -p build/compat-$LOADER-stress && cp "$RUN"/screenshots/stress_*.png build/compat-$LOADER-stress/ 2>/dev/null
-for f in $OUT-scene.out $OUT-stress.out; do
+fi
+for f in $(ls $OUT-scene*.out; [ -n "$NO_STRESS" ] || echo $OUT-stress.out); do
 	echo "=== $f: $(grep -c 'CHECK' $f) checks, $(grep -oE 'DONE, failed checks: [0-9]+' $f)"
 	grep 'CHECK FAIL' $f | head -10
 	sed -n '/--- errors/,$p' $f | head -12

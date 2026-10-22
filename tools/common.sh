@@ -14,4 +14,18 @@ kill_dev() {
         *) pkill -f 'spartan-shields.*(fml.modFolders|loom-cache|net.fabricmc)' 2>/dev/null ;;
     esac
 }
-# Run dir name of the gradle task: runScene / runStress / runServer for both loaders
+# Runs a gradle task into a log, stopping the game when it writes a crash report (it would wait on the crash screen)
+run_watched() {
+    log=$1; timeout=$2; shift 2
+    perl -e "alarm $timeout; exec @ARGV" ./gradlew "$@" --console=plain > "$log" 2>&1 &
+    gradle_pid=$!
+    while kill -0 $gradle_pid 2>/dev/null; do
+        if grep -q -- '---- Minecraft Crash Report ----' "$log" 2>/dev/null; then
+            sleep 3
+            kill_dev
+        fi
+        sleep 2
+    done
+    wait $gradle_pid
+    echo "exit $?"
+}
