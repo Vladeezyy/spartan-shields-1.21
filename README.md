@@ -120,6 +120,9 @@ The full list, with the reasons and what 1.21 changed, is in **[PORTLOG.md](PORT
   (60 FPS), 60 mobs against a Spikes shield (server tick 2 ms), 30 teleports up to 60 000 blocks.
 - **Compatibility**: Mekanism 10.7, Ender IO 8, Sodium 0.6 + Iris 1.8 with Complementary shaders, Lithium, FerriteCore,
   ModernFix, JEI, Jade.
+- **Fabric** (Loader 0.16.14, Fabric API 0.116.17, Forge Config API Port 21.1.6): the same scene (20 checks), the
+  release jar on a dedicated Fabric server and the scene on a production client; compatibility with Sodium 0.6.13 +
+  Iris 1.8.8 with Complementary shaders, Lithium, FerriteCore, ModernFix, Jade, EMI.
 - Not tested: Botania (no 1.21.1 release yet; its shields use the mana API when it is installed).
 
 ## ❤️ Credits
@@ -259,6 +262,9 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
   (60 FPS), 60 мобов против щита со Spikes (тик сервера 2 мс), 30 телепортов на расстояние до 60 000 блоков.
 - **Совместимость**: Mekanism 10.7, Ender IO 8, Sodium 0.6 + Iris 1.8 с шейдерами Complementary, Lithium, FerriteCore,
   ModernFix, JEI, Jade.
+- **Fabric** (Loader 0.16.14, Fabric API 0.116.17, Forge Config API Port 21.1.6): та же сцена (20 проверок), release
+  jar на выделенном сервере Fabric и сцена на production-клиенте; совместимость с Sodium 0.6.13 + Iris 1.8.8 с
+  шейдерами Complementary, Lithium, FerriteCore, ModernFix, Jade, EMI.
 - Не проверено: Botania (под 1.21.1 ещё не вышла; когда она установлена, её щиты используют API маны).
 
 </details>

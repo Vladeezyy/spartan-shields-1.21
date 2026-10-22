@@ -172,3 +172,17 @@ Checked with modding-kb `scripts/langcheck.py` (145/145 keys, placeholders) and 
   unpowered Mekanist and Dark Steel tower shields (`scene_glow`); with `-Dspartanshields.fullGlow=true` (the old full
   light pass) and without it the shields are the same pixels (differences only in the animated water and leaves).
 - The FE shield bars read a plain component, nothing to change. Client scene and stress scene: all checks pass.
+
+## NeoForge and Fabric release check (2026-10-22, 3.1.1.4)
+
+- Release jar on real NeoForge servers 21.1.259 and 21.1.197 and on a dedicated Fabric server (Loom
+  `ServerProductionRunTask`): starts clean. The client scene on a Fabric production client (intermediary names, the
+  release jar plus the test classes): 20/20.
+- Compatibility on both loaders (Sodium 0.6.13, Iris 1.8.8 on Fabric with Complementary Reimagined r5.9.3, Lithium,
+  FerriteCore, ModernFix, Jade, JEI on NeoForge, EMI on Fabric): client scene 20/20. Errors in the logs are the shader
+  pack's own, other mods' optional mixins and EMI's "Untranslated tag" for the mod's item tags (no tag names in the
+  language files yet).
+- No stress scene and no FPS measurements in this run (owner's call); the last numbers are in the performance check above.
+- Later the same day: Loom's `ClientProductionRunTask` also puts the project's `remapJar` into `mods`, so the scenes
+  jar and the release jar ran together (Fabric happened to load the scenes jar). The task now uses `mods.setFrom`, and the
+  production runs were repeated with only the scenes jar: all checks pass.
