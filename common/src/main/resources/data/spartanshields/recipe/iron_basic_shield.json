@@ -4,12 +4,8 @@
   "fabric:load_conditions": [],
   "group": "spartanshields:iron_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/iron"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/iron",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

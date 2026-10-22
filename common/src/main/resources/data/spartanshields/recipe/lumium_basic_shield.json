@@ -9,11 +9,8 @@
       ]
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/lumium"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/lumium"
     }
   ],
   "fabric:load_conditions": [
@@ -31,12 +28,8 @@
   ],
   "group": "spartanshields:lumium_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/lumium"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/lumium",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

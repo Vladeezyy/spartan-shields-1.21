@@ -12,4 +12,6 @@ public interface IItemPoweredFE
 	
 	public boolean canExtractFE(ItemStack stack);
 	public boolean canReceiveFE(ItemStack stack);
+
+	public int getFEMaxReceive(ItemStack container);
 }

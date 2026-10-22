@@ -27,18 +27,10 @@
     }
   ],
   "key": {
-    "#": {
-      "tag": "c:ingots/elementium"
-    },
-    "/": {
-      "item": "botania:dreamwood_twig"
-    },
-    "m": {
-      "item": "botania:rune_mana"
-    },
-    "s": {
-      "item": "botania:rune_summer"
-    }
+    "#": "#c:ingots/elementium",
+    "/": "botania:dreamwood_twig",
+    "m": "botania:rune_mana",
+    "s": "botania:rune_summer"
   },
   "pattern": [
     "#s#",

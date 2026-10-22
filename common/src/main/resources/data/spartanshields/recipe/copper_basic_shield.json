@@ -4,12 +4,8 @@
   "fabric:load_conditions": [],
   "group": "spartanshields:copper_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/copper"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/copper",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

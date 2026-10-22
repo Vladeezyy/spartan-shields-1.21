@@ -1,15 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "tag": "c:ingots/netherite"
-  },
-  "base": {
-    "item": "spartanshields:diamond_basic_shield"
-  },
+  "addition": "#c:ingots/netherite",
+  "base": "spartanshields:diamond_basic_shield",
   "result": {
     "id": "spartanshields:netherite_basic_shield"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  }
+  "template": "minecraft:netherite_upgrade_smithing_template"
 }

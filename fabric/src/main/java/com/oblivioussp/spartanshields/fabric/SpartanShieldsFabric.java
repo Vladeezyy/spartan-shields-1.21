@@ -11,8 +11,8 @@ import com.oblivioussp.spartanshields.item.IItemPoweredFE;
 import com.oblivioussp.spartanshields.network.ShieldBashPacket;
 import com.oblivioussp.spartanshields.platform.Registrar;
 
-import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
-import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
+import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.v5.ModConfigEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -34,9 +34,9 @@ public class SpartanShieldsFabric implements ModInitializer
 		ModSpartanShields.setup();
 
 		// Forge Config API Port loads a common config right in register(): the listeners come first
-		NeoForgeModConfigEvents.loading(ModSpartanShields.ID).register(config -> Config.onConfigChanged(config.getFileName(), config.getSpec()));
-		NeoForgeModConfigEvents.reloading(ModSpartanShields.ID).register(config -> Config.onConfigChanged(config.getFileName(), config.getSpec()));
-		NeoForgeConfigRegistry.INSTANCE.register(ModSpartanShields.ID, ModConfig.Type.COMMON, Config.CONFIG_SPEC);
+		ModConfigEvents.loading(ModSpartanShields.ID).register(config -> Config.onConfigChanged(config.getFileName(), config.getSpec()));
+		ModConfigEvents.reloading(ModSpartanShields.ID).register(config -> Config.onConfigChanged(config.getFileName(), config.getSpec()));
+		ConfigRegistry.INSTANCE.register(ModSpartanShields.ID, ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 		Config.apply();
 
 		PayloadTypeRegistry.playC2S().register(ShieldBashPacket.TYPE, ShieldBashPacket.STREAM_CODEC);

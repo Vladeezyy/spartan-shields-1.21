@@ -10,7 +10,7 @@ import com.oblivioussp.spartanshields.network.ShieldBashPacket;
 import com.oblivioussp.spartanshields.platform.Registrar;
 
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -65,7 +65,8 @@ public class SpartanShieldsNeoForge
         }
         // The recipe condition spartanshields:type_disabled (a NeoForge registry)
         if(ev.getRegistryKey().equals(NeoForgeRegistries.Keys.CONDITION_CODECS))
-            ev.register(NeoForgeRegistries.Keys.CONDITION_CODECS, ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "type_disabled"), () -> TypeDisabledConditionNeoForge.CODEC);
+            ev.register(NeoForgeRegistries.Keys.CONDITION_CODECS, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "type_disabled"), () -> TypeDisabledConditionNeoForge.CODEC);
+            ev.register(NeoForgeRegistries.Keys.CONDITION_CODECS, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "tag_not_empty"), () -> TagNotEmptyConditionNeoForge.CODEC);
     }
 
     private static void registerPayloads(RegisterPayloadHandlersEvent ev)
@@ -85,7 +86,7 @@ public class SpartanShieldsNeoForge
         {
             Item item = holder.get();
             if(item instanceof IItemPoweredFE)
-                ev.registerItem(Capabilities.EnergyStorage.ITEM, new EnergyCapabilityProviderItem(), item);
+                ev.registerItem(Capabilities.Energy.ITEM, new EnergyCapabilityProviderItem(), item);
         }
     }
 

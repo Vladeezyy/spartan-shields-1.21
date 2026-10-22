@@ -26,10 +26,10 @@ public class SpikesEnchantment implements EnchantmentSS
 	            if (attacker != null)
 	                attacker.hurt(user.damageSources().thorns(user), spikesDamage);
 	
-	            activeStack.hurtAndBreak(9, user, LivingEntity.getSlotForHand(user.getUsedItemHand()));
+	            activeStack.hurtAndBreak(9, user, user.getUsedItemHand().asEquipmentSlot());
 	        }
 	        else
-	        	activeStack.hurtAndBreak(3, user, LivingEntity.getSlotForHand(user.getUsedItemHand()));
+	        	activeStack.hurtAndBreak(3, user, user.getUsedItemHand().asEquipmentSlot());
         }
     }
 

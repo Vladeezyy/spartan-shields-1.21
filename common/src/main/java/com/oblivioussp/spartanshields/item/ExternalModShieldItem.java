@@ -1,6 +1,7 @@
 package com.oblivioussp.spartanshields.item;
 
-import java.util.List;
+import java.util.function.Consumer;
+
 
 import com.oblivioussp.spartanshields.ModSpartanShields;
 import com.oblivioussp.spartanshields.config.Config;
@@ -11,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class ExternalModShieldItem extends BasicShieldItem
 {
@@ -26,13 +28,13 @@ public class ExternalModShieldItem extends BasicShieldItem
      * allows items to add custom lines of information to the mouseover description
      */
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn)
     {
     	if(!Config.INSTANCE.forceDisableUncraftableTooltips.get())
     	{
-    		tooltip.add(Component.translatable("tooltip." + ModSpartanShields.ID + ".uncraftable_missing_mods", Component.translatable("mod." + ModSpartanShields.ID + "." + modName)).withStyle(ChatFormatting.RED));
+    		tooltip.accept(Component.translatable("tooltip." + ModSpartanShields.ID + ".uncraftable_missing_mods", Component.translatable("mod." + ModSpartanShields.ID + "." + modName)).withStyle(ChatFormatting.RED));
     	}
     	
-    	super.appendHoverText(stack, context, tooltip, flagIn);
+    	super.appendHoverText(stack, context, display, tooltip, flagIn);
     }
 }

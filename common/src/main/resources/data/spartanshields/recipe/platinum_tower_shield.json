@@ -9,11 +9,8 @@
       ]
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/platinum"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/platinum"
     }
   ],
   "fabric:load_conditions": [
@@ -31,12 +28,8 @@
   ],
   "group": "spartanshields:platinum_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/platinum"
-    },
-    "O": {
-      "item": "spartanshields:wooden_tower_shield"
-    }
+    "#": "#c:ingots/platinum",
+    "O": "spartanshields:wooden_tower_shield"
   },
   "pattern": [
     "###",

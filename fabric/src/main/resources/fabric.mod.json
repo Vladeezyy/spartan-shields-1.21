@@ -19,6 +19,7 @@
     "client": ["com.oblivioussp.spartanshields.fabric.SpartanShieldsFabricClient"]
   },
   "mixins": ["spartanshields.fabric.mixins.json"],
+  "accessWidener": "spartanshields.accesswidener",
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",

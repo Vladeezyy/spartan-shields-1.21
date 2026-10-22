@@ -1,6 +1,7 @@
 package com.oblivioussp.spartanshields.item;
 
-import java.util.List;
+import java.util.function.Consumer;
+
 
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -16,18 +17,22 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.level.Level;
 import com.oblivioussp.spartanshields.platform.Platform;
 
 public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield, IItemPoweredFE
 {
+	private static final BlocksAttacks.ItemDamageFunction NO_DURABILITY_DAMAGE = new BlocksAttacks.ItemDamageFunction(Float.MAX_VALUE, 0.0F, 0.0F);
+
 	protected int energyCapacity;
 	protected int maxEnergyReceive;
 	protected String modName;
@@ -38,7 +43,8 @@ public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield
 		// 1.20.1 passed a durability of 0 here and made the item damageable through getMaxDamage (the energy capacity);
 		// a 1.21 item needs a positive max_damage component for that, so it gets the capacity (the shield never
 		// takes damage: setDamage keeps it at 0)
-		super(capacity, isTowerShieldIn, prop);
+		// Blocked hits take energy (damageShield), never durability
+		super(capacity, isTowerShieldIn, prop, NO_DURABILITY_DAMAGE);
 		this.energyCapacity = isTowerShieldIn ? Mth.floor(capacity * 1.25f) : capacity;
 		this.maxEnergyReceive = maxReceive;
 		this.modName = modName;
@@ -81,39 +87,39 @@ public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield
      * allows items to add custom lines of information to the mouseover description
      */
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn)
     {
 		LocalizedNumberFormatter formatter = NumberFormatter.withLocale(Platform.INSTANCE.isClient() ? ClientHelper.getJavaLocale() : java.util.Locale.ROOT);
-    	tooltip.add(Component.translatable("tooltip." + ModSpartanShields.ID + "." + preferredEnergyUnit.getCapacityTranslationKey(), formatter.format(Mth.floor(this.getFEStored(stack) * preferredEnergyUnit.getEnergyScaleToFE())).toString(), formatter.format(Mth.floor(this.getFECapacity(stack)  * preferredEnergyUnit.getEnergyScaleToFE())).toString()));
-    	tooltip.add(Component.translatable("tooltip." + ModSpartanShields.ID + "." + preferredEnergyUnit.getEnergyChargeRateTranslationKey(), formatter.format(Mth.floor(this.maxEnergyReceive * preferredEnergyUnit.getEnergyScaleToFE())).toString()));
-    	tooltip.add(Component.translatable("tooltip." + ModSpartanShields.ID + "." + preferredEnergyUnit.getEnergyPerDamageTranslationKey(), formatter.format(Mth.floor(Config.INSTANCE.damageToFEMultiplier.get() * 2 * preferredEnergyUnit.getEnergyScaleToFE())).toString()));
-    	tooltip.add(Component.translatable("tooltip." + ModSpartanShields.ID + "." + "fe_shield.desc"));
+    	tooltip.accept(Component.translatable("tooltip." + ModSpartanShields.ID + "." + preferredEnergyUnit.getCapacityTranslationKey(), formatter.format(Mth.floor(this.getFEStored(stack) * preferredEnergyUnit.getEnergyScaleToFE())).toString(), formatter.format(Mth.floor(this.getFECapacity(stack)  * preferredEnergyUnit.getEnergyScaleToFE())).toString()));
+    	tooltip.accept(Component.translatable("tooltip." + ModSpartanShields.ID + "." + preferredEnergyUnit.getEnergyChargeRateTranslationKey(), formatter.format(Mth.floor(this.maxEnergyReceive * preferredEnergyUnit.getEnergyScaleToFE())).toString()));
+    	tooltip.accept(Component.translatable("tooltip." + ModSpartanShields.ID + "." + preferredEnergyUnit.getEnergyPerDamageTranslationKey(), formatter.format(Mth.floor(Config.INSTANCE.damageToFEMultiplier.get() * 2 * preferredEnergyUnit.getEnergyScaleToFE())).toString()));
+    	tooltip.accept(Component.translatable("tooltip." + ModSpartanShields.ID + "." + "fe_shield.desc"));
     }
 	
     @Override
-    public UseAnim getUseAnimation(ItemStack stack)
+    public ItemUseAnimation getUseAnimation(ItemStack stack)
     {
     	if(this.getFEStored(stack) > 0)
-    		return UseAnim.BLOCK;
+    		return ItemUseAnimation.BLOCK;
     	else
-    		return UseAnim.NONE;
+    		return ItemUseAnimation.NONE;
     }
     
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+    public InteractionResult use(Level level, Player player, InteractionHand hand)
     {
         ItemStack stack = player.getItemInHand(hand);
         if(this.getFEStored(stack) > 0)
         {
         	player.startUsingItem(hand);
-        	return InteractionResultHolder.consume(stack);
+        	return InteractionResult.CONSUME;
         }
         else
         {
         	// 1.20.1 started using the empty shield anyway (the use animation was NONE, so it did not block)
-        	if(level.isClientSide)
+        	if(level.isClientSide())
         		player.displayClientMessage(Component.translatable("message." + ModSpartanShields.ID + ".powered_shield_block_fail", stack.getHoverName()).withStyle(ChatFormatting.YELLOW), false);
-        	return InteractionResultHolder.fail(stack);
+        	return InteractionResult.FAIL;
         }
     }
 
@@ -134,7 +140,7 @@ public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield
 		if(currentEnergy == 0)
 		{
 			Level level = player.level();
-			player.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + level.random.nextFloat() * 0.4F);
+			player.playSound(SoundEvents.SHIELD_BREAK.value(), 0.8F, 0.8F + level.random.nextFloat() * 0.4F);
 		}
 	}
 	
@@ -182,6 +188,12 @@ public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield
 	public int getFECapacity(ItemStack container) 
 	{
 		return energyCapacity;
+	}
+
+	@Override
+	public int getFEMaxReceive(ItemStack container)
+	{
+		return maxEnergyReceive;
 	}
 
 	@Override

@@ -9,11 +9,8 @@
       ]
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/lead"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/lead"
     }
   ],
   "fabric:load_conditions": [
@@ -31,12 +28,8 @@
   ],
   "group": "spartanshields:lead_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/lead"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/lead",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

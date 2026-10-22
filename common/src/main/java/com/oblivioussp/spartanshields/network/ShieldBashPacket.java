@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +27,7 @@ import com.oblivioussp.spartanshields.platform.Platform;
 /** Client -> server: the player bashed with the shield in {@code hand}, hitting {@code entityId} or missing. */
 public record ShieldBashPacket(InteractionHand hand, int entityId, boolean attackEntity) implements CustomPacketPayload
 {
-	public static final CustomPacketPayload.Type<ShieldBashPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "shield_bash"));
+	public static final CustomPacketPayload.Type<ShieldBashPacket> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "shield_bash"));
 	public static final StreamCodec<ByteBuf, ShieldBashPacket> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.BOOL.map(b -> b ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND, h -> h == InteractionHand.OFF_HAND), ShieldBashPacket::hand,
 			ByteBufCodecs.INT, ShieldBashPacket::entityId,
@@ -52,7 +52,7 @@ public record ShieldBashPacket(InteractionHand hand, int entityId, boolean attac
 			ItemStack shieldStack = player.getItemInHand(packet.hand);
 			boolean isTowerShield = shieldStack.is(ModItemTags.TOWER_SHIELDS);
 			
-			if(!shieldStack.isEmpty() && !player.getCooldowns().isOnCooldown(shieldStack.getItem()) && 
+			if(!shieldStack.isEmpty() && !player.getCooldowns().isOnCooldown(shieldStack) && 
 					player.getUseItem().is(ModItemTags.SHIELDS_WITH_BASH) && Platform.INSTANCE.canShieldBlock(player.getUseItem()))
 			{
 				// 1.20.1 trusted the entity id from the client: any entity of the level could be bashed from any distance
@@ -88,7 +88,7 @@ public record ShieldBashPacket(InteractionHand hand, int entityId, boolean attac
 					player.level().playSound((Player)null, player.getX(), player.getY(), player.getZ(), ModSounds.SHIELD_BASH_MISS.get(), player.getSoundSource(), 0.5f, 0.01f);
 				}
 				player.stopUsingItem();
-				player.getCooldowns().addCooldown(shieldStack.getItem(), isTowerShield ? Config.INSTANCE.cooldownTowerShieldBash.get() : Config.INSTANCE.cooldownShieldBash.get());
+				player.getCooldowns().addCooldown(shieldStack, isTowerShield ? Config.INSTANCE.cooldownTowerShieldBash.get() : Config.INSTANCE.cooldownShieldBash.get());
 			}
 		}
 	}
@@ -115,7 +115,7 @@ public record ShieldBashPacket(InteractionHand hand, int entityId, boolean attac
 		
 		// Finally deal damage.
 		targetEntity.hurt(player.damageSources().playerAttack(player), bashDamage);
-		shieldStack.hurtAndBreak(5, player, LivingEntity.getSlotForHand(hand));
+		shieldStack.hurtAndBreak(5, player, hand.asEquipmentSlot());
 		
 		// Set foes on fire when hit with the Shield Bash
 		int firebrandLvl = ModEnchantments.getLevel(player.level(), shieldStack, ModEnchantments.FIREBRAND);

@@ -143,5 +143,5 @@
   "message.spartanshields.powered_shield_block_fail": "Не можна поглинути шкоду: у %s скінчилася енергія.",
   "message.spartanshields.event_bus_shutdown_error": "[Критична помилка] Інший мод зупинив шину подій до або під час реєстрації, і Spartan Shields не зміг зареєструвати свої предмети! Знайдіть цей мод у лозі!",
   "key.spartanshields.alt_shield_bash": "Додаткова клавіша удару щитом",
-  "key.spartanshields.category": "Spartan Shields"
+  "key.category.spartanshields.main": "Spartan Shields"
 }

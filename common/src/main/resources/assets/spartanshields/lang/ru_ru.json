@@ -143,5 +143,5 @@
   "message.spartanshields.powered_shield_block_fail": "Нельзя поглотить урон: у %s кончилась энергия.",
   "message.spartanshields.event_bus_shutdown_error": "[Критическая ошибка] Другой мод остановил шину событий до или во время регистрации, и Spartan Shields не смог зарегистрировать свои предметы! Найдите этот мод по логу!",
   "key.spartanshields.alt_shield_bash": "Дополнительная клавиша удара щитом",
-  "key.spartanshields.category": "Spartan Shields"
+  "key.category.spartanshields.main": "Spartan Shields"
 }

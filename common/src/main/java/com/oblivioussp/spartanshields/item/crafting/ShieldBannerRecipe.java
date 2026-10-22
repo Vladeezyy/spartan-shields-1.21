@@ -17,11 +17,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShieldDecorationRecipe;
+import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.level.Level;
 
-/** Applies a banner to one tower shield (the vanilla shield decoration recipe for another shield item). */
-public class ShieldBannerRecipe extends ShieldDecorationRecipe
+/**
+ * Applies a banner to one tower shield (the vanilla shield decoration recipe for another shield item). 1.21.2+: a
+ * CustomRecipe, as ShieldDecorationRecipe#getSerializer is typed to its own serializer.
+ */
+public class ShieldBannerRecipe extends CustomRecipe
 {
 	protected final Item shieldItem;
 
@@ -117,7 +120,7 @@ public class ShieldBannerRecipe extends ShieldDecorationRecipe
     }
 
 	@Override
-	public RecipeSerializer<?> getSerializer() 
+	public RecipeSerializer<ShieldBannerRecipe> getSerializer() 
 	{
 		return ModRecipes.SHIELD_BANNER.get();
 	}

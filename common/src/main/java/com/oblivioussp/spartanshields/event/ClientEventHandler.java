@@ -66,7 +66,7 @@ public class ClientEventHandler
 				return;
 			
 //			Log.info("Bashing hand: " + shieldHand);
-			if(player.getCooldowns().isOnCooldown(shieldStack.getItem()))
+			if(player.getCooldowns().isOnCooldown(shieldStack))
 				return;
 			
 			// 1.20.1: the pick range of the game mode (the block reach)
@@ -138,14 +138,14 @@ public class ClientEventHandler
 				Vec3 hitVec = entityRayTrace.getLocation();
 				double d2 = eyePos.distanceToSqr(hitVec);
 				if(flag && d2 > (reach * reach))
-					result = BlockHitResult.miss(hitVec, Direction.getNearest(lookVec.x, lookVec.y, lookVec.z), BlockPos.containing(hitVec));
+					result = BlockHitResult.miss(hitVec, Direction.getApproximateNearest(lookVec.x, lookVec.y, lookVec.z), BlockPos.containing(hitVec));
 				
 				else if(d2 < d1 || result == null)
 					result = entityRayTrace;
 			}
 			else
 			{
-				result = BlockHitResult.miss(attackVec, Direction.getNearest(lookVec.x, lookVec.y, lookVec.z), BlockPos.containing(attackVec));
+				result = BlockHitResult.miss(attackVec, Direction.getApproximateNearest(lookVec.x, lookVec.y, lookVec.z), BlockPos.containing(attackVec));
 			}
 		}
 		

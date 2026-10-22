@@ -9,11 +9,8 @@
       ]
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/nickel"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/nickel"
     }
   ],
   "fabric:load_conditions": [
@@ -31,12 +28,8 @@
   ],
   "group": "spartanshields:nickel_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/nickel"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/nickel",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

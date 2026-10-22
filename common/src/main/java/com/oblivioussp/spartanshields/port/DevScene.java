@@ -32,7 +32,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,9 +42,9 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -53,7 +54,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.WorldDataConfiguration;
@@ -95,11 +96,11 @@ public final class DevScene
 		// -Dspartanshields.fullGlow=true, which draws the whole model in the light pass as before (port/GlowLayer check)
 		at(341, mc -> server(mc, DevScene::glowCloseUp));
 		at(346, mc -> shot(mc, "glow"));
-		at(348, mc -> server(mc, p -> p.teleportTo(p.serverLevel(), stage.getX() + 0.5, stage.getY() + 1.2, stage.getZ() + 1.5, 0.0F, 15.0F)));
+		at(348, mc -> server(mc, p -> p.teleportTo(p.level(), stage.getX() + 0.5, stage.getY() + 1.2, stage.getZ() + 1.5, java.util.Set.of(), 0.0F, 15.0F, true)));
 		// Creative tab
 		at(350, mc -> {
 			mc.options.hideGui = false;
-			mc.getToasts().clear();
+			mc.getToastManager().clear();
 			mc.setScreen(new CreativeModeInventoryScreen(mc.player, mc.player.connection.enabledFeatures(), true));
 		});
 		at(360, mc -> {
@@ -122,9 +123,11 @@ public final class DevScene
 		at(395, mc -> mc.setScreen(null));
 		// First person: blocking with a tower shield in the off hand
 		at(400, mc -> server(mc, DevScene::firstPerson));
-		at(410, mc -> mc.options.keyUse.setDown(true));
-		at(470, mc -> server(mc, DevScene::spawnZombie));
-		at(480, mc -> { mc.getToasts().clear(); shot(mc, "blocking"); });
+		// The husk first: it stands between the player and the armour stands, else the right click goes to a stand
+		// (aimed at from the first person spot) instead of raising the shield
+		at(410, mc -> server(mc, DevScene::spawnZombie));
+		at(412, mc -> mc.options.keyUse.setDown(true));
+		at(480, mc -> { mc.getToastManager().clear(); shot(mc, "blocking"); });
 		// Shield bash on a husk (the real packet from the client)
 		at(485, mc -> {
 			NetworkHandler.sendPacketToServer(new ShieldBashPacket(InteractionHand.OFF_HAND, zombieId, true));
@@ -170,7 +173,7 @@ public final class DevScene
 				mc.createWorldOpenFlows().openWorld(WORLD, () -> mc.setScreen(new TitleScreen()));
 			else
 			{
-				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true, new GameRules(), WorldDataConfiguration.DEFAULT);
+				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true, new GameRules(net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS), WorldDataConfiguration.DEFAULT);
 				mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, new WorldOptions(1234L, false, false), WorldPresets::createNormalWorldDimensions, new TitleScreen());
 			}
 			return;
@@ -179,7 +182,7 @@ public final class DevScene
 			return;
 		mc.options.pauseOnLostFocus = false;
 		mc.getTutorial().setStep(net.minecraft.client.tutorial.TutorialSteps.NONE);
-		mc.getToasts().clear();
+		mc.getToastManager().clear();
 		if(mc.screen instanceof PauseScreen)
 			mc.setScreen(null);
 		tick++;
@@ -208,20 +211,20 @@ public final class DevScene
 
 	private static void setup(ServerPlayer player)
 	{
-		MinecraftServer server = player.getServer();
+		MinecraftServer server = player.level().getServer();
 		player.setGameMode(GameType.CREATIVE);
-		server.getGameRules().getRule(GameRules.RULE_DOMOBSPAWNING).set(false, server);
-		server.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false, server);
-		server.getGameRules().getRule(GameRules.RULE_WEATHER_CYCLE).set(false, server);
-		player.serverLevel().setDayTime(6000);
-		player.serverLevel().setWeatherParameters(6000, 0, false, false);
+		server.overworld().getGameRules().set(GameRules.SPAWN_MOBS, false, server);
+		server.overworld().getGameRules().set(GameRules.ADVANCE_TIME, false, server);
+		server.overworld().getGameRules().set(GameRules.ADVANCE_WEATHER, false, server);
+		player.level().setDayTime(6000);
+		player.level().setWeatherParameters(6000, 0, false, false);
 	}
 
 	/** Flat stone stage at the spawn with two rows of armor stands: basic shields in front, tower shields behind. */
 	private static void buildStage(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
-		BlockPos spawn = level.getSharedSpawnPos();
+		ServerLevel level = player.level();
+		BlockPos spawn = level.getRespawnData().pos();
 		int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawn.getX(), spawn.getZ());
 		stage = new BlockPos(spawn.getX(), y, spawn.getZ());
 		for(int dx = -12; dx <= 12; dx++)
@@ -249,7 +252,7 @@ public final class DevScene
 			level.addFreshEntity(frame);
 		}
 		Log.info("[scene] " + all.size() + " shields on the wall");
-		player.teleportTo(level, stage.getX() + 0.5, stage.getY() + 1.4, stage.getZ() + 4.5, 0.0F, -2.0F);
+		player.teleportTo(level, stage.getX() + 0.5, stage.getY() + 1.4, stage.getZ() + 4.5, java.util.Set.of(), 0.0F, -2.0F, true);
 	}
 
 	private static void row(ServerLevel level, List<ItemStack> shields, int dz)
@@ -257,9 +260,9 @@ public final class DevScene
 		int n = shields.size();
 		for(int i = 0; i < n; i++)
 		{
-			ArmorStand stand = EntityType.ARMOR_STAND.create(level);
+			ArmorStand stand = EntityType.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
 			double x = stage.getX() + 0.5 + (i - (n - 1) / 2.0) * 2.0;
-			stand.moveTo(x, stage.getY(), stage.getZ() + dz + 0.5, 0.0F, 0.0F);
+			stand.snapTo(x, stage.getY(), stage.getZ() + dz + 0.5, 0.0F, 0.0F);
 			stand.setYBodyRot(0.0F);
 			stand.setYHeadRot(0.0F);
 			stand.setShowArms(true);
@@ -271,7 +274,7 @@ public final class DevScene
 
 	private static void closeUp(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		HolderLookup.Provider registries = level.registryAccess();
 		List<ItemStack> tower = List.of(stack(ModItems.WOODEN_TOWER_SHIELD), stack(ModItems.IRON_TOWER_SHIELD), stack(ModItems.DIAMOND_TOWER_SHIELD),
 				bannered(ModItems.STONE_TOWER_SHIELD.get(), registries, DyeColor.RED), stack(ModItems.ENDERIUM_TOWER_SHIELD),
@@ -279,23 +282,23 @@ public final class DevScene
 				stack(ModItems.LUMIUM_TOWER_SHIELD), stack(ModItems.TERRASTEEL_TOWER_SHIELD), charged(ModItems.ULTIMATE_MEKANISTS_TOWER_SHIELD.get()),
 				charged(ModItems.DARK_STEEL_RIOT_TOWER_SHIELD.get()));
 		row(level, tower, 6);
-		player.teleportTo(player.serverLevel(), stage.getX() + 0.5, stage.getY() + 1.2, stage.getZ() + 1.5, 0.0F, 15.0F);
+		player.teleportTo(player.level(), stage.getX() + 0.5, stage.getY() + 1.2, stage.getZ() + 1.5, java.util.Set.of(), 0.0F, 15.0F, true);
 	}
 
 	private static void glowCloseUp(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		for(int i = 0; i < 2; i++)
 		{
-			ArmorStand stand = EntityType.ARMOR_STAND.create(level);
-			stand.moveTo(stage.getX() + 12.5 + i * 2.0 - 2.0, stage.getY(), stage.getZ() + 6.5, 0.0F, 0.0F);
+			ArmorStand stand = EntityType.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
+			stand.snapTo(stage.getX() + 12.5 + i * 2.0 - 2.0, stage.getY(), stage.getZ() + 6.5, 0.0F, 0.0F);
 			stand.setYBodyRot(0.0F);
 			stand.setShowArms(true);
 			stand.setNoBasePlate(true);
 			stand.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(i == 0 ? ModItems.ULTIMATE_MEKANISTS_TOWER_SHIELD.get() : ModItems.DARK_STEEL_RIOT_TOWER_SHIELD.get()));
 			level.addFreshEntity(stand);
 		}
-		player.teleportTo(level, stage.getX() + 10.5, stage.getY() + 1.2, stage.getZ() + 3.0, 0.0F, 12.0F);
+		player.teleportTo(level, stage.getX() + 10.5, stage.getY() + 1.2, stage.getZ() + 3.0, java.util.Set.of(), 0.0F, 12.0F, true);
 	}
 
 	private static void firstPerson(ServerPlayer player)
@@ -303,13 +306,13 @@ public final class DevScene
 		ItemStack shield = bannered(ModItems.IRON_TOWER_SHIELD.get(), player.registryAccess(), DyeColor.LIGHT_BLUE);
 		player.setItemSlot(EquipmentSlot.OFFHAND, shield);
 		player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-		player.teleportTo(player.serverLevel(), stage.getX() + 0.5, stage.getY(), stage.getZ() + 1.5, 0.0F, 10.0F);
+		player.teleportTo(player.level(), stage.getX() + 0.5, stage.getY(), stage.getZ() + 1.5, java.util.Set.of(), 0.0F, 10.0F, true);
 	}
 
 	private static void spawnZombie(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
-		Zombie zombie = EntityType.HUSK.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.5), MobSpawnType.COMMAND);
+		ServerLevel level = player.level();
+		Zombie zombie = EntityType.HUSK.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.5), EntitySpawnReason.COMMAND);
 		zombie.setNoAi(true);
 		zombie.setYRot(180.0F);
 		zombie.setYHeadRot(180.0F);
@@ -319,21 +322,21 @@ public final class DevScene
 
 	private static void checkBash(ServerPlayer player)
 	{
-		Zombie zombie = (Zombie)player.serverLevel().getEntity(zombieId);
+		Zombie zombie = (Zombie)player.level().getEntity(zombieId);
 		int hits = player.getStats().getValue(Stats.CUSTOM.get(ModStats.SHIELD_BASH_HITS));
 		check("shield bash (accepted only while blocking) hurts the husk", zombie != null && zombie.getHealth() < zombieHealth, zombie == null ? "no zombie" : zombieHealth + " -> " + zombie.getHealth());
 		check("shield bash counted in the stat", hits > 0, hits);
-		check("shield bash puts the shield on cooldown", player.getCooldowns().isOnCooldown(ModItems.IRON_TOWER_SHIELD.get()), "");
+		check("shield bash puts the shield on cooldown", player.getCooldowns().isOnCooldown(new ItemStack(ModItems.IRON_TOWER_SHIELD.get())), "");
 		// Too far: the server refuses the bash (1.20.1 accepted any entity id)
-		ServerLevel level = player.serverLevel();
-		Zombie far = EntityType.ZOMBIE.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 30), MobSpawnType.COMMAND);
+		ServerLevel level = player.level();
+		Zombie far = EntityType.ZOMBIE.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 30), EntitySpawnReason.COMMAND);
 		far.setNoAi(true);
 		float before = far.getHealth();
-		player.getCooldowns().removeCooldown(ModItems.IRON_TOWER_SHIELD.get());
+		player.getCooldowns().removeCooldown(ModItems.IRON_TOWER_SHIELD.getId());
 		ShieldBashPacket.handle(new ShieldBashPacket(InteractionHand.OFF_HAND, far.getId(), true), player);
 		check("shield bash out of reach is refused", far.getHealth() == before, before + " -> " + far.getHealth());
 		far.discard();
-		player.getCooldowns().removeCooldown(ModItems.IRON_TOWER_SHIELD.get());
+		player.getCooldowns().removeCooldown(ModItems.IRON_TOWER_SHIELD.getId());
 	}
 
 	private static ItemStack enchantTestShield;
@@ -341,12 +344,12 @@ public final class DevScene
 	private static void prepareEnchantTest(ServerPlayer player)
 	{
 		player.setGameMode(GameType.SURVIVAL);
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		ItemStack shield = new ItemStack(ModItems.DIAMOND_BASIC_SHIELD.get());
-		var enchantments = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+		var enchantments = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
 		ItemEnchantments.Mutable ench = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
-		ench.set(enchantments.getHolderOrThrow(ModEnchantments.SPIKES), 3);
-		ench.set(enchantments.getHolderOrThrow(ModEnchantments.PAYBACK), 4);
+		ench.set(enchantments.getOrThrow(ModEnchantments.SPIKES), 3);
+		ench.set(enchantments.getOrThrow(ModEnchantments.PAYBACK), 4);
 		shield.set(DataComponents.ENCHANTMENTS, ench.toImmutable());
 		player.setItemSlot(EquipmentSlot.OFFHAND, shield);
 		player.startUsingItem(InteractionHand.OFF_HAND);
@@ -358,7 +361,7 @@ public final class DevScene
 
 	private static void zombieAttacks(ServerPlayer player)
 	{
-		Zombie zombie = (Zombie)player.serverLevel().getEntity(zombieId);
+		Zombie zombie = (Zombie)player.level().getEntity(zombieId);
 		zombie.setInvulnerable(false);
 		zombie.setHealth(zombie.getMaxHealth());
 		zombieHealthBeforeSpikes = zombie.getHealth();
@@ -372,7 +375,7 @@ public final class DevScene
 
 	private static void checkEnchantTest(ServerPlayer player)
 	{
-		Zombie zombie = (Zombie)player.serverLevel().getEntity(zombieId);
+		Zombie zombie = (Zombie)player.level().getEntity(zombieId);
 		float payback = enchantTestShield.getOrDefault(ModDataComponents.PAYBACK_DAMAGE.get(), 0.0F);
 		check("Payback stores half the blocked damage, max 2 per level", payback == 8.0F, payback);
 		check("Spikes hurts the attacker (60% per hit at level III, 6 hits)", zombie.getHealth() < zombieHealthBeforeSpikes, zombieHealthBeforeSpikes + " -> " + zombie.getHealth());
@@ -383,9 +386,9 @@ public final class DevScene
 
 	private static void checkData(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
-		var recipes = level.getRecipeManager();
-		long ours = recipes.getRecipes().stream().filter(r -> r.id().getNamespace().equals(ModSpartanShields.ID)).count();
+		ServerLevel level = player.level();
+		var recipes = level.recipeAccess();
+		long ours = recipes.getRecipes().stream().filter(r -> r.id().identifier().getNamespace().equals(ModSpartanShields.ID)).count();
 		check("recipes loaded", ours > 0, ours + " recipes");
 		// Banner on a tower shield
 		CraftingInput input = CraftingInput.of(2, 1, List.of(new ItemStack(ModItems.GOLDEN_TOWER_SHIELD.get()), new ItemStack(Items.RED_BANNER)));
@@ -397,21 +400,21 @@ public final class DevScene
 		// Shaped shield recipe
 		ItemStack plank = new ItemStack(Items.OAK_PLANKS), stone = new ItemStack(Items.COBBLESTONE), wood = new ItemStack(ModItems.WOODEN_BASIC_SHIELD.get());
 		CraftingInput stoneShield = CraftingInput.of(3, 3, List.of(ItemStack.EMPTY, stone, ItemStack.EMPTY, stone, wood, stone, ItemStack.EMPTY, stone, ItemStack.EMPTY));
-		check("stone shield recipe", recipes.getRecipeFor(RecipeType.CRAFTING, stoneShield, level).map(r -> r.value().getResultItem(level.registryAccess()).is(ModItems.STONE_BASIC_SHIELD.get())).orElse(false), "");
+		check("stone shield recipe", recipes.getRecipeFor(RecipeType.CRAFTING, stoneShield, level).map(r -> r.value().assemble(stoneShield, level.registryAccess()).is(ModItems.STONE_BASIC_SHIELD.get())).orElse(false), "");
 		// Modded material recipes are skipped while no mod adds the material
-		boolean tin = recipes.byKey(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "tin_basic_shield")).isPresent();
-		boolean tinIngots = BuiltInRegistries.ITEM.getTag(com.oblivioussp.spartanshields.tags.ModItemTags.TIN_INGOT).map(t -> t.size() > 0).orElse(false);
+		boolean tin = recipes.byKey(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "tin_basic_shield"))).isPresent();
+		boolean tinIngots = BuiltInRegistries.ITEM.get(com.oblivioussp.spartanshields.tags.ModItemTags.TIN_INGOT).map(t -> t.size() > 0).orElse(false);
 		check("tin shield recipe only with tin ingots", tin == tinIngots, "recipe " + tin + ", ingots " + tinIngots);
 		boolean mekanism = Platform.INSTANCE.isModLoaded("mekanism");
-		boolean mekRecipe = recipes.byKey(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "advanced_mekanists_basic_shield")).isPresent();
+		boolean mekRecipe = recipes.byKey(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "advanced_mekanists_basic_shield"))).isPresent();
 		check("Mekanism recipes only with Mekanism", mekRecipe == mekanism, "recipe " + mekRecipe + ", mekanism " + mekanism);
 		// Enchanting table offers the shield enchantments
 		ItemStack iron = new ItemStack(ModItems.IRON_BASIC_SHIELD.get());
-		var possible = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getTag(net.minecraft.tags.EnchantmentTags.IN_ENCHANTING_TABLE).orElseThrow();
+		var possible = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(net.minecraft.tags.EnchantmentTags.IN_ENCHANTING_TABLE).orElseThrow();
 		List<EnchantmentInstance> available = EnchantmentHelper.getAvailableEnchantmentResults(30, iron, possible.stream());
-		List<String> names = available.stream().map(e -> e.enchantment.unwrapKey().get().location().toString()).distinct().toList();
+		List<String> names = available.stream().map(e -> e.enchantment().unwrapKey().get().identifier().toString()).distinct().toList();
 		check("enchanting table: Spikes, Firebrand, Payback, Unbreaking on a shield", names.containsAll(List.of("spartanshields:spikes", "spartanshields:firebrand", "spartanshields:payback", "minecraft:unbreaking")), names);
-		check("the vanilla shield does not take Spikes", EnchantmentHelper.getAvailableEnchantmentResults(30, new ItemStack(Items.SHIELD), possible.stream()).stream().noneMatch(e -> e.enchantment.is(ModEnchantments.SPIKES)), "");
+		check("the vanilla shield does not take Spikes", EnchantmentHelper.getAvailableEnchantmentResults(30, new ItemStack(Items.SHIELD), possible.stream()).stream().noneMatch(e -> e.enchantment().is(ModEnchantments.SPIKES)), "");
 		// Energy
 		ItemStack powered = new ItemStack(ModItems.BASIC_MEKANISTS_BASIC_SHIELD.get());
 		Platform.ItemEnergy energy = Platform.INSTANCE.getItemEnergy(powered);
@@ -420,40 +423,6 @@ public final class DevScene
 		((FEPoweredShieldItem)powered.getItem()).damageShield(powered, player, null, 4.0F);
 		check("blocking 4 damage uses 4 * 50 FE", powered.getOrDefault(ModDataComponents.ENERGY.get(), 0) == 3800, powered.getOrDefault(ModDataComponents.ENERGY.get(), 0));
 		check("durability from the config", new ItemStack(ModItems.IRON_TOWER_SHIELD.get()).getMaxDamage() == 672 && iron.getMaxDamage() == 538, iron.getMaxDamage() + " / " + new ItemStack(ModItems.IRON_TOWER_SHIELD.get()).getMaxDamage());
-		if(mekanism)
-			checkMekanism(player);
-	}
-
-	/** With Mekanism: an energy tablet charges the upgrade (the upgrade recipe adds the energy of the ingredients). */
-	private static void checkMekanism(ServerPlayer player)
-	{
-		ServerLevel level = player.serverLevel();
-		ItemStack tablet = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("mekanism:energy_tablet")));
-		Platform.ItemEnergy tabletEnergy = Platform.INSTANCE.getItemEnergy(tablet);
-		if(tabletEnergy != null)
-			for(int i = 0; i < 1000 && (int)tabletEnergy.stored() < (int)tabletEnergy.capacity(); i++)
-				tabletEnergy.receive(Integer.MAX_VALUE, false);
-		ItemStack old = charged(ModItems.BASIC_MEKANISTS_BASIC_SHIELD.get());
-		var recipe = level.getRecipeManager().byKey(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "advanced_mekanists_basic_shield")).orElseThrow();
-		var shaped = (net.minecraft.world.item.crafting.ShapedRecipe)recipe.value();
-		NonNullList<net.minecraft.world.item.crafting.Ingredient> ingredients = shaped.getIngredients();
-		List<ItemStack> grid = new ArrayList<>();
-		for(var ingredient : ingredients)
-		{
-			ItemStack[] items = ingredient.getItems();
-			ItemStack item = items.length == 0 ? ItemStack.EMPTY : items[0].copy();
-			if(item.is(tablet.getItem()))
-				item = tablet.copy();
-			if(item.is(ModItems.BASIC_MEKANISTS_BASIC_SHIELD.get()))
-				item = old;
-			grid.add(item);
-		}
-		CraftingInput input = CraftingInput.of(shaped.getWidth(), shaped.getHeight(), grid);
-		boolean matches = shaped.matches(input, level);
-		ItemStack result = shaped.assemble(input, level.registryAccess());
-		int stored = result.getOrDefault(ModDataComponents.ENERGY.get(), 0);
-		int capacity = ((FEPoweredShieldItem)result.getItem()).getFECapacity(result);
-		check("Mekanism: upgrade recipe matches and carries the energy over", matches && stored > 800000 && stored <= capacity, "tablet " + (tabletEnergy == null ? "no FE" : (int)tabletEnergy.stored()) + ", result " + stored + "/" + capacity);
 	}
 
 	private static ItemStack stack(com.oblivioussp.spartanshields.platform.Registrar.Entry<Item, ?> item)
@@ -482,6 +451,6 @@ public final class DevScene
 
 	private static void shot(Minecraft mc, String name)
 	{
-		Screenshot.grab(mc.gameDirectory, "scene_" + name + ".png", mc.getMainRenderTarget(), c -> Log.info("[scene] " + c.getString()));
+		Screenshot.grab(mc.gameDirectory, "scene_" + name + ".png", mc.getMainRenderTarget(), 1, c -> Log.info("[scene] " + c.getString()));
 	}
 }

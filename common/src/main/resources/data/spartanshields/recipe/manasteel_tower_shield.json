@@ -27,18 +27,10 @@
     }
   ],
   "key": {
-    "#": {
-      "tag": "c:ingots/manasteel"
-    },
-    "/": {
-      "item": "botania:livingwood_twig"
-    },
-    "e": {
-      "item": "botania:rune_earth"
-    },
-    "m": {
-      "item": "botania:rune_mana"
-    }
+    "#": "#c:ingots/manasteel",
+    "/": "botania:livingwood_twig",
+    "e": "botania:rune_earth",
+    "m": "botania:rune_mana"
   },
   "pattern": [
     "#e#",

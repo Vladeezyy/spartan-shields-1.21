@@ -1,5 +1,7 @@
 package com.oblivioussp.spartanshields.item;
 
+import javax.annotation.Nullable;
+
 import java.util.function.Consumer;
 
 import com.oblivioussp.spartanshields.compat.BotaniaCompat;
@@ -13,7 +15,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 
 /** Shield that repairs itself and absorbs its damage with mana (only registered in this form with Botania loaded). */
 public class BotaniaShieldItem extends BasicShieldItem
@@ -27,9 +30,10 @@ public class BotaniaShieldItem extends BasicShieldItem
 	}
 	
 	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) 
+	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entityIn, @Nullable EquipmentSlot slot) 
 	{
-		if(!level.isClientSide && entityIn instanceof Player && 
+		// 1.21.5+: called on the server only
+		if(entityIn instanceof Player && 
 				stack.getDamageValue() > 0 && 
 				BotaniaCompat.requestManaExactForTool(stack, (Player)entityIn, manaPerDamage * 2, true))
 		{
@@ -43,7 +47,7 @@ public class BotaniaShieldItem extends BasicShieldItem
 	{
 		if(!(entity instanceof Player player) || amount == 0)
 			return amount;
-		int unbreaking = player.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.UNBREAKING).map(holder -> EnchantmentHelper.getItemEnchantmentLevel(holder, stack)).orElse(0);
+		int unbreaking = player.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.UNBREAKING).map(holder -> EnchantmentHelper.getItemEnchantmentLevel(holder, stack)).orElse(0);
 		while(amount > 0)
 		{
 			if(BotaniaCompat.requestManaExactForTool(stack, player, manaPerDamage, false))

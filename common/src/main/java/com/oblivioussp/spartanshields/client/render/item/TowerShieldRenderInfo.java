@@ -1,20 +1,20 @@
 package com.oblivioussp.spartanshields.client.render.item;
 
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.Identifier;
 
 public class TowerShieldRenderInfo
 {
-	protected final ResourceLocation textureNoPattern;
-	protected final ResourceLocation texturePattern;
+	protected final Identifier textureNoPattern;
+	protected final Identifier texturePattern;
 	
 	protected final Material materialNoPattern;
 	protected final Material materialPattern;
 	
-	public TowerShieldRenderInfo(ResourceLocation texNoPattern, ResourceLocation texPattern)
+	public TowerShieldRenderInfo(Identifier texNoPattern, Identifier texPattern)
 	{
 		textureNoPattern = texNoPattern;
 		texturePattern = texPattern;
@@ -33,9 +33,10 @@ public class TowerShieldRenderInfo
 		return false;
 	}
 	
-	public RenderType getLayerRenderType(ItemStack stack)
+	/** The light layer's render type for a shield with or without energy */
+	public RenderType getLayerRenderType(boolean powered)
 	{
-		return RenderType.solid();
+		return RenderTypes.entitySolid(textureNoPattern);
 	}
 	
 	public float getColourRed()

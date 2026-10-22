@@ -1,25 +1,25 @@
 package com.oblivioussp.spartanshields.client.render.item;
 
 import com.oblivioussp.spartanshields.ModSpartanShields;
-import com.oblivioussp.spartanshields.init.ModDataComponents;
 
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 public class DarkSteelTowerShieldRenderInfo extends TowerShieldRenderInfo 
 {
 	protected final float r, g, b;
 
-	// TODO: Custom shader using the same shader code as the eye shader? (to prevent any potential screwery with shader mods)
-	protected static final RenderType LIGHTS_ON = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/enderio/dark_steel_tower_shield_lights_on.png"));
-	protected static final RenderType LIGHTS_OFF = RenderType.entityTranslucent(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/enderio/dark_steel_tower_shield_lights_off.png"));
+	// 1.21.9+: eyes is translucent (the black of the "lights on" texture would be drawn); energy_swirl adds the colour
+	// as eyes did before (no texture scrolling with the offset 0, 0)
+	protected static final RenderType LIGHTS_ON = RenderTypes.energySwirl(Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/enderio/dark_steel_tower_shield_lights_on.png"), 0.0F, 0.0F);
+	protected static final RenderType LIGHTS_OFF = RenderTypes.entityTranslucent(Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "textures/entity/enderio/dark_steel_tower_shield_lights_off.png"));
 	
 
 	public DarkSteelTowerShieldRenderInfo(float rIn, float gIn, float bIn) 
 	{
-		super(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "entity/enderio/dark_steel_tower_shield_nopattern"),
-				ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "entity/enderio/dark_steel_tower_shield_pattern"));
+		super(Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "entity/enderio/dark_steel_tower_shield_nopattern"),
+				Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "entity/enderio/dark_steel_tower_shield_pattern"));
 		r = rIn;
 		g = gIn;
 		b = bIn;
@@ -32,10 +32,9 @@ public class DarkSteelTowerShieldRenderInfo extends TowerShieldRenderInfo
 	}
 	
 	@Override
-	public RenderType getLayerRenderType(ItemStack stack) 
+	public RenderType getLayerRenderType(boolean powered) 
 	{
-		boolean isPowered = stack.getOrDefault(ModDataComponents.ENERGY.get(), 0) != 0;
-		return isPowered ? LIGHTS_ON : LIGHTS_OFF;
+		return powered ? LIGHTS_ON : LIGHTS_OFF;
 	}
 	
 	@Override

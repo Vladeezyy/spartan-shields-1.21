@@ -38,7 +38,7 @@ public class PoweredShieldUpgradeRecipe extends ShapedRecipe
 	@Override
 	public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) 
 	{
-		ItemStack resultStack = getResultItem(registries).copy();
+		ItemStack resultStack = recipeResult.copy();
 		int feToTransfer = 0;
 		
 		for(int i = 0; i < inv.size(); i++)
@@ -63,7 +63,7 @@ public class PoweredShieldUpgradeRecipe extends ShapedRecipe
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() 
+	public RecipeSerializer<PoweredShieldUpgradeRecipe> getSerializer() 
 	{
 		return ModRecipes.POWERED_SHIELD_UPGRADE.get();
 	}
@@ -78,14 +78,14 @@ public class PoweredShieldUpgradeRecipe extends ShapedRecipe
 	public static class Serializer implements RecipeSerializer<PoweredShieldUpgradeRecipe>
 	{
 		private static final MapCodec<PoweredShieldUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-				Codec.STRING.optionalFieldOf("group", "").forGetter(ShapedRecipe::getGroup),
+				Codec.STRING.optionalFieldOf("group", "").forGetter(ShapedRecipe::group),
 				CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(r -> CraftingBookCategory.MISC),
 				ShapedRecipePattern.MAP_CODEC.forGetter(r -> r.recipePattern),
 				ItemStack.STRICT_CODEC.fieldOf("result").forGetter(r -> r.recipeResult),
 				Codec.BOOL.optionalFieldOf("show_notification", true).forGetter(ShapedRecipe::showNotification))
 				.apply(builder, PoweredShieldUpgradeRecipe::new));
 		private static final StreamCodec<RegistryFriendlyByteBuf, PoweredShieldUpgradeRecipe> STREAM_CODEC = StreamCodec.composite(
-				ByteBufCodecs.STRING_UTF8, ShapedRecipe::getGroup,
+				ByteBufCodecs.STRING_UTF8, ShapedRecipe::group,
 				ShapedRecipePattern.STREAM_CODEC, r -> r.recipePattern,
 				ItemStack.STREAM_CODEC, r -> r.recipeResult,
 				ByteBufCodecs.BOOL, ShapedRecipe::showNotification,

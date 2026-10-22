@@ -27,21 +27,11 @@
     }
   ],
   "key": {
-    "#": {
-      "item": "enderio:dark_steel_ingot"
-    },
-    "O": {
-      "item": "spartanshields:wooden_tower_shield"
-    },
-    "c": {
-      "item": "enderio:octadic_capacitor"
-    },
-    "p": {
-      "item": "enderio:pulsating_crystal"
-    },
-    "v": {
-      "item": "enderio:vibrant_crystal"
-    }
+    "#": "enderio:dark_steel_ingot",
+    "O": "spartanshields:wooden_tower_shield",
+    "c": "enderio:octadic_capacitor",
+    "p": "enderio:pulsating_crystal",
+    "v": "enderio:vibrant_crystal"
   },
   "pattern": [
     "#v#",

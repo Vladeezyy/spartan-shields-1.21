@@ -12,11 +12,8 @@
       "modid": "mekanism"
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/refined_obsidian"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/refined_obsidian"
     }
   ],
   "fabric:load_conditions": [
@@ -39,12 +36,8 @@
   ],
   "group": "spartanshields:refined_obsidian_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/refined_obsidian"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/refined_obsidian",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

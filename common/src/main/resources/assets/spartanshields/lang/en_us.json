@@ -143,5 +143,5 @@
   "message.spartanshields.powered_shield_block_fail": "Cannot absorb damage. The %s is out of power.",
   "message.spartanshields.event_bus_shutdown_error": "[Critical Error] A mod has caused the Event Bus to shut down before/during registration and prevented Spartan Shields from registering its items! Check your log to find out which mod is causing this!",
   "key.spartanshields.alt_shield_bash": "Alternate Shield Bash",
-  "key.spartanshields.category": "Spartan Shields"
+  "key.category.spartanshields.main": "Spartan Shields"
 }

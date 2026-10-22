@@ -5,7 +5,7 @@ import net.minecraft.core.registries.Registries;
 import com.oblivioussp.spartanshields.ModSpartanShields;
 import com.oblivioussp.spartanshields.util.Constants;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -44,16 +44,16 @@ public class ModItemTags
 	public static final TagKey<Item> LUMIUM_INGOT = common("ingots/lumium");
 	public static final TagKey<Item> ENDERIUM_INGOT = common("ingots/enderium");
 	
-	public static final TagKey<Item> BASIC_SHIELDS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "basic_shields"));
-	public static final TagKey<Item> TOWER_SHIELDS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "tower_shields"));
-	public static final TagKey<Item> SHIELDS_WITH_BASH = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "shields_with_bash"));
+	public static final TagKey<Item> BASIC_SHIELDS = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "basic_shields"));
+	public static final TagKey<Item> TOWER_SHIELDS = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "tower_shields"));
+	public static final TagKey<Item> SHIELDS_WITH_BASH = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "shields_with_bash"));
 	/** The items the shield enchantments apply to (the 1.20.1 enchantment category: every ShieldBaseItem). */
-	public static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "enchantable/shield"));
+	public static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "enchantable/shield"));
 	
-	public static final TagKey<Item> MANA_USING_ITEMS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.Botania_ModID, "mana_using_items"));
+	public static final TagKey<Item> MANA_USING_ITEMS = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.Botania_ModID, "mana_using_items"));
 
 	private static TagKey<Item> common(String path)
 	{
-		return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
+		return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", path));
 	}
 }

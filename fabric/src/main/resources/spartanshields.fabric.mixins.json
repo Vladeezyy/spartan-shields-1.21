@@ -4,10 +4,7 @@
   "package": "com.oblivioussp.spartanshields.fabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AxeItemMixin",
-    "ItemStackMixin",
-    "PlayerMixin",
-    "TagLoadResultMixin"
+    "ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

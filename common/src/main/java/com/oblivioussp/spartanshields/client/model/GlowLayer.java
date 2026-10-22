@@ -1,6 +1,5 @@
 package com.oblivioussp.spartanshields.client.model;
 
-import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.oblivioussp.spartanshields.util.Log;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 /**
@@ -22,8 +21,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
  * drawn fully transparent (translucent "lights off") or black (additive "lights on"), which leaves no trace. The faces
  * are picked once per resource reload; the picture is the same.
  *
- * <p>{@code ModelPart.Cube} keeps its faces private, so they are read once through reflection; if that fails the whole
- * model is drawn as before.
+ * <p>If the light textures cannot be read, the whole model is drawn as before.
  */
 public final class GlowLayer
 {
@@ -37,7 +35,7 @@ public final class GlowLayer
 	 * @param textures the light textures; {@code additive[i]}: black counts as unlit (eyes render type), otherwise
 	 * only full transparency does
 	 */
-	public static GlowLayer of(ModelPart root, ResourceManager manager, ResourceLocation[] textures, boolean[] additive)
+	public static GlowLayer of(ModelPart root, ResourceManager manager, Identifier[] textures, boolean[] additive)
 	{
 		try
 		{
@@ -56,18 +54,16 @@ public final class GlowLayer
 					for(int x = 0; x < Math.min(width, image.getWidth()); x++)
 						for(int y = 0; y < Math.min(height, image.getHeight()); y++)
 						{
-							int abgr = image.getPixelRGBA(x, y);
-							boolean visible = (abgr >>> 24) != 0 && (!additive[t] || (abgr & 0xFFFFFF) != 0);
+							int argb = image.getPixel(x, y);
+							boolean visible = (argb >>> 24) != 0 && (!additive[t] || (argb & 0xFFFFFF) != 0);
 							lit[x][y] |= visible;
 						}
 				}
 			}
-			Field polygonsField = ModelPart.Cube.class.getDeclaredField("polygons");
-			polygonsField.setAccessible(true);
 			GlowLayer layer = new GlowLayer();
 			boolean[][] mask = lit;
 			int w = width, h = height;
-			root.visit(new PoseStack(), (pose, path, index, cube) -> layer.add(cube, polygonsField, mask, w, h));
+			root.visit(new PoseStack(), (pose, path, index, cube) -> layer.add(cube, mask, w, h));
 			Log.info("Shield light layer " + textures[0] + ": " + layer.kept + " of " + layer.total + " faces");
 			return layer;
 		}
@@ -78,64 +74,40 @@ public final class GlowLayer
 		}
 	}
 
-	private void add(ModelPart.Cube cube, Field polygonsField, boolean[][] mask, int width, int height)
+	private void add(ModelPart.Cube cube, boolean[][] mask, int width, int height)
 	{
-		try
+		// 1.21.11: the faces and their vertices are public records (1.21.1 needed reflection)
+		float[] packed = new float[cube.polygons.length * 23];
+		int n = 0;
+		for(ModelPart.Polygon polygon : cube.polygons)
 		{
-			Object[] polygons = (Object[])polygonsField.get(cube);
-			float[] packed = new float[polygons.length * 23];
-			int n = 0;
-			for(Object polygon : polygons)
+			total++;
+			ModelPart.Vertex[] vertices = polygon.vertices();
+			float minU = 1, minV = 1, maxU = 0, maxV = 0;
+			for(int i = 0; i < 4; i++)
 			{
-				total++;
-				Field verticesField = polygon.getClass().getDeclaredField("vertices");
-				Field normalField = polygon.getClass().getDeclaredField("normal");
-				verticesField.setAccessible(true);
-				normalField.setAccessible(true);
-				Object[] vertices = (Object[])verticesField.get(polygon);
-				Vector3f normal = (Vector3f)normalField.get(polygon);
-				float[] pos = new float[12], uv = new float[8];
-				float minU = 1, minV = 1, maxU = 0, maxV = 0;
-				for(int i = 0; i < 4; i++)
-				{
-					Class<?> vertexClass = vertices[i].getClass();
-					Field p = vertexClass.getDeclaredField("pos"), u = vertexClass.getDeclaredField("u"), v = vertexClass.getDeclaredField("v");
-					p.setAccessible(true);
-					u.setAccessible(true);
-					v.setAccessible(true);
-					Vector3f vp = (Vector3f)p.get(vertices[i]);
-					pos[i * 3] = vp.x();
-					pos[i * 3 + 1] = vp.y();
-					pos[i * 3 + 2] = vp.z();
-					uv[i * 2] = u.getFloat(vertices[i]);
-					uv[i * 2 + 1] = v.getFloat(vertices[i]);
-					minU = Math.min(minU, uv[i * 2]);
-					maxU = Math.max(maxU, uv[i * 2]);
-					minV = Math.min(minV, uv[i * 2 + 1]);
-					maxV = Math.max(maxV, uv[i * 2 + 1]);
-				}
-				if(!anyLit(mask, width, height, minU, minV, maxU, maxV))
-					continue;
-				kept++;
-				packed[n++] = normal.x();
-				packed[n++] = normal.y();
-				packed[n++] = normal.z();
-				for(int i = 0; i < 4; i++)
-				{
-					packed[n++] = pos[i * 3];
-					packed[n++] = pos[i * 3 + 1];
-					packed[n++] = pos[i * 3 + 2];
-					packed[n++] = uv[i * 2];
-					packed[n++] = uv[i * 2 + 1];
-				}
+				minU = Math.min(minU, vertices[i].u());
+				maxU = Math.max(maxU, vertices[i].u());
+				minV = Math.min(minV, vertices[i].v());
+				maxV = Math.max(maxV, vertices[i].v());
 			}
-			if(n > 0)
-				faces.put(cube, java.util.Arrays.copyOf(packed, n));
+			if(!anyLit(mask, width, height, minU, minV, maxU, maxV))
+				continue;
+			kept++;
+			packed[n++] = polygon.normal().x();
+			packed[n++] = polygon.normal().y();
+			packed[n++] = polygon.normal().z();
+			for(int i = 0; i < 4; i++)
+			{
+				packed[n++] = vertices[i].x();
+				packed[n++] = vertices[i].y();
+				packed[n++] = vertices[i].z();
+				packed[n++] = vertices[i].u();
+				packed[n++] = vertices[i].v();
+			}
 		}
-		catch(ReflectiveOperationException e)
-		{
-			throw new IllegalStateException(e);
-		}
+		if(n > 0)
+			faces.put(cube, java.util.Arrays.copyOf(packed, n));
 	}
 
 	private static boolean anyLit(boolean[][] mask, int width, int height, float minU, float minV, float maxU, float maxV)

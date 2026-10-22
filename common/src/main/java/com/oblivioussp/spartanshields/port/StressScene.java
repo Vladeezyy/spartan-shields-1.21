@@ -37,16 +37,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.monster.Husk;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.zombie.Husk;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.WorldDataConfiguration;
@@ -90,8 +89,8 @@ public final class StressScene
 		FIRST.add(Pair.of(60, mc -> server(mc, StressScene::writeData)));
 		FIRST.add(Pair.of(100, mc -> {
 			Log.info("[stress] leaving the world");
-			mc.level.disconnect();
-			mc.disconnect(new TitleScreen());
+			mc.level.disconnect(net.minecraft.network.chat.Component.empty());
+			mc.disconnect(new TitleScreen(), false);
 			opened = false;
 			phase = 2;
 			tick = 0;
@@ -154,7 +153,7 @@ public final class StressScene
 				mc.createWorldOpenFlows().openWorld(WORLD, () -> mc.setScreen(new TitleScreen()));
 			else
 			{
-				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true, new GameRules(), WorldDataConfiguration.DEFAULT);
+				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true, new GameRules(net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS), WorldDataConfiguration.DEFAULT);
 				mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, new WorldOptions(4321L, false, false), WorldPresets::createNormalWorldDimensions, new TitleScreen());
 			}
 			return;
@@ -163,7 +162,7 @@ public final class StressScene
 			return;
 		mc.options.pauseOnLostFocus = false;
 		mc.getTutorial().setStep(net.minecraft.client.tutorial.TutorialSteps.NONE);
-		mc.getToasts().clear();
+		mc.getToastManager().clear();
 		if(mc.screen instanceof PauseScreen)
 			mc.setScreen(null);
 		tick++;
@@ -248,13 +247,13 @@ public final class StressScene
 
 	private static void setup(ServerPlayer player)
 	{
-		MinecraftServer server = player.getServer();
-		ServerLevel level = player.serverLevel();
-		server.getGameRules().getRule(GameRules.RULE_DOMOBSPAWNING).set(false, server);
-		server.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false, server);
-		server.getGameRules().getRule(GameRules.RULE_WEATHER_CYCLE).set(false, server);
+		MinecraftServer server = player.level().getServer();
+		ServerLevel level = player.level();
+		server.overworld().getGameRules().set(GameRules.SPAWN_MOBS, false, server);
+		server.overworld().getGameRules().set(GameRules.ADVANCE_TIME, false, server);
+		server.overworld().getGameRules().set(GameRules.ADVANCE_WEATHER, false, server);
 		level.setDayTime(6000);
-		BlockPos spawn = level.getSharedSpawnPos();
+		BlockPos spawn = level.getRespawnData().pos();
 		int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawn.getX(), spawn.getZ());
 		stage = new BlockPos(spawn.getX(), y, spawn.getZ());
 		for(int dx = -24; dx <= 24; dx++)
@@ -264,7 +263,7 @@ public final class StressScene
 				for(int dy = 0; dy < 10; dy++)
 					level.setBlockAndUpdate(stage.offset(dx, dy, dz), Blocks.AIR.defaultBlockState());
 			}
-		player.teleportTo(level, stage.getX() + 0.5, stage.getY(), stage.getZ() + 0.5, 0.0F, 10.0F);
+		player.teleportTo(level, stage.getX() + 0.5, stage.getY(), stage.getZ() + 0.5, java.util.Set.of(), 0.0F, 10.0F, true);
 	}
 
 	private static List<ItemStack> testStacks(HolderLookup.Provider registries)
@@ -286,7 +285,7 @@ public final class StressScene
 
 	private static void writeData(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		List<ItemStack> stacks = testStacks(level.registryAccess());
 		BlockPos chestPos = stage.offset(2, 0, 2);
 		level.setBlockAndUpdate(chestPos, Blocks.CHEST.defaultBlockState());
@@ -301,8 +300,8 @@ public final class StressScene
 
 	private static void checkData(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
-		BlockPos spawn = level.getSharedSpawnPos();
+		ServerLevel level = player.level();
+		BlockPos spawn = level.getRespawnData().pos();
 		int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawn.getX(), spawn.getZ());
 		stage = new BlockPos(spawn.getX(), y, spawn.getZ());
 		ChestBlockEntity chest = null;
@@ -325,19 +324,19 @@ public final class StressScene
 
 	private static void prepareRealAttacker(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		player.setGameMode(GameType.SURVIVAL);
 		player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.IRON_TOWER_SHIELD.get()));
-		player.teleportTo(level, stage.getX() + 0.5, stage.getY(), stage.getZ() + 0.5, 0.0F, 10.0F);
+		player.teleportTo(level, stage.getX() + 0.5, stage.getY(), stage.getZ() + 0.5, java.util.Set.of(), 0.0F, 10.0F, true);
 		player.setHealth(player.getMaxHealth());
 	}
 
 	/** A husk with its AI attacks the player, who already holds the shield up, for 30 s. */
 	private static void realAttacker(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		check("player blocks before the husk comes", player.isBlocking(), player.getUseItem());
-		Husk husk = EntityType.HUSK.spawn(level, stage.offset(0, 0, 3), MobSpawnType.COMMAND);
+		Husk husk = EntityType.HUSK.spawn(level, stage.offset(0, 0, 3), EntitySpawnReason.COMMAND);
 		husk.setPersistenceRequired();
 		husk.setTarget(player);
 		targetId = husk.getId();
@@ -351,7 +350,7 @@ public final class StressScene
 		stat("husk hits on the blocking player in 30 s: blocked / not blocked (from the side or behind)", blockedHits + " / " + unblockedHits);
 		// a shield only covers the front half (vanilla): the husk walks around the player, who does not turn
 		check("issue #7: the shield keeps blocking a real attacker (30 s), every hit from the front blocked", blockedHits >= 10 && unblockedFrontHits == 0, blockedHits + " blocked, " + unblockedFrontHits + " from the front not blocked");
-		Entity husk = player.serverLevel().getEntity(targetId);
+		Entity husk = player.level().getEntity(targetId);
 		if(husk != null)
 			husk.discard();
 	}
@@ -361,19 +360,19 @@ public final class StressScene
 
 	private static void bashTarget(ServerPlayer player)
 	{
-		Zombie target = EntityType.HUSK.spawn(player.serverLevel(), BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.0), MobSpawnType.COMMAND);
+		Zombie target = EntityType.HUSK.spawn(player.level(), BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.0), EntitySpawnReason.COMMAND);
 		target.setNoAi(true);
 		target.setPersistenceRequired();
 		targetId = target.getId();
 		bashTargetHealth = target.getHealth();
 		playerHealthBeforeSpam = player.getHealth();
-		player.getCooldowns().removeCooldown(ModItems.IRON_TOWER_SHIELD.get());
+		player.getCooldowns().removeCooldown(ModItems.IRON_TOWER_SHIELD.getId());
 		check("player blocks before the bash spam", player.isBlocking(), player.getUseItem());
 	}
 
 	private static void checkBashSpam(ServerPlayer player)
 	{
-		Zombie target = (Zombie)player.serverLevel().getEntity(targetId);
+		Zombie target = (Zombie)player.level().getEntity(targetId);
 		float lost = target == null ? -1 : bashTargetHealth - target.getHealth();
 		check("100 bash packets in one tick land once (cooldown)", lost > 0.5F && lost < 1.5F, "lost " + lost + " health");
 		check("bad entity ids in bash packets (incl. the player itself): no crash, player unhurt", player.isAlive() && player.getHealth() >= playerHealthBeforeSpam, playerHealthBeforeSpam + " -> " + player.getHealth());
@@ -384,7 +383,7 @@ public final class StressScene
 	/** Config extremes: durability 0 and 100000 with the tower multiplier at 10, energy multiplier 1000000. */
 	private static void extremeConfig(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		Config.INSTANCE.durabilityIronShield.set(0);
 		Config.apply();
 		ItemStack zero = new ItemStack(ModItems.IRON_BASIC_SHIELD.get());
@@ -417,7 +416,7 @@ public final class StressScene
 	/** 400 armor stands with tower shields (every other one with a banner) in front of the player. */
 	private static void renderStress(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		player.setGameMode(GameType.CREATIVE);
 		List<Item> towers = new ArrayList<>();
 		for(var holder : ModItems.REGISTER.getEntries())
@@ -427,8 +426,8 @@ public final class StressScene
 		for(int x = 0; x < 20; x++)
 			for(int z = 0; z < 20; z++)
 			{
-				ArmorStand stand = EntityType.ARMOR_STAND.create(level);
-				stand.moveTo(stage.getX() - 9.5 + x, stage.getY(), stage.getZ() + 4.5 + z, 180.0F, 0.0F);
+				ArmorStand stand = EntityType.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
+				stand.snapTo(stage.getX() - 9.5 + x, stage.getY(), stage.getZ() + 4.5 + z, 180.0F, 0.0F);
 				stand.setShowArms(true);
 				stand.setNoBasePlate(true);
 				Item item = towers.get(n % towers.size());
@@ -441,14 +440,14 @@ public final class StressScene
 				mobs.add(stand.getId());
 				n++;
 			}
-		player.teleportTo(level, stage.getX() + 0.5, stage.getY() + 3.0, stage.getZ() - 2.0, 0.0F, 25.0F);
+		player.teleportTo(level, stage.getX() + 0.5, stage.getY() + 3.0, stage.getZ() - 2.0, java.util.Set.of(), 0.0F, 25.0F, true);
 		stat("armor stands with tower shields", n * 2 + " shields");
 	}
 
 	/** Every shield on the stands becomes a vanilla shield, with the same banner where there was one. */
 	private static void vanillaBaseline(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		for(int id : mobs)
 		{
 			if(level.getEntity(id) instanceof ArmorStand stand)
@@ -477,7 +476,7 @@ public final class StressScene
 	/** 60 husks around a blocking survival player with an unbreakable Spikes III / Payback IV shield. */
 	private static void combatStress(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		for(int id : mobs)
 		{
 			Entity e = level.getEntity(id);
@@ -486,18 +485,18 @@ public final class StressScene
 		}
 		mobs.clear();
 		player.setGameMode(GameType.SURVIVAL);
-		player.teleportTo(level, stage.getX() + 0.5, stage.getY(), stage.getZ() + 0.5, 0.0F, 10.0F);
+		player.teleportTo(level, stage.getX() + 0.5, stage.getY(), stage.getZ() + 0.5, java.util.Set.of(), 0.0F, 10.0F, true);
 		player.setHealth(player.getMaxHealth());
 		ItemStack shield = testStacks(level.registryAccess()).get(2);
-		shield.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
+		shield.set(DataComponents.UNBREAKABLE, net.minecraft.util.Unit.INSTANCE);
 		player.setItemSlot(EquipmentSlot.OFFHAND, shield);
 		// husks flank the player, and a shield only covers the front: the side hits must not kill the test player
-		player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 2400, 4, false, false));
+		player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.RESISTANCE, 2400, 4, false, false));
 		for(int i = 0; i < 60; i++)
 		{
 			double angle = Math.toRadians(-60 + (i % 12) * 10);
 			double r = 3 + (i / 12) * 1.5;
-			Husk husk = EntityType.HUSK.spawn(level, BlockPos.containing(player.getX() - Math.sin(angle) * r, player.getY(), player.getZ() + Math.cos(angle) * r), MobSpawnType.COMMAND);
+			Husk husk = EntityType.HUSK.spawn(level, BlockPos.containing(player.getX() - Math.sin(angle) * r, player.getY(), player.getZ() + Math.cos(angle) * r), EntitySpawnReason.COMMAND);
 			husk.setPersistenceRequired();
 			husk.setTarget(player);
 			mobs.add(husk.getId());
@@ -509,8 +508,8 @@ public final class StressScene
 
 	private static void checkCombatStress(ServerPlayer player)
 	{
-		ServerLevel level = player.serverLevel();
-		MinecraftServer server = player.getServer();
+		ServerLevel level = player.level();
+		MinecraftServer server = player.level().getServer();
 		int alive = 0;
 		for(int id : mobs)
 			if(level.getEntity(id) instanceof Husk husk && husk.isAlive())
@@ -536,16 +535,16 @@ public final class StressScene
 
 	private static void teleport(ServerPlayer player, int n)
 	{
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		int x = stage.getX() + (n % 2 == 0 ? 1 : -1) * (n + 1) * 2000;
-		player.teleportTo(level, x + 0.5, 200, stage.getZ() + 0.5, player.getYRot(), 0.0F);
+		player.teleportTo(level, x + 0.5, 200, stage.getZ() + 0.5, java.util.Set.of(), player.getYRot(), 0.0F, true);
 	}
 
 	private static void checkTeleports(ServerPlayer player)
 	{
 		check("30 teleports of 2000-60000 blocks while holding a tower shield", player.isAlive() && player.getOffhandItem().is(ModItems.DIAMOND_TOWER_SHIELD.get()), player.blockPosition());
-		stat("server tick ms after teleports", String.format("%.2f", player.getServer().getAverageTickTimeNanos() / 1.0E6));
-		stat("loaded chunks", player.serverLevel().getChunkSource().getLoadedChunksCount());
+		stat("server tick ms after teleports", String.format("%.2f", player.level().getServer().getAverageTickTimeNanos() / 1.0E6));
+		stat("loaded chunks", player.level().getChunkSource().getLoadedChunksCount());
 		Runtime rt = Runtime.getRuntime();
 		stat("memory used MB", (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024));
 		serverDone = true;
@@ -565,7 +564,7 @@ public final class StressScene
 
 	private static void shot(Minecraft mc, String name)
 	{
-		Screenshot.grab(mc.gameDirectory, "stress_" + name + ".png", mc.getMainRenderTarget(), c -> Log.info("[stress] " + c.getString()));
+		Screenshot.grab(mc.gameDirectory, "stress_" + name + ".png", mc.getMainRenderTarget(), 1, c -> Log.info("[stress] " + c.getString()));
 	}
 
 }

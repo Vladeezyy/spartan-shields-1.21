@@ -11,10 +11,6 @@ repositories {
 
 neoForge {
     version = neo_version
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
     runs {
         configureEach {
             gameDirectory = project.file('run')
@@ -51,16 +47,12 @@ configurations {
 }
 
 dependencies {
-    if (project.hasProperty('with_mods')) {
-        localRuntime "mekanism:Mekanism:${mekanism_version}"
-        localRuntime "com.enderio:enderio:${enderio_version}"
-    }
+    // Mekanism and Ender IO have no 1.21.11 version: their shields stay off (as without those mods on 1.21.1)
     if (project.hasProperty('with_compat')) {
         localRuntime "maven.modrinth:sodium:${compat_sodium}"
         localRuntime "maven.modrinth:iris:${compat_iris}"
         localRuntime "maven.modrinth:lithium:${compat_lithium}"
         localRuntime "maven.modrinth:ferrite-core:${compat_ferritecore}"
-        localRuntime "maven.modrinth:modernfix:${compat_modernfix}"
         localRuntime "maven.modrinth:jade:${compat_jade}"
         localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${compat_jei}"
     }

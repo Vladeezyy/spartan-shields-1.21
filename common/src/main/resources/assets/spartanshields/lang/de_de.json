@@ -143,5 +143,5 @@
   "message.spartanshields.powered_shield_block_fail": "Kein Schaden absorbierbar: %s hat keine Energie mehr.",
   "message.spartanshields.event_bus_shutdown_error": "[Kritischer Fehler] Eine Mod hat den Event-Bus vor oder während der Registrierung gestoppt, und Spartan Shields konnte seine Gegenstände nicht registrieren! Sieh im Log nach, welche Mod schuld ist!",
   "key.spartanshields.alt_shield_bash": "Alternativer Schildstoß",
-  "key.spartanshields.category": "Spartan Shields"
+  "key.category.spartanshields.main": "Spartan Shields"
 }

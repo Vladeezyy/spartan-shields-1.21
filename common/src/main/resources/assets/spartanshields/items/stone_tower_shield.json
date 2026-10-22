@@ -1,0 +1,22 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:using_item",
+    "on_true": {
+      "type": "minecraft:special",
+      "base": "spartanshields:item/tower_shield_base_blocking",
+      "model": {
+        "type": "spartanshields:tower_shield",
+        "shield": "spartanshields:stone_tower_shield"
+      }
+    },
+    "on_false": {
+      "type": "minecraft:special",
+      "base": "spartanshields:item/stone_tower_shield",
+      "model": {
+        "type": "spartanshields:tower_shield",
+        "shield": "spartanshields:stone_tower_shield"
+      }
+    }
+  }
+}

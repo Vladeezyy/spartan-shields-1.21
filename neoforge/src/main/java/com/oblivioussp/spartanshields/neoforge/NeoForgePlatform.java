@@ -8,9 +8,11 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraft.core.component.DataComponents;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 public class NeoForgePlatform implements Platform
 {
@@ -29,13 +31,14 @@ public class NeoForgePlatform implements Platform
 	@Override
 	public boolean isClient()
 	{
-		return FMLEnvironment.dist.isClient();
+		return FMLEnvironment.getDist().isClient();
 	}
 
 	@Override
 	public boolean canShieldBlock(ItemStack stack)
 	{
-		return stack.canPerformAction(ItemAbilities.SHIELD_BLOCK);
+		// 1.21.5+: a shield is an item with the blocks_attacks component
+		return stack.has(DataComponents.BLOCKS_ATTACKS);
 	}
 
 	@Override
@@ -47,13 +50,13 @@ public class NeoForgePlatform implements Platform
 	@Override
 	public void sendToServer(CustomPacketPayload payload)
 	{
-		PacketDistributor.sendToServer(payload);
+		ClientPacketDistributor.sendToServer(payload);
 	}
 
 	@Override
 	public ItemEnergy getItemEnergy(ItemStack stack)
 	{
-		IEnergyStorage storage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+		EnergyHandler storage = ItemAccess.forStack(stack).getCapability(Capabilities.Energy.ITEM);
 		if(storage == null)
 			return null;
 		return new ItemEnergy()
@@ -61,19 +64,26 @@ public class NeoForgePlatform implements Platform
 			@Override
 			public long stored()
 			{
-				return storage.getEnergyStored();
+				return storage.getAmountAsLong();
 			}
 
 			@Override
 			public long capacity()
 			{
-				return storage.getMaxEnergyStored();
+				return storage.getCapacityAsLong();
 			}
 
 			@Override
 			public long receive(long amount, boolean simulate)
 			{
-				return storage.receiveEnergy((int)Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, amount)), simulate);
+				// NeoForge 21.9+: transactional; a simulation is a transaction that is not committed
+				try(Transaction transaction = Transaction.openRoot())
+				{
+					int inserted = storage.insert((int)Math.max(0, Math.min(Integer.MAX_VALUE, amount)), transaction);
+					if(!simulate)
+						transaction.commit();
+					return inserted;
+				}
 			}
 		};
 	}

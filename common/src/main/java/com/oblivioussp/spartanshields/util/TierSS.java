@@ -1,16 +1,11 @@
 package com.oblivioussp.spartanshields.util;
 
-import java.util.function.Supplier;
-
-import com.google.common.base.Suppliers;
 import com.oblivioussp.spartanshields.tags.ModItemTags;
 
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.ToolMaterial;
 
 /**
  * Shield material: durability, enchantability and repair tag. (1.21 tiers also carry the blocks a tool cannot mine,
@@ -18,13 +13,13 @@ import net.minecraft.world.item.crafting.Ingredient;
  */
 public class TierSS
 {
-	public static final TierSS WOOD = new TierSS(Tiers.WOOD, ItemTags.PLANKS);
-	public static final TierSS STONE = new TierSS(Tiers.STONE, ModItemTags.COBBLESTONES);
+	public static final TierSS WOOD = new TierSS(ToolMaterial.WOOD, ItemTags.PLANKS);
+	public static final TierSS STONE = new TierSS(ToolMaterial.STONE, ModItemTags.COBBLESTONES);
 	public static final TierSS COPPER = new TierSS(200, 5.0f, 1.5f, 8, ModItemTags.COPPER_INGOT);
-	public static final TierSS IRON = new TierSS(Tiers.IRON, ModItemTags.IRON_INGOT);
-	public static final TierSS GOLD = new TierSS(Tiers.GOLD, ModItemTags.GOLD_INGOT);
-	public static final TierSS DIAMOND = new TierSS(Tiers.DIAMOND, ModItemTags.DIAMOND_GEM);
-	public static final TierSS NETHERITE = new TierSS(Tiers.NETHERITE, ModItemTags.NETHERITE_INGOT);
+	public static final TierSS IRON = new TierSS(ToolMaterial.IRON, ModItemTags.IRON_INGOT);
+	public static final TierSS GOLD = new TierSS(ToolMaterial.GOLD, ModItemTags.GOLD_INGOT);
+	public static final TierSS DIAMOND = new TierSS(ToolMaterial.DIAMOND, ModItemTags.DIAMOND_GEM);
+	public static final TierSS NETHERITE = new TierSS(ToolMaterial.NETHERITE, ModItemTags.NETHERITE_INGOT);
 	public static final TierSS OBSIDIAN = new TierSS(1024, 5.0f, 1.5f, 5, ModItemTags.OBSIDIANS);
 	
 	public static final TierSS TIN = new TierSS(180, 5.25f, 1.75f, 6, ModItemTags.TIN_INGOT);
@@ -60,7 +55,6 @@ public class TierSS
    	private final float attackDamage;
    	/** Defines the natural enchantability factor of the material. */
    	private final int enchantability;
-   	private final Supplier<Ingredient> repairMaterial;
    	private final TagKey<Item> repairTag;
    
    	public TierSS(int durabilityIn, float speedIn, float attackDamageIn, int enchantabilityIn, TagKey<Item> repairMaterialTag)
@@ -70,12 +64,11 @@ public class TierSS
    		attackDamage = attackDamageIn;
    		enchantability = enchantabilityIn;
    		repairTag = repairMaterialTag;
-		repairMaterial = Suppliers.memoize(() -> Ingredient.of(repairMaterialTag));
    	}
    	
-   	public TierSS(Tier tier, TagKey<Item> repairMaterialTag)
+   	public TierSS(ToolMaterial tier, TagKey<Item> repairMaterialTag)
    	{
-   		this(tier.getUses(), tier.getSpeed(), tier.getAttackDamageBonus(), tier.getEnchantmentValue(), repairMaterialTag);
+   		this(tier.durability(), tier.speed(), tier.attackDamageBonus(), tier.enchantmentValue(), repairMaterialTag);
    	}
 	
 	public int getUses() 
@@ -98,11 +91,6 @@ public class TierSS
 		return enchantability;
 	}
 
-	public Ingredient getRepairIngredient() 
-	{
-		return repairMaterial.get();
-	}
-	
 	public TagKey<Item> getRepairTag() 
 	{
 		return repairTag;

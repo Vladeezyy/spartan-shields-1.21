@@ -9,11 +9,8 @@
       ]
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/constantan"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/constantan"
     }
   ],
   "fabric:load_conditions": [
@@ -31,12 +28,8 @@
   ],
   "group": "spartanshields:constantan_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/constantan"
-    },
-    "O": {
-      "item": "spartanshields:wooden_tower_shield"
-    }
+    "#": "#c:ingots/constantan",
+    "O": "spartanshields:wooden_tower_shield"
   },
   "pattern": [
     "###",

@@ -4,12 +4,8 @@
   "fabric:load_conditions": [],
   "group": "spartanshields:wood_shields",
   "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    },
-    "/": {
-      "tag": "c:rods/wooden"
-    }
+    "#": "#minecraft:planks",
+    "/": "#c:rods/wooden"
   },
   "pattern": [
     "###",

@@ -27,24 +27,12 @@
     }
   ],
   "key": {
-    "#": {
-      "tag": "c:ingots/steel"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    },
-    "a": {
-      "item": "mekanism:alloy_infused"
-    },
-    "b": {
-      "item": "mekanism:energy_tablet"
-    },
-    "c": {
-      "item": "mekanism:basic_control_circuit"
-    },
-    "d": {
-      "item": "mekanism:enriched_diamond"
-    }
+    "#": "#c:ingots/steel",
+    "O": "spartanshields:wooden_basic_shield",
+    "a": "mekanism:alloy_infused",
+    "b": "mekanism:energy_tablet",
+    "c": "mekanism:basic_control_circuit",
+    "d": "mekanism:enriched_diamond"
   },
   "pattern": [
     "ada",

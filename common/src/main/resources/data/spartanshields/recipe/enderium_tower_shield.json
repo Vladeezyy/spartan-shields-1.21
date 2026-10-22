@@ -9,11 +9,8 @@
       ]
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/enderium"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/enderium"
     }
   ],
   "fabric:load_conditions": [
@@ -31,12 +28,8 @@
   ],
   "group": "spartanshields:enderium_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/enderium"
-    },
-    "O": {
-      "item": "spartanshields:wooden_tower_shield"
-    }
+    "#": "#c:ingots/enderium",
+    "O": "spartanshields:wooden_tower_shield"
   },
   "pattern": [
     " # ",

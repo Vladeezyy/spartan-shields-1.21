@@ -143,5 +143,5 @@
   "message.spartanshields.powered_shield_block_fail": "Não é possível absorver dano: %s está sem energia.",
   "message.spartanshields.event_bus_shutdown_error": "[Erro crítico] Um mod parou o barramento de eventos antes ou durante o registro e o Spartan Shields não conseguiu registrar seus itens! Veja no log qual mod causou isso!",
   "key.spartanshields.alt_shield_bash": "Golpe de escudo alternativo",
-  "key.spartanshields.category": "Spartan Shields"
+  "key.category.spartanshields.main": "Spartan Shields"
 }

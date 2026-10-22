@@ -27,18 +27,10 @@
     }
   ],
   "key": {
-    "#": {
-      "tag": "c:ingots/terrasteel"
-    },
-    "/": {
-      "item": "botania:livingwood_twig"
-    },
-    "m": {
-      "item": "botania:rune_mana"
-    },
-    "p": {
-      "item": "botania:rune_pride"
-    }
+    "#": "#c:ingots/terrasteel",
+    "/": "botania:livingwood_twig",
+    "m": "botania:rune_mana",
+    "p": "botania:rune_pride"
   },
   "pattern": [
     " p ",

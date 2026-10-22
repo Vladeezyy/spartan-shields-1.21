@@ -1,6 +1,7 @@
 package com.oblivioussp.spartanshields.item;
 
-import java.util.List;
+import java.util.function.Consumer;
+
 
 import com.oblivioussp.spartanshields.ModSpartanShields;
 import com.oblivioussp.spartanshields.util.TierSS;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class SilverShieldItem extends BasicShieldItem implements IDamageShield
 {
@@ -29,10 +31,10 @@ public class SilverShieldItem extends BasicShieldItem implements IDamageShield
 	}
 	
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn)
     {
-    	super.appendHoverText(stack, context, tooltip, flagIn);
-    	tooltip.add(Component.translatable("tooltip." + ModSpartanShields.ID + ".on_block", Component.translatable("tooltip." + ModSpartanShields.ID + ".shield_silver.desc").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.GOLD));
+    	super.appendHoverText(stack, context, display, tooltip, flagIn);
+    	tooltip.accept(Component.translatable("tooltip." + ModSpartanShields.ID + ".on_block", Component.translatable("tooltip." + ModSpartanShields.ID + ".shield_silver.desc").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.GOLD));
     }
     
     @Override

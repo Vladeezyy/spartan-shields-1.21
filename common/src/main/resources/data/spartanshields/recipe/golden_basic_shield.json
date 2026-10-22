@@ -4,12 +4,8 @@
   "fabric:load_conditions": [],
   "group": "spartanshields:gold_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/gold"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/gold",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

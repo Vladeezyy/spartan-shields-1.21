@@ -9,11 +9,8 @@
       ]
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/invar"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/invar"
     }
   ],
   "fabric:load_conditions": [
@@ -31,12 +28,8 @@
   ],
   "group": "spartanshields:invar_shields",
   "key": {
-    "#": {
-      "tag": "c:ingots/invar"
-    },
-    "O": {
-      "item": "spartanshields:wooden_basic_shield"
-    }
+    "#": "#c:ingots/invar",
+    "O": "spartanshields:wooden_basic_shield"
   },
   "pattern": [
     " # ",

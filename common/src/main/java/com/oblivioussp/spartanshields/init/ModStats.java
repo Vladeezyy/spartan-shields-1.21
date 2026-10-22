@@ -4,15 +4,15 @@ import com.oblivioussp.spartanshields.platform.Registrar;
 import com.oblivioussp.spartanshields.ModSpartanShields;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 
 public class ModStats 
 {
-	public static final Registrar<ResourceLocation> REGISTER = Registrar.create(Registries.CUSTOM_STAT);
+	public static final Registrar<Identifier> REGISTER = Registrar.create(Registries.CUSTOM_STAT);
 	
-	public static final ResourceLocation SHIELD_BASH_HITS = ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, "shield_bash_hits");
+	public static final Identifier SHIELD_BASH_HITS = Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "shield_bash_hits");
 	
 	static
 	{

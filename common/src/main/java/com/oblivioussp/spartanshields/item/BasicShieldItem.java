@@ -1,6 +1,7 @@
 package com.oblivioussp.spartanshields.item;
 
-import java.util.List;
+import java.util.function.Consumer;
+
 
 import com.oblivioussp.spartanshields.ModSpartanShields;
 import com.oblivioussp.spartanshields.config.Config;
@@ -12,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class BasicShieldItem extends ShieldBaseItem
 {
@@ -19,7 +21,8 @@ public class BasicShieldItem extends ShieldBaseItem
 
 	public BasicShieldItem(TierSS toolMaterial, int defaultMaxDamage, boolean isTowerShieldIn, Item.Properties prop)
 	{
-		super(defaultMaxDamage, isTowerShieldIn, prop);
+		// 1.21.2+: the repair material and the enchantability are item properties
+		super(defaultMaxDamage, isTowerShieldIn, prop.repairable(toolMaterial.getRepairTag()).enchantable(toolMaterial.getEnchantmentValue()));
 		material = toolMaterial;
 	}
 	
@@ -32,35 +35,23 @@ public class BasicShieldItem extends ShieldBaseItem
      * allows items to add custom lines of information to the mouseover description
      */
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn)
     {
-		tooltip.add(Component.translatable("tooltip." + ModSpartanShields.ID + ".protection", this.getMaxDamage(stack)));
+		tooltip.accept(Component.translatable("tooltip." + ModSpartanShields.ID + ".protection", this.getMaxDamage(stack)));
 		
 		// 1.20.1 checked the tag once and kept the answer for the whole game (wrong after joining another server or
 		// reloading data packs); the check is cheap, so it is made every time
     	if(context.registries() != null && !Config.INSTANCE.forceDisableUncraftableTooltips.get() && !canBeCrafted())
     	{
-    		tooltip.add(Component.translatable(String.format("tooltip.%s.uncraftable_missing_material", ModSpartanShields.ID), material.getRepairTagName()).withStyle(ChatFormatting.RED));
+    		tooltip.accept(Component.translatable(String.format("tooltip.%s.uncraftable_missing_material", ModSpartanShields.ID), material.getRepairTagName()).withStyle(ChatFormatting.RED));
     	}
     	
-    	super.appendHoverText(stack, context, tooltip, flagIn);
+    	super.appendHoverText(stack, context, display, tooltip, flagIn);
     }
     
     /** The material tag exists and has at least one item. */
     protected boolean canBeCrafted()
     {
-    	return BuiltInRegistries.ITEM.getTag(material.getRepairTag()).map(tag -> tag.size() > 0).orElse(false);
+    	return BuiltInRegistries.ITEM.get(material.getRepairTag()).map(tag -> tag.size() > 0).orElse(false);
     }
-	
-	@Override
-	public int getEnchantmentValue() 
-	{
-		return material.getEnchantmentValue();
-	}
-	
-	@Override
-	public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) 
-	{
-		return material.getRepairIngredient().test(repair) || super.isValidRepairItem(toRepair, repair);
-	}
 }

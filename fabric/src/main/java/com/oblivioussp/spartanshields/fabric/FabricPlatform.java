@@ -12,7 +12,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.core.component.DataComponents;
 import team.reborn.energy.api.EnergyStorage;
 
 public class FabricPlatform implements Platform
@@ -38,8 +38,8 @@ public class FabricPlatform implements Platform
 	@Override
 	public boolean canShieldBlock(ItemStack stack)
 	{
-		// Fabric has no item abilities: a shield is an item that blocks when used
-		return !stack.isEmpty() && stack.getUseAnimation() == UseAnim.BLOCK;
+		// 1.21.5+: a shield is an item with the blocks_attacks component
+		return stack.has(DataComponents.BLOCKS_ATTACKS);
 	}
 
 	@Override

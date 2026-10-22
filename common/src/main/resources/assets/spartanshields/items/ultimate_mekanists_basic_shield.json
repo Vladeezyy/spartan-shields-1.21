@@ -1,0 +1,70 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "spartanshields:powered_off",
+    "on_true": {
+      "type": "minecraft:condition",
+      "property": "minecraft:using_item",
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "spartanshields:item/mekanists_basic_shield_base_deactivated_blocking",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": -1
+          },
+          {
+            "type": "minecraft:constant",
+            "value": -1014800
+          }
+        ]
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "spartanshields:item/mekanists_basic_shield_base_deactivated",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": -1
+          },
+          {
+            "type": "minecraft:constant",
+            "value": -1014800
+          }
+        ]
+      }
+    },
+    "on_false": {
+      "type": "minecraft:condition",
+      "property": "minecraft:using_item",
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "spartanshields:item/mekanists_basic_shield_base_blocking",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": -1
+          },
+          {
+            "type": "minecraft:constant",
+            "value": -1014800
+          }
+        ]
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "spartanshields:item/ultimate_mekanists_basic_shield",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": -1
+          },
+          {
+            "type": "minecraft:constant",
+            "value": -1014800
+          }
+        ]
+      }
+    }
+  }
+}

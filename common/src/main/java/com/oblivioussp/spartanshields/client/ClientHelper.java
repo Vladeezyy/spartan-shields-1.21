@@ -16,60 +16,38 @@ import com.oblivioussp.spartanshields.client.model.ShieldBaseModel;
 import com.oblivioussp.spartanshields.client.model.TerrasteelTowerShieldModel;
 import com.oblivioussp.spartanshields.client.model.TowerShieldModel;
 import com.oblivioussp.spartanshields.client.render.item.ModelLayers;
-import com.oblivioussp.spartanshields.init.ModDataComponents;
 import com.oblivioussp.spartanshields.init.ModItems;
-import com.oblivioussp.spartanshields.item.FEPoweredShieldItem;
 import com.oblivioussp.spartanshields.item.ShieldBaseItem;
 import com.oblivioussp.spartanshields.util.Log;
 
+import com.mojang.serialization.MapCodec;
+import com.oblivioussp.spartanshields.client.render.item.PoweredOffProperty;
+import com.oblivioussp.spartanshields.client.render.item.TowerShieldSpecialRenderer;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperty;
+import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 /** The client registrations of the mod; NeoForge and Fabric call these from their client setup. */
 public class ClientHelper
 {
-	/** ItemProperties.register (NeoForge makes it public, Fabric has its own registry for it). */
-	@FunctionalInterface
-	public interface ItemPropertyRegistrar
+	/**
+	 * 1.21.4+: the looks of an item come from its item definition (assets/spartanshields/items); the code only adds the
+	 * powered_off condition (1.21.1: the item property minecraft:disabled) and the tower shield renderer (1.21.1: a
+	 * BEWLR). The blocking pose and the colour of the light layer are in the definitions.
+	 */
+	public static void registerItemModelProperties(BiConsumer<Identifier, MapCodec<? extends ConditionalItemModelProperty>> registrar)
 	{
-		void register(Item item, ResourceLocation name, ClampedItemPropertyFunction property);
+		registrar.accept(PoweredOffProperty.TYPE, PoweredOffProperty.MAP_CODEC);
 	}
 
-	// 1.20.1 registered the item properties from the item constructors; 1.21 wants them in client setup
-	public static void registerItemProperties(ItemPropertyRegistrar registrar)
+	public static void registerSpecialRenderers(BiConsumer<Identifier, MapCodec<? extends SpecialModelRenderer.Unbaked>> registrar)
 	{
-		for(var holder : ModItems.REGISTER.getEntries())
-		{
-			Item item = holder.get();
-			if(item instanceof FEPoweredShieldItem powered)
-				registerPoweredShieldPropertyOverrides(registrar, powered);
-			else if(item instanceof ShieldBaseItem shield)
-				registerShieldPropertyOverrides(registrar, shield);
-		}
-	}
-
-	public static void registerShieldPropertyOverrides(ItemPropertyRegistrar registrar, ShieldBaseItem item)
-	{
-		registrar.register(item, ResourceLocation.withDefaultNamespace("blocking"), (stack, world, living, value) ->
-		{
-	         return living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
-		});
-	}
-
-	public static void registerPoweredShieldPropertyOverrides(ItemPropertyRegistrar registrar, FEPoweredShieldItem item)
-	{
-		registerShieldPropertyOverrides(registrar, item);
-		registrar.register(item, ResourceLocation.withDefaultNamespace("disabled"), (stack, world, living, value) ->
-		{
-			boolean disabled = stack.getOrDefault(ModDataComponents.ENERGY.get(), 0) <= 0 ;
-			return disabled ? 1.0f : 0.0f;
-		});
+		registrar.accept(TowerShieldSpecialRenderer.TYPE, TowerShieldSpecialRenderer.Unbaked.MAP_CODEC);
 	}
 
 	/** The items drawn by the tower shield renderer (1.20.1: Item.initializeClient). */
@@ -77,22 +55,6 @@ public class ClientHelper
 	{
 		return ModItems.REGISTER.getEntries().stream().map(Supplier::get)
 				.filter(item -> item instanceof ShieldBaseItem shield && shield.isTowerShield()).map(item -> (ShieldBaseItem)item).toList();
-	}
-
-	// 1.21 item colours are ARGB: the 1.20.1 RGB values get an opaque alpha
-	private static ItemColor layerColour(int rgb)
-	{
-		int colour = FastColor.ARGB32.opaque(rgb);
-		return (stack, layer) -> layer == 1 ? colour : -1;
-	}
-
-	public static void registerItemColours(BiConsumer<ItemColor, Item> registrar)
-	{
-		registrar.accept(layerColour(0x78F083), ModItems.BASIC_MEKANISTS_BASIC_SHIELD.get());
-		registrar.accept(layerColour(0xF07883), ModItems.ADVANCED_MEKANISTS_BASIC_SHIELD.get());
-		registrar.accept(layerColour(0x7883F0), ModItems.ELITE_MEKANISTS_BASIC_SHIELD.get());
-		registrar.accept(layerColour(0xF083F0), ModItems.ULTIMATE_MEKANISTS_BASIC_SHIELD.get());
-		registrar.accept(layerColour(0x80FFA0), ModItems.DARK_STEEL_RIOT_BASIC_SHIELD.get());
 	}
 
 	public static void registerModelLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> registrar)

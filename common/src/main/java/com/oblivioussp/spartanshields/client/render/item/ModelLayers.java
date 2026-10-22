@@ -3,7 +3,7 @@ package com.oblivioussp.spartanshields.client.render.item;
 import com.oblivioussp.spartanshields.ModSpartanShields;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class ModelLayers 
 {
@@ -20,6 +20,6 @@ public class ModelLayers
 	
 	public static ModelLayerLocation createMainModelLayer(String location)
 	{
-		return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, location), "main");
+		return new ModelLayerLocation(Identifier.fromNamespaceAndPath(ModSpartanShields.ID, location), "main");
 	}
 }

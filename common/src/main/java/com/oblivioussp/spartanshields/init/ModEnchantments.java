@@ -5,7 +5,7 @@ import com.oblivioussp.spartanshields.ModSpartanShields;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -20,13 +20,13 @@ public class ModEnchantments
 	
 	private static ResourceKey<Enchantment> key(String name)
 	{
-		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(ModSpartanShields.ID, name));
+		return ResourceKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, name));
 	}
 	
 	/** Level of the enchantment on the stack for gameplay (0 when the enchantment is missing, e.g. removed by a data pack). */
 	public static int getLevel(Level level, ItemStack stack, ResourceKey<Enchantment> enchantment)
 	{
-		return level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(enchantment).map(holder -> EnchantmentHelper.getItemEnchantmentLevel(holder, stack)).orElse(0);
+		return level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(enchantment).map(holder -> EnchantmentHelper.getItemEnchantmentLevel(holder, stack)).orElse(0);
 	}
 	
 	/** Level as stored on the stack, without registry access (tooltips). */

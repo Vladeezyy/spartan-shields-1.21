@@ -27,21 +27,11 @@
     }
   ],
   "key": {
-    "#": {
-      "tag": "c:ingots/steel"
-    },
-    "O": {
-      "item": "spartanshields:elite_mekanists_basic_shield"
-    },
-    "a": {
-      "item": "mekanism:alloy_atomic"
-    },
-    "b": {
-      "item": "mekanism:energy_tablet"
-    },
-    "c": {
-      "item": "mekanism:ultimate_control_circuit"
-    }
+    "#": "#c:ingots/steel",
+    "O": "spartanshields:elite_mekanists_basic_shield",
+    "a": "mekanism:alloy_atomic",
+    "b": "mekanism:energy_tablet",
+    "c": "mekanism:ultimate_control_circuit"
   },
   "pattern": [
     "a a",

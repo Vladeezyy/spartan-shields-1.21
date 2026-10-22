@@ -10,8 +10,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 public class MekanismTowerShieldModel extends ShieldBaseModel 
 {
@@ -27,7 +26,7 @@ public class MekanismTowerShieldModel extends ShieldBaseModel
 
     public MekanismTowerShieldModel(ModelPart rootModel)
     {
-    	super(RenderType::entityTranslucent, rootModel);
+    	super(RenderTypes::entityTranslucent, rootModel);
     	
     	plateExtra = rootModel.getChild(PART_PLATE_EXTRA);
     	upper = rootModel.getChild(PART_UPPER);
@@ -77,15 +76,4 @@ public class MekanismTowerShieldModel extends ShieldBaseModel
     	});
     }
     
-    @Override
-    public void renderLayers(PoseStack mStack, MultiBufferSource bufferIn, RenderType renderTypeIn, int packedLightIn, int packedOverlayIn,
-    		int color)
-    {
-    	VertexConsumer consumer = bufferIn.getBuffer(renderTypeIn);
-    	// only the faces that show in the light textures (see GlowLayer); the whole model if that could not be set up
-    	if(glow != null)
-    		glow.render(root, mStack, consumer, packedLightIn, packedOverlayIn, color);
-    	else
-    		root.render(mStack, consumer, packedLightIn, packedOverlayIn, color);
-    }
 }

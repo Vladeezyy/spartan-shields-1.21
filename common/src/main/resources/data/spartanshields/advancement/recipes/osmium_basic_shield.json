@@ -11,11 +11,8 @@
       "modid": "mekanism"
     },
     {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:tag_empty",
-        "tag": "c:ingots/osmium"
-      }
+      "type": "spartanshields:tag_not_empty",
+      "tag": "c:ingots/osmium"
     }
   ],
   "fabric:load_conditions": [

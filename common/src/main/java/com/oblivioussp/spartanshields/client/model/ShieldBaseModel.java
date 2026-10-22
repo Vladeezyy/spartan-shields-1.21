@@ -12,11 +12,12 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Unit;
 
-public class ShieldBaseModel extends Model
+public class ShieldBaseModel extends Model<Unit>
 {
 //	public ModelRenderer plate;
 //	public ModelRenderer handle;
@@ -24,14 +25,8 @@ public class ShieldBaseModel extends Model
 	protected static final String PART_PLATE = "plate";
 	protected static final String PART_HANDLE = "handle";
 	
-	protected ModelPart root;
-	/** The faces of the light layer to draw, set by the tower shield renderer on resource reload (null: all) */
+	/** The faces of the light layer to draw, set by the tower shield renderer when it is baked (null: all) */
 	protected GlowLayer glow;
-
-	public ModelPart root()
-	{
-		return root;
-	}
 
 	public void setGlow(GlowLayer glowIn)
 	{
@@ -54,17 +49,16 @@ public class ShieldBaseModel extends Model
 		handle.addBox(-1.0f, -3.0f, -1.0f, 2.0f, 6.0f, 6.0f, 0.0f);
     }*/
 	
-	public ShieldBaseModel(Function<ResourceLocation, RenderType> renderType, ModelPart rootModel)
+	public ShieldBaseModel(Function<Identifier, RenderType> renderType, ModelPart rootModel)
 	{
-		super(renderType);
-		root = rootModel;
+		super(rootModel, renderType);
 		plate = rootModel.getChild(PART_PLATE);
 		handle = rootModel.getChild(PART_HANDLE);
 	}
 	
 	public ShieldBaseModel(ModelPart rootModel)
 	{
-		this(RenderType::entitySolid, rootModel);
+		this(RenderTypes::entitySolid, rootModel);
 	}
 	
 	public static LayerDefinition createLayer()
@@ -99,15 +93,13 @@ public class ShieldBaseModel extends Model
 		this.handle.render(mStack, vertexBuilder, packedLightIn, packedOverlayIn, color);
 	}
 	
-	public void renderLayers(PoseStack mStack, MultiBufferSource bufferIn, RenderType renderTypeIn, int packedLightIn, int packedOverlayIn,
-			int color) {}
-
-	@Override
-	public void renderToBuffer(PoseStack mStack, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn,
-			int color)
+	/** The light layer (Mekanist, Dark Steel): only the faces that show in the light textures (see GlowLayer), the whole
+	 * model if that could not be set up */
+	public void renderLayers(PoseStack mStack, VertexConsumer consumer, int packedLightIn, int packedOverlayIn, int color)
 	{
-//		this.plate.render(mStack, vertexBuilder, packedLightIn, packedOverlayIn, color);
-//		renderExtraParts(mStack, vertexBuilder, packedLightIn, packedOverlayIn, color);
-		root.render(mStack, vertexBuilder, packedLightIn, packedOverlayIn, color);
+		if(glow != null)
+			glow.render(root, mStack, consumer, packedLightIn, packedOverlayIn, color);
+		else
+			root.render(mStack, consumer, packedLightIn, packedOverlayIn, color);
 	}
 }

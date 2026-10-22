@@ -4,12 +4,8 @@
   "fabric:load_conditions": [],
   "group": "spartanshields:stone_shields",
   "key": {
-    "#": {
-      "tag": "c:cobblestones"
-    },
-    "O": {
-      "item": "spartanshields:wooden_tower_shield"
-    }
+    "#": "#c:cobblestones",
+    "O": "spartanshields:wooden_tower_shield"
   },
   "pattern": [
     "###",
