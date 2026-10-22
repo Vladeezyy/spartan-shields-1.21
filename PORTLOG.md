@@ -186,3 +186,59 @@ Checked with modding-kb `scripts/langcheck.py` (145/145 keys, placeholders) and 
 - Later the same day: Loom's `ClientProductionRunTask` also puts the project's `remapJar` into `mods`, so the scenes
   jar and the release jar ran together (Fabric happened to load the scenes jar). The task now uses `mods.setFrom`, and the
   production runs were repeated with only the scenes jar: all checks pass.
+
+## 1.21.11 (branch mc/1.21.11, 2026-10-22, 3.1.1.4+1.21.11)
+
+NeoForge 21.11.48, Fabric Loader 0.19.5 + Fabric API 0.141.6, Forge Config API Port 21.11.1, Team Reborn Energy 4.2.0,
+Fabric Loom 1.17.21 (Gradle 9.8.1: the Fabric mods of the compatibility run for 1.21.11 are built with Loom 1.14–1.16).
+No Parchment for 1.21.11. Mekanism, Ender IO and Botania have no 1.21.11 version: their shields stay off, as on 1.21.1
+without those mods.
+
+- **Shields are items with the blocks_attacks component** (1.21.5+: ShieldItem has no use/use animation of its own).
+  ShieldBaseItem gives every shield vanilla Items.SHIELD's values: 90° block in front after 0.25 s, 1 + damage
+  durability from hits of 3 or more, banner patterns, off hand, break sound. The powered shields take no durability
+  from blocked hits (threshold Float.MAX_VALUE); their energy pays as before. Vanilla now treats any item with the
+  component as a shield, so the two Fabric mixins for it are gone: the axe stripping check
+  (AxeItem#playerHasShieldUseIntent) and the shield damage / axe cooldown in Player.
+- Items:
+  - the id goes into the properties (`setId`);
+  - repair and enchantability are properties (`repairable(tag)`, `enchantable(n)`; TierSS uses ToolMaterial);
+  - tooltips go through a Consumer;
+  - the name without the banner colour comes from getName.
+- **Looks from item definitions** (`assets/spartanshields/items`, made by `tools/port/gen_item_definitions.py` from the
+  1.21.1 models and overrides):
+  - minecraft:blocking → the minecraft:using_item condition;
+  - minecraft:disabled → spartanshields:powered_off (a ConditionalItemModelProperty);
+  - the light layer colour of the basic Mekanist / Dark Steel shields → a constant tint.
+- **Tower shields: a special model renderer** (`spartanshields:tower_shield`, the shield id in the definition) instead
+  of the BEWLR:
+  - SubmitNodeCollector, banner patterns on a Model of the plate.
+  - The light layer draws with energy_swirl (eyes became translucent in 1.21.9 and would draw the black of the "lights
+    on" texture), only the visible faces (31 of 120 as before; ModelPart's faces are public records now, no reflection).
+  - The light layer is submitted with `order(1)`. At order 0 the shield drawn afterwards covered it.
+  - Registration on NeoForge: RegisterSpecialModelRendererEvent and RegisterConditionalItemModelPropertyEvent. On
+    Fabric: an access widener on the vanilla ID_MAPPERs (Fabric API has no registry for them).
+- Recipes:
+  - Ingredients are strings (`"#c:ingots/iron"`), converted by modding-kb `scripts/ingredients_1_21_2.py`.
+  - **NeoForge's `not tag_empty` only asks whether the tag exists in 21.11** (`IContext#isTagLoaded`), and NeoForge
+    declares c:ingots/tin & co. empty, so tin shield recipes loaded without tin. The recipes now use the mod's own
+    `spartanshields:tag_not_empty` on NeoForge too. It reads the reload's pending tags from ConditionContext (private
+    field); without them it falls back to "tag exists".
+  - On Fabric the resource conditions get the registry lookup with the tags (1.21.2+), so the TagManager.LoadResult
+    mixin is gone.
+- Energy on NeoForge: the transactional Transfer API (`Capabilities.Energy.ITEM`, ItemAccessEnergyHandler over the
+  energy component).
+- Key category: `KeyMapping.Category` (`key.category.spartanshields.main`, renamed in all six languages).
+- The client scene raised the shield while looking at an armour stand, so the right click went to the stand. On Fabric
+  the shield went up only once the husk stood in front, too late for the bash check. The husk now comes first.
+- Fabric production client: Team Reborn Energy is nested in the release jar only, so it is now a production mod of its
+  own (also on 1.21.1, where it had only worked from Fabric's cache of an earlier run).
+- Checks:
+  - client scene 20/20 on NeoForge and Fabric;
+  - release jar on a real NeoForge 21.11.48 server and a dedicated Fabric server;
+  - scene on a Fabric production client 20/20;
+  - compatibility (Sodium 0.8.14, Iris 1.10.8, Lithium 0.21.4, FerriteCore 8.2.0, Jade 21.1.x): Fabric 20/20 with
+    Complementary Reimagined on.
+  - NeoForge: 20/20 with the shader pack off. With it on, Iris 1.10.8 for NeoForge crashes in its shadow pass ("Missing
+    sampler Sampler1") as soon as an enchanted item is in hand, the vanilla shield as well (checked).
+  - no stress scene and no FPS measurements (owner's call).

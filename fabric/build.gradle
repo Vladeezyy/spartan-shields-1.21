@@ -72,6 +72,9 @@ configurations {
 dependencies {
     productionMods "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     productionMods "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+    // Nested in the release jar; the scenes jar is plain classes, so the production client gets it as a mod of its own
+    // (it only worked before from Fabric's cache of an earlier run with the release jar)
+    productionMods "teamreborn:energy:${team_reborn_energy_version}"
 }
 
 // Production runs (tools/prodtest.sh): Minecraft with intermediary names, as players have it. The release jar on a
