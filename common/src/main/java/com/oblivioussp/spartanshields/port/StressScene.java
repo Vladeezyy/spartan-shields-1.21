@@ -36,6 +36,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -139,18 +140,25 @@ public final class StressScene
 		if(!ENABLED)
 			return;
 		Minecraft mc = Minecraft.getInstance();
-		if(!opened && mc.screen instanceof AccessibilityOnboardingScreen)
+		if(!opened && mc.gui.screen() instanceof AccessibilityOnboardingScreen)
 		{
 			mc.options.onboardAccessibility = false;
 			mc.options.save();
-			mc.setScreen(new TitleScreen());
+			mc.gui.setScreen(new TitleScreen());
 			return;
 		}
-		if(!opened && mc.screen instanceof TitleScreen)
+		// NeoForge 26.2: load warnings (e.g. another mod's deprecated logoFile) open LoadingErrorScreen before the menu
+		if(!opened && mc.gui.screen() != null && mc.gui.screen().getClass().getSimpleName().equals("LoadingErrorScreen"))
+		{
+			Log.info("[scene] NeoForge load warnings screen, going on to the main menu");
+			mc.gui.setScreen(new TitleScreen());
+			return;
+		}
+		if(!opened && mc.gui.screen() instanceof TitleScreen)
 		{
 			opened = true;
 			if(mc.getLevelSource().levelExists(WORLD))
-				mc.createWorldOpenFlows().openWorld(WORLD, () -> mc.setScreen(new TitleScreen()));
+				mc.createWorldOpenFlows().openWorld(WORLD, () -> mc.gui.setScreen(new TitleScreen()));
 			else
 			{
 				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, new LevelSettings.DifficultySettings(Difficulty.NORMAL, false, false), true, WorldDataConfiguration.DEFAULT);
@@ -162,9 +170,9 @@ public final class StressScene
 			return;
 		mc.options.pauseOnLostFocus = false;
 		mc.getTutorial().setStep(net.minecraft.client.tutorial.TutorialSteps.NONE);
-		mc.getToastManager().clear();
-		if(mc.screen instanceof PauseScreen)
-			mc.setScreen(null);
+		mc.gui.toastManager().clear();
+		if(mc.gui.screen() instanceof PauseScreen)
+			mc.gui.setScreen(null);
 		tick++;
 		if(phase == 2 && tick > 1900 && (serverDone || tick > 8000))
 		{
@@ -336,7 +344,7 @@ public final class StressScene
 	{
 		ServerLevel level = player.level();
 		check("player blocks before the husk comes", player.isBlocking(), player.getUseItem());
-		Husk husk = EntityType.HUSK.spawn(level, stage.offset(0, 0, 3), EntitySpawnReason.COMMAND);
+		Husk husk = EntityTypes.HUSK.spawn(level, stage.offset(0, 0, 3), EntitySpawnReason.COMMAND);
 		husk.setPersistenceRequired();
 		husk.setTarget(player);
 		targetId = husk.getId();
@@ -360,7 +368,7 @@ public final class StressScene
 
 	private static void bashTarget(ServerPlayer player)
 	{
-		Zombie target = EntityType.HUSK.spawn(player.level(), BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.0), EntitySpawnReason.COMMAND);
+		Zombie target = EntityTypes.HUSK.spawn(player.level(), BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.0), EntitySpawnReason.COMMAND);
 		target.setNoAi(true);
 		target.setPersistenceRequired();
 		targetId = target.getId();
@@ -426,7 +434,7 @@ public final class StressScene
 		for(int x = 0; x < 20; x++)
 			for(int z = 0; z < 20; z++)
 			{
-				ArmorStand stand = EntityType.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
+				ArmorStand stand = EntityTypes.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
 				stand.snapTo(stage.getX() - 9.5 + x, stage.getY(), stage.getZ() + 4.5 + z, 180.0F, 0.0F);
 				stand.setShowArms(true);
 				stand.setNoBasePlate(true);
@@ -496,7 +504,7 @@ public final class StressScene
 		{
 			double angle = Math.toRadians(-60 + (i % 12) * 10);
 			double r = 3 + (i / 12) * 1.5;
-			Husk husk = EntityType.HUSK.spawn(level, BlockPos.containing(player.getX() - Math.sin(angle) * r, player.getY(), player.getZ() + Math.cos(angle) * r), EntitySpawnReason.COMMAND);
+			Husk husk = EntityTypes.HUSK.spawn(level, BlockPos.containing(player.getX() - Math.sin(angle) * r, player.getY(), player.getZ() + Math.cos(angle) * r), EntitySpawnReason.COMMAND);
 			husk.setPersistenceRequired();
 			husk.setTarget(player);
 			mobs.add(husk.getId());
@@ -564,7 +572,7 @@ public final class StressScene
 
 	private static void shot(Minecraft mc, String name)
 	{
-		Screenshot.grab(mc.gameDirectory, "stress_" + name + ".png", mc.getMainRenderTarget(), 1, c -> Log.info("[stress] " + c.getString()));
+		Screenshot.grab(mc.gameDirectory, "stress_" + name + ".png", mc.gameRenderer.mainRenderTarget(), 1, c -> Log.info("[stress] " + c.getString()));
 	}
 
 }

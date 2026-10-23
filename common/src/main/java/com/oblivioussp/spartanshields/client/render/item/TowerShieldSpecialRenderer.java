@@ -173,10 +173,14 @@ public class TowerShieldSpecialRenderer implements SpecialModelRenderer<TowerShi
 		if(foil)
 			collector.submitCustomGeometry(poseStack, RenderTypes.entityGlint(), (pose, consumer) -> model.renderExtraParts(at(pose), sprite.wrap(consumer), light, overlay, -1));
 		// 26.1: the banner layers come without the plate under them (vanilla's shield draws its model first)
-		collector.submitModelPart(model.getPlate(), poseStack, renderType, light, overlay, sprite, false, foil, -1, null, outline);
+		collector.submitModelPart(model.getPlate(), poseStack, renderType, light, overlay, sprite, -1, null, outline);
 		if(banner)
 			BannerRenderer.submitPatterns(sprites, poseStack, collector, light, overlay, plate, Unit.INSTANCE, false,
 					Objects.requireNonNullElse(argument.baseColour(), DyeColor.WHITE), argument.patterns(), null);
+		// 26.2: submitModelPart has no foil flag; the glint goes over the banner layers, as vanilla's shield does
+		if(foil)
+			collector.order((banner ? argument.patterns().layers().size() : 0) + 1).submitModelPart(model.getPlate(), poseStack,
+					RenderTypes.entityGlint(), light, overlay, sprite, -1, null, 0);
 		if(info.hasLayers())
 		{
 			int colour = ARGB.colorFromFloat(1.0F, info.getColourRed(), info.getColourGreen(), info.getColourBlue());

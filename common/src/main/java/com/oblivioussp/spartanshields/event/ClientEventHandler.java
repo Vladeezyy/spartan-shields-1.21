@@ -46,7 +46,7 @@ public class ClientEventHandler
 		// - The game is loaded into a world
 		// - The player is valid. If there is no valid player, do not execute this event as it will cause a crash
 		// If not, then don't continue the attack
-		if(Config.INSTANCE.disableShieldBash.get() || mc.level == null || mc.screen != null || Minecraft.getInstance().isPaused() || player == null)
+		if(Config.INSTANCE.disableShieldBash.get() || mc.level == null || mc.gui.screen() != null || Minecraft.getInstance().isPaused() || player == null)
 			return;
 		
 		// Ensure that the player is blocking first

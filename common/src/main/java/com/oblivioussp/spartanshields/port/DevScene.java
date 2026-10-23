@@ -42,6 +42,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -88,7 +89,7 @@ public final class DevScene
 	static
 	{
 		at(40, mc -> server(mc, DevScene::setup));
-		at(45, mc -> mc.options.hideGui = true);
+		at(45, mc -> setHudHidden(mc, true));
 		at(140, mc -> server(mc, DevScene::buildStage));
 		at(270, mc -> shot(mc, "collection"));
 		at(280, mc -> server(mc, DevScene::closeUp));
@@ -100,12 +101,12 @@ public final class DevScene
 		at(348, mc -> server(mc, p -> p.teleportTo(p.level(), stage.getX() + 0.5, stage.getY() + 1.2, stage.getZ() + 1.5, java.util.Set.of(), 0.0F, 15.0F, true)));
 		// Creative tab
 		at(350, mc -> {
-			mc.options.hideGui = false;
-			mc.getToastManager().clear();
-			mc.setScreen(new CreativeModeInventoryScreen(mc.player, mc.player.connection.enabledFeatures(), true));
+			setHudHidden(mc, false);
+			mc.gui.toastManager().clear();
+			mc.gui.setScreen(new CreativeModeInventoryScreen(mc.player, mc.player.connection.enabledFeatures(), true));
 		});
 		at(360, mc -> {
-			if(mc.screen instanceof CreativeModeInventoryScreen screen)
+			if(mc.gui.screen() instanceof CreativeModeInventoryScreen screen)
 			{
 				try
 				{
@@ -132,14 +133,14 @@ public final class DevScene
 			}
 		});
 		at(390, mc -> shot(mc, "creative_tab"));
-		at(395, mc -> mc.setScreen(null));
+		at(395, mc -> mc.gui.setScreen(null));
 		// First person: blocking with a tower shield in the off hand
 		at(400, mc -> server(mc, DevScene::firstPerson));
 		// The husk first: it stands between the player and the armour stands, else the right click goes to a stand
 		// (aimed at from the first person spot) instead of raising the shield
 		at(410, mc -> server(mc, DevScene::spawnZombie));
 		at(412, mc -> mc.options.keyUse.setDown(true));
-		at(480, mc -> { mc.getToastManager().clear(); shot(mc, "blocking"); });
+		at(480, mc -> { mc.gui.toastManager().clear(); shot(mc, "blocking"); });
 		// Shield bash on a husk (the real packet from the client)
 		at(485, mc -> {
 			NetworkHandler.sendPacketToServer(new ShieldBashPacket(InteractionHand.OFF_HAND, zombieId, true));
@@ -171,18 +172,25 @@ public final class DevScene
 			return;
 		Minecraft mc = Minecraft.getInstance();
 		// A fresh game directory starts with the accessibility onboarding screen instead of the title screen
-		if(!opened && mc.screen instanceof net.minecraft.client.gui.screens.AccessibilityOnboardingScreen)
+		if(!opened && mc.gui.screen() instanceof net.minecraft.client.gui.screens.AccessibilityOnboardingScreen)
 		{
 			mc.options.onboardAccessibility = false;
 			mc.options.save();
-			mc.setScreen(new TitleScreen());
+			mc.gui.setScreen(new TitleScreen());
 			return;
 		}
-		if(!opened && mc.screen instanceof TitleScreen)
+		// NeoForge 26.2: load warnings (e.g. another mod's deprecated logoFile) open LoadingErrorScreen before the menu
+		if(!opened && mc.gui.screen() != null && mc.gui.screen().getClass().getSimpleName().equals("LoadingErrorScreen"))
+		{
+			Log.info("[scene] NeoForge load warnings screen, going on to the main menu");
+			mc.gui.setScreen(new TitleScreen());
+			return;
+		}
+		if(!opened && mc.gui.screen() instanceof TitleScreen)
 		{
 			opened = true;
 			if(mc.getLevelSource().levelExists(WORLD))
-				mc.createWorldOpenFlows().openWorld(WORLD, () -> mc.setScreen(new TitleScreen()));
+				mc.createWorldOpenFlows().openWorld(WORLD, () -> mc.gui.setScreen(new TitleScreen()));
 			else
 			{
 				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, new LevelSettings.DifficultySettings(Difficulty.NORMAL, false, false), true, WorldDataConfiguration.DEFAULT);
@@ -194,9 +202,9 @@ public final class DevScene
 			return;
 		mc.options.pauseOnLostFocus = false;
 		mc.getTutorial().setStep(net.minecraft.client.tutorial.TutorialSteps.NONE);
-		mc.getToastManager().clear();
-		if(mc.screen instanceof PauseScreen)
-			mc.setScreen(null);
+		mc.gui.toastManager().clear();
+		if(mc.gui.screen() instanceof PauseScreen)
+			mc.gui.setScreen(null);
 		tick++;
 		for(Pair<Integer, Consumer<Minecraft>> step : STEPS)
 		{
@@ -272,7 +280,7 @@ public final class DevScene
 		int n = shields.size();
 		for(int i = 0; i < n; i++)
 		{
-			ArmorStand stand = EntityType.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
+			ArmorStand stand = EntityTypes.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
 			double x = stage.getX() + 0.5 + (i - (n - 1) / 2.0) * 2.0;
 			stand.snapTo(x, stage.getY(), stage.getZ() + dz + 0.5, 0.0F, 0.0F);
 			stand.setYBodyRot(0.0F);
@@ -302,7 +310,7 @@ public final class DevScene
 		ServerLevel level = player.level();
 		for(int i = 0; i < 2; i++)
 		{
-			ArmorStand stand = EntityType.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
+			ArmorStand stand = EntityTypes.ARMOR_STAND.create(level, EntitySpawnReason.COMMAND);
 			stand.snapTo(stage.getX() + 12.5 + i * 2.0 - 2.0, stage.getY(), stage.getZ() + 6.5, 0.0F, 0.0F);
 			stand.setYBodyRot(0.0F);
 			stand.setShowArms(true);
@@ -324,7 +332,7 @@ public final class DevScene
 	private static void spawnZombie(ServerPlayer player)
 	{
 		ServerLevel level = player.level();
-		Zombie zombie = EntityType.HUSK.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.5), EntitySpawnReason.COMMAND);
+		Zombie zombie = EntityTypes.HUSK.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 2.5), EntitySpawnReason.COMMAND);
 		zombie.setNoAi(true);
 		zombie.setYRot(180.0F);
 		zombie.setYHeadRot(180.0F);
@@ -341,7 +349,7 @@ public final class DevScene
 		check("shield bash puts the shield on cooldown", player.getCooldowns().isOnCooldown(new ItemStack(ModItems.IRON_TOWER_SHIELD.get())), "");
 		// Too far: the server refuses the bash (1.20.1 accepted any entity id)
 		ServerLevel level = player.level();
-		Zombie far = EntityType.ZOMBIE.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 30), EntitySpawnReason.COMMAND);
+		Zombie far = EntityTypes.ZOMBIE.spawn(level, BlockPos.containing(player.getX(), player.getY(), player.getZ() + 30), EntitySpawnReason.COMMAND);
 		far.setNoAi(true);
 		float before = far.getHealth();
 		player.getCooldowns().removeCooldown(ModItems.IRON_TOWER_SHIELD.getId());
@@ -403,11 +411,11 @@ public final class DevScene
 		long ours = recipes.getRecipes().stream().filter(r -> r.id().identifier().getNamespace().equals(ModSpartanShields.ID)).count();
 		check("recipes loaded", ours > 0, ours + " recipes");
 		// Banner on a tower shield
-		CraftingInput input = CraftingInput.of(2, 1, List.of(new ItemStack(ModItems.GOLDEN_TOWER_SHIELD.get()), new ItemStack(Items.RED_BANNER)));
+		CraftingInput input = CraftingInput.of(2, 1, List.of(new ItemStack(ModItems.GOLDEN_TOWER_SHIELD.get()), new ItemStack(Items.BANNER.red())));
 		Optional<RecipeHolder<net.minecraft.world.item.crafting.CraftingRecipe>> banner = recipes.getRecipeFor(RecipeType.CRAFTING, input, level);
 		ItemStack result = banner.map(r -> r.value().assemble(input)).orElse(ItemStack.EMPTY);
 		check("banner applies to a tower shield", result.get(DataComponents.BASE_COLOR) == DyeColor.RED, banner.map(r -> r.id().toString()).orElse("no recipe"));
-		CraftingInput twice = CraftingInput.of(2, 1, List.of(result, new ItemStack(Items.BLUE_BANNER)));
+		CraftingInput twice = CraftingInput.of(2, 1, List.of(result, new ItemStack(Items.BANNER.blue())));
 		check("no second banner", recipes.getRecipeFor(RecipeType.CRAFTING, twice, level).isEmpty(), "");
 		// Shaped shield recipe
 		ItemStack plank = new ItemStack(Items.OAK_PLANKS), stone = new ItemStack(Items.COBBLESTONE), wood = new ItemStack(ModItems.WOODEN_BASIC_SHIELD.get());
@@ -466,6 +474,13 @@ public final class DevScene
 
 	private static void shot(Minecraft mc, String name)
 	{
-		Screenshot.grab(mc.gameDirectory, "scene_" + name + ".png", mc.getMainRenderTarget(), 1, c -> Log.info("[scene] " + c.getString()));
+		Screenshot.grab(mc.gameDirectory, "scene_" + name + ".png", mc.gameRenderer.mainRenderTarget(), 1, c -> Log.info("[scene] " + c.getString()));
+	}
+
+	/** 26.2: the HUD is hidden through Minecraft.gui.hud, which only toggles */
+	private static void setHudHidden(net.minecraft.client.Minecraft mc, boolean hidden)
+	{
+		if(mc.gui.hud.isHidden() != hidden)
+			mc.gui.hud.toggle();
 	}
 }
