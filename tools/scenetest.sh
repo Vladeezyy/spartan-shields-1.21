@@ -5,7 +5,7 @@
 . "$(dirname "$0")/common.sh"
 LOG=build-scene-$LOADER.log
 rm -rf "$RUN/saves/ss_scene" "$RUN"/screenshots/scene_*.png "$LOG"
-perl -e 'alarm 900; exec @ARGV' ./gradlew ":$LOADER:runScene" --console=plain "$@" > "$LOG" 2>&1
+run_watched "$LOG" 900 ":$LOADER:runScene" "$@"
 echo "exit $?"
 grep -E '\[scene\] (CHECK|DONE)' "$LOG" | sed -E 's/^.*\[scene\] //'
 ls "$RUN/screenshots/" 2>/dev/null | grep scene_

@@ -4,7 +4,7 @@
 . "$(dirname "$0")/common.sh"
 LOG=build-stress-$LOADER.log
 rm -rf "$RUN/saves/ss_stress" "$RUN"/screenshots/stress_*.png "$RUN/config/spartanshields-common.toml" "$LOG"
-perl -e 'alarm 1200; exec @ARGV' ./gradlew ":$LOADER:runStress" --console=plain "$@" > "$LOG" 2>&1
+run_watched "$LOG" 1200 ":$LOADER:runStress" "$@"
 echo "exit $?"
 grep -E '\[stress\] (CHECK|STAT|DONE)' "$LOG" | sed -E 's/^.*\[stress\] //'
 echo "--- errors"
