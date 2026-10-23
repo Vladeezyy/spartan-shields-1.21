@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:lumium_tower_shield"
+        "recipes": "spartanshields:lumium_tower_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

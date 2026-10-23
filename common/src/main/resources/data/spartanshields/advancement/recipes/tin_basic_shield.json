@@ -29,7 +29,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:tin_basic_shield"
+        "recipes": "spartanshields:tin_basic_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

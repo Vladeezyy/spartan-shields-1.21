@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:diamond_basic_shield"
+        "recipes": "spartanshields:diamond_basic_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

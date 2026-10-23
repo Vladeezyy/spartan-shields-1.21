@@ -47,7 +47,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:refined_obsidian_basic_shield"
+        "recipes": "spartanshields:refined_obsidian_basic_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

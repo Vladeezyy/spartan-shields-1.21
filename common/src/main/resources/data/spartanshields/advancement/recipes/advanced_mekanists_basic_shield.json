@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:advanced_mekanists_basic_shield"
+        "recipes": "spartanshields:advanced_mekanists_basic_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

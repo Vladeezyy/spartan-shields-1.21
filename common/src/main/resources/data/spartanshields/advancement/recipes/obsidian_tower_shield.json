@@ -37,7 +37,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:obsidian_tower_shield"
+        "recipes": "spartanshields:obsidian_tower_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

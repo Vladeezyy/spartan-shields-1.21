@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:aluminum_tower_shield"
+        "recipes": "spartanshields:aluminum_tower_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

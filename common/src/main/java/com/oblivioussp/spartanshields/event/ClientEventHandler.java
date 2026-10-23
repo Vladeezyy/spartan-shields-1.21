@@ -93,7 +93,7 @@ public class ClientEventHandler
 					//Log.debug("Shield Bash has missed!");
 				}
 				
-				player.swing(shieldHand, true);
+				player.swing(shieldHand, net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
 //				Log.debug("Shield Hand: " + shieldHand.toString());
 				NetworkHandler.sendPacketToServer(new ShieldBashPacket(shieldHand, entId, attackEntity));
 			}

@@ -44,7 +44,8 @@ public class SpartanShieldsNeoForge
 
         NeoForge.EVENT_BUS.addListener((LivingIncomingDamageEvent ev) -> CommonEventHandler.attackEvent(ev.getEntity(), ev.getSource(), ev.getAmount()));
 
-        container.registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
+        // 26.3: COMMON is LOCAL; the file keeps its name
+        container.registerConfig(ModConfig.Type.LOCAL, Config.CONFIG_SPEC, ModSpartanShields.ID + "-common.toml");
     }
 
     private static void onConfig(ModConfig config)

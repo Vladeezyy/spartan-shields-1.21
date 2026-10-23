@@ -382,13 +382,13 @@ public final class DevScene
 	private static void zombieAttacks(ServerPlayer player)
 	{
 		Zombie zombie = (Zombie)player.level().getEntity(zombieId);
-		zombie.setInvulnerable(false);
+		zombie.setPermanentlyInvulnerable(false);
 		zombie.setHealth(zombie.getMaxHealth());
 		zombieHealthBeforeSpikes = zombie.getHealth();
 		check("player blocks with the enchanted shield", player.isBlocking() && player.getUseItem() == enchantTestShield, player.getUseItem());
 		for(int i = 0; i < 6; i++)
 		{
-			player.invulnerableTime = 0;
+			player.setInvulnerableTime(0);
 			player.hurt(player.damageSources().mobAttack(zombie), 4.0F);
 		}
 	}

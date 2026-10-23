@@ -102,7 +102,7 @@ public record ShieldBashPacket(InteractionHand hand, int entityId, boolean attac
 	
 	protected static boolean bashEntity(Entity targetEntity, Player player, ItemStack shieldStack, int knockbackLevel, InteractionHand hand)
 	{
-		targetEntity.invulnerableTime = 0;
+		targetEntity.setInvulnerableTime(0);
 		// 26.2: knockback takes the damage source and damage (for NeoForge's knockback event); the bash's own hit follows
 		((LivingEntity)targetEntity).knockback(1.0f + (knockbackLevel), (double)Mth.sin(player.getYRot() * 0.017453292F), (double)(-Mth.cos(player.getYRot() * 0.017453292F)),
 				player.damageSources().playerAttack(player), 0.0F);

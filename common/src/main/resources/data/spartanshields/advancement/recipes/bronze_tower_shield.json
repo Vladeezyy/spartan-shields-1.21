@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:bronze_tower_shield"
+        "recipes": "spartanshields:bronze_tower_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

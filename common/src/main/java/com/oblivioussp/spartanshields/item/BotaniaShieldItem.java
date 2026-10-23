@@ -43,7 +43,7 @@ public class BotaniaShieldItem extends BasicShieldItem
 	
 	/** Botania 1.20.1 ToolCommons.damageItemIfPossible: each point of damage is paid with mana while there is mana. */
 	// NeoForge IItemExtension; the Botania shields only exist with Botania, which has no Fabric version for 1.21
-	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken)
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<ItemStack> onBroken)
 	{
 		if(!(entity instanceof Player player) || amount == 0)
 			return amount;

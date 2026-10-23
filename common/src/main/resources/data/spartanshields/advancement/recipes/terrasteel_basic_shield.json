@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:terrasteel_basic_shield"
+        "recipes": "spartanshields:terrasteel_basic_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

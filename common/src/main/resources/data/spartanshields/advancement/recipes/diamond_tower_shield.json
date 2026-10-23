@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:diamond_tower_shield"
+        "recipes": "spartanshields:diamond_tower_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

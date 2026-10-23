@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:constantan_tower_shield"
+        "recipes": "spartanshields:constantan_tower_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

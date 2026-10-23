@@ -47,7 +47,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:lapis_lazuli_basic_shield"
+        "recipes": "spartanshields:lapis_lazuli_basic_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

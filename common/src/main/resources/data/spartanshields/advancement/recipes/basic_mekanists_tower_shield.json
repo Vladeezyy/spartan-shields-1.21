@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "spartanshields:basic_mekanists_tower_shield"
+        "recipes": "spartanshields:basic_mekanists_tower_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
