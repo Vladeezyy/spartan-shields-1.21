@@ -1,4 +1,4 @@
-accessWidener v2 named
+accessWidener v2 official
 # The powered_off condition and the tower shield renderer of the item definitions (Fabric API has no registry for them;
 # NeoForge: RegisterConditionalItemModelPropertyEvent, RegisterSpecialModelRendererEvent)
 accessible field net/minecraft/client/renderer/item/properties/conditional/ConditionalItemModelProperties ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;

@@ -185,7 +185,7 @@ public final class DevScene
 				mc.createWorldOpenFlows().openWorld(WORLD, () -> mc.setScreen(new TitleScreen()));
 			else
 			{
-				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true, new GameRules(net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS), WorldDataConfiguration.DEFAULT);
+				LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, new LevelSettings.DifficultySettings(Difficulty.NORMAL, false, false), true, WorldDataConfiguration.DEFAULT);
 				mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, new WorldOptions(1234L, false, false), WorldPresets::createNormalWorldDimensions, new TitleScreen());
 			}
 			return;
@@ -228,8 +228,8 @@ public final class DevScene
 		server.overworld().getGameRules().set(GameRules.SPAWN_MOBS, false, server);
 		server.overworld().getGameRules().set(GameRules.ADVANCE_TIME, false, server);
 		server.overworld().getGameRules().set(GameRules.ADVANCE_WEATHER, false, server);
-		player.level().setDayTime(6000);
-		player.level().setWeatherParameters(6000, 0, false, false);
+		player.level().getServer().getCommands().performPrefixedCommand(player.level().getServer().createCommandSourceStack().withSuppressedOutput(), "time set 6000");
+		player.level().getServer().getCommands().performPrefixedCommand(player.level().getServer().createCommandSourceStack().withSuppressedOutput(), "weather clear");
 	}
 
 	/** Flat stone stage at the spawn with two rows of armor stands: basic shields in front, tower shields behind. */
@@ -405,14 +405,14 @@ public final class DevScene
 		// Banner on a tower shield
 		CraftingInput input = CraftingInput.of(2, 1, List.of(new ItemStack(ModItems.GOLDEN_TOWER_SHIELD.get()), new ItemStack(Items.RED_BANNER)));
 		Optional<RecipeHolder<net.minecraft.world.item.crafting.CraftingRecipe>> banner = recipes.getRecipeFor(RecipeType.CRAFTING, input, level);
-		ItemStack result = banner.map(r -> r.value().assemble(input, level.registryAccess())).orElse(ItemStack.EMPTY);
+		ItemStack result = banner.map(r -> r.value().assemble(input)).orElse(ItemStack.EMPTY);
 		check("banner applies to a tower shield", result.get(DataComponents.BASE_COLOR) == DyeColor.RED, banner.map(r -> r.id().toString()).orElse("no recipe"));
 		CraftingInput twice = CraftingInput.of(2, 1, List.of(result, new ItemStack(Items.BLUE_BANNER)));
 		check("no second banner", recipes.getRecipeFor(RecipeType.CRAFTING, twice, level).isEmpty(), "");
 		// Shaped shield recipe
 		ItemStack plank = new ItemStack(Items.OAK_PLANKS), stone = new ItemStack(Items.COBBLESTONE), wood = new ItemStack(ModItems.WOODEN_BASIC_SHIELD.get());
 		CraftingInput stoneShield = CraftingInput.of(3, 3, List.of(ItemStack.EMPTY, stone, ItemStack.EMPTY, stone, wood, stone, ItemStack.EMPTY, stone, ItemStack.EMPTY));
-		check("stone shield recipe", recipes.getRecipeFor(RecipeType.CRAFTING, stoneShield, level).map(r -> r.value().assemble(stoneShield, level.registryAccess()).is(ModItems.STONE_BASIC_SHIELD.get())).orElse(false), "");
+		check("stone shield recipe", recipes.getRecipeFor(RecipeType.CRAFTING, stoneShield, level).map(r -> r.value().assemble(stoneShield).is(ModItems.STONE_BASIC_SHIELD.get())).orElse(false), "");
 		// Modded material recipes are skipped while no mod adds the material
 		boolean tin = recipes.byKey(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ModSpartanShields.ID, "tin_basic_shield"))).isPresent();
 		boolean tinIngots = BuiltInRegistries.ITEM.get(com.oblivioussp.spartanshields.tags.ModItemTags.TIN_INGOT).map(t -> t.size() > 0).orElse(false);

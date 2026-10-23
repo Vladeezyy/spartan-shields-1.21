@@ -39,7 +39,7 @@ public class SpartanShieldsFabric implements ModInitializer
 		ConfigRegistry.INSTANCE.register(ModSpartanShields.ID, ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 		Config.apply();
 
-		PayloadTypeRegistry.playC2S().register(ShieldBashPacket.TYPE, ShieldBashPacket.STREAM_CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(ShieldBashPacket.TYPE, ShieldBashPacket.STREAM_CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(ShieldBashPacket.TYPE, (packet, ctx) -> ShieldBashPacket.handle(packet, ctx.player()));
 
 		// NeoForge's LivingIncomingDamageEvent: after the invulnerability checks, before the shield block

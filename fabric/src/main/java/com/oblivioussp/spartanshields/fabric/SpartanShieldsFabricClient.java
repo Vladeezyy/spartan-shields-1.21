@@ -7,8 +7,8 @@ import com.oblivioussp.spartanshields.event.ClientEventHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
@@ -22,9 +22,9 @@ public class SpartanShieldsFabricClient implements ClientModInitializer
 		// special renderer, instead of item properties, item colours and a BEWLR
 		ClientHelper.registerItemModelProperties(ConditionalItemModelProperties.ID_MAPPER::put);
 		ClientHelper.registerSpecialRenderers(SpecialModelRenderers.ID_MAPPER::put);
-		ClientHelper.registerModelLayers((layer, definition) -> EntityModelLayerRegistry.registerModelLayer(layer, definition::get));
+		ClientHelper.registerModelLayers((layer, definition) -> ModelLayerRegistry.registerModelLayer(layer, definition::get));
 		KeyMapping.Category.register(ModKeyBinds.CATEGORY.id());
-		KeyBindingHelper.registerKeyBinding(ModKeyBinds.KEY_ALT_SHIELD_BASH);
+		KeyMappingHelper.registerKeyMapping(ModKeyBinds.KEY_ALT_SHIELD_BASH);
 
 		// NeoForge: the mouse button and key input events; on Fabric before the game handles the key bindings each tick
 		ClientTickEvents.START_CLIENT_TICK.register(mc -> ClientEventHandler.checkForShieldBash());

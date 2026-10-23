@@ -45,7 +45,7 @@ public class SilverShieldItem extends BasicShieldItem implements IDamageShield
     	{
     		LivingEntity attackerLiving = (LivingEntity)attacker;
     		
-    		if(attackerLiving.getType().is(EntityTypeTags.UNDEAD))
+    		if(attackerLiving.is(EntityTypeTags.UNDEAD))
     		{
     			attackerLiving.hurt(player.damageSources().playerAttack(player), 2.0f);
     		}

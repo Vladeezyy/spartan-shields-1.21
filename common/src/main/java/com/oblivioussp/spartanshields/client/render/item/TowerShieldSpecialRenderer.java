@@ -35,14 +35,13 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 
@@ -139,15 +138,15 @@ public class TowerShieldSpecialRenderer implements SpecialModelRenderer<TowerShi
 		shield("dark_steel_riot_tower_shield", Kind.DARK_STEEL, TextureStitcher.RENDER_INFO_DARK_STEEL_TOWER_SHIELD);
 	}
 
-	private final MaterialSet materials;
+	private final SpriteGetter sprites;
 	private final ShieldBaseModel model;
 	/** The plate alone, for the banner layers (they are drawn over the whole model they are given) */
 	private final Model.Simple plate;
 	private final TowerShieldRenderInfo info;
 
-	private TowerShieldSpecialRenderer(MaterialSet materials, ShieldBaseModel model, TowerShieldRenderInfo info)
+	private TowerShieldSpecialRenderer(SpriteGetter sprites, ShieldBaseModel model, TowerShieldRenderInfo info)
 	{
-		this.materials = materials;
+		this.sprites = sprites;
 		this.model = model;
 		this.plate = new Model.Simple(model.getPlate(), RenderTypes::entitySolid);
 		this.info = info;
@@ -161,23 +160,23 @@ public class TowerShieldSpecialRenderer implements SpecialModelRenderer<TowerShi
 	}
 
 	@Override
-	public void submit(Argument argument, ItemDisplayContext context, PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay,
+	public void submit(Argument argument, PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay,
 			boolean foil, int outline)
 	{
 		boolean banner = argument != null && argument.hasBanner();
 		poseStack.pushPose();
 		poseStack.scale(1.0F, -1.0F, -1.0F);
-		Material material = info.getMaterial(banner);
-		TextureAtlasSprite sprite = materials.get(material);
+		SpriteId material = info.getMaterial(banner);
+		TextureAtlasSprite sprite = sprites.get(material);
 		RenderType renderType = model.renderType(material.atlasLocation());
 		collector.submitCustomGeometry(poseStack, renderType, (pose, consumer) -> model.renderExtraParts(at(pose), sprite.wrap(consumer), light, overlay, -1));
 		if(foil)
 			collector.submitCustomGeometry(poseStack, RenderTypes.entityGlint(), (pose, consumer) -> model.renderExtraParts(at(pose), sprite.wrap(consumer), light, overlay, -1));
+		// 26.1: the banner layers come without the plate under them (vanilla's shield draws its model first)
+		collector.submitModelPart(model.getPlate(), poseStack, renderType, light, overlay, sprite, false, foil, -1, null, outline);
 		if(banner)
-			BannerRenderer.submitPatterns(materials, poseStack, collector, light, overlay, plate, Unit.INSTANCE, material, false,
-					Objects.requireNonNullElse(argument.baseColour(), DyeColor.WHITE), argument.patterns(), foil, null, outline);
-		else
-			collector.submitModelPart(model.getPlate(), poseStack, renderType, light, overlay, sprite, false, foil, -1, null, outline);
+			BannerRenderer.submitPatterns(sprites, poseStack, collector, light, overlay, plate, Unit.INSTANCE, false,
+					Objects.requireNonNullElse(argument.baseColour(), DyeColor.WHITE), argument.patterns(), null);
 		if(info.hasLayers())
 		{
 			int colour = ARGB.colorFromFloat(1.0F, info.getColourRed(), info.getColourGreen(), info.getColourBlue());
@@ -203,7 +202,7 @@ public class TowerShieldSpecialRenderer implements SpecialModelRenderer<TowerShi
 		model.root().getExtentsForGui(poseStack, output);
 	}
 
-	public record Unbaked(Identifier shield) implements SpecialModelRenderer.Unbaked
+	public record Unbaked(Identifier shield) implements SpecialModelRenderer.Unbaked<Argument>
 	{
 		public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 				Identifier.CODEC.fieldOf("shield").forGetter(Unbaked::shield)).apply(builder, Unbaked::new));
@@ -215,7 +214,7 @@ public class TowerShieldSpecialRenderer implements SpecialModelRenderer<TowerShi
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context)
+		public TowerShieldSpecialRenderer bake(SpecialModelRenderer.BakingContext context)
 		{
 			Shield shield = SHIELDS.get(this.shield);
 			if(shield == null)
@@ -229,7 +228,7 @@ public class TowerShieldSpecialRenderer implements SpecialModelRenderer<TowerShi
 						Identifier.fromNamespaceAndPath(ModSpartanShields.ID, lights + "_lights_on.png"),
 						Identifier.fromNamespaceAndPath(ModSpartanShields.ID, lights + "_lights_off.png")}, new boolean[] {true, false}));
 			}
-			return new TowerShieldSpecialRenderer(context.materials(), model, shield.info());
+			return new TowerShieldSpecialRenderer(context.sprites(), model, shield.info());
 		}
 	}
 }

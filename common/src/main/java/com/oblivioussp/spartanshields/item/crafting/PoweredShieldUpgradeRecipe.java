@@ -1,18 +1,17 @@
 package com.oblivioussp.spartanshields.item.crafting;
 
-import com.mojang.serialization.Codec;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.oblivioussp.spartanshields.init.ModDataComponents;
-import com.oblivioussp.spartanshields.init.ModRecipes;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -25,20 +24,35 @@ import com.oblivioussp.spartanshields.platform.Platform;
  */
 public class PoweredShieldUpgradeRecipe extends ShapedRecipe
 {
+	// 26.1: the shaped recipe of Recipe.CommonInfo / CraftingBookInfo and an ItemStackTemplate result, as vanilla's
+	public static final MapCodec<PoweredShieldUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+			Recipe.CommonInfo.MAP_CODEC.forGetter(r -> r.commonInfo),
+			CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(r -> r.bookInfo),
+			ShapedRecipePattern.MAP_CODEC.forGetter(r -> r.recipePattern),
+			ItemStackTemplate.CODEC.fieldOf("result").forGetter(r -> r.recipeResult))
+			.apply(builder, PoweredShieldUpgradeRecipe::new));
+	public static final StreamCodec<RegistryFriendlyByteBuf, PoweredShieldUpgradeRecipe> STREAM_CODEC = StreamCodec.composite(
+			Recipe.CommonInfo.STREAM_CODEC, r -> r.commonInfo,
+			CraftingRecipe.CraftingBookInfo.STREAM_CODEC, r -> r.bookInfo,
+			ShapedRecipePattern.STREAM_CODEC, r -> r.recipePattern,
+			ItemStackTemplate.STREAM_CODEC, r -> r.recipeResult,
+			PoweredShieldUpgradeRecipe::new);
+	public static final RecipeSerializer<PoweredShieldUpgradeRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
 	private final ShapedRecipePattern recipePattern;
-	private final ItemStack recipeResult;
+	private final ItemStackTemplate recipeResult;
 	
-	public PoweredShieldUpgradeRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification)
+	public PoweredShieldUpgradeRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo bookInfo, ShapedRecipePattern pattern, ItemStackTemplate result)
 	{
-		super(group, category, pattern, result, showNotification);
+		super(commonInfo, bookInfo, pattern, result);
 		recipePattern = pattern;
 		recipeResult = result;
 	}
 
 	@Override
-	public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) 
+	public ItemStack assemble(CraftingInput inv) 
 	{
-		ItemStack resultStack = recipeResult.copy();
+		ItemStack resultStack = recipeResult.create();
 		int feToTransfer = 0;
 		
 		for(int i = 0; i < inv.size(); i++)
@@ -62,45 +76,11 @@ public class PoweredShieldUpgradeRecipe extends ShapedRecipe
 		return resultStack;
 	}
 
+	// ShapedRecipe#getSerializer is typed to vanilla's serializer
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public RecipeSerializer<PoweredShieldUpgradeRecipe> getSerializer() 
+	public RecipeSerializer<ShapedRecipe> getSerializer() 
 	{
-		return ModRecipes.POWERED_SHIELD_UPGRADE.get();
-	}
-
-	@Override
-	public CraftingBookCategory category() 
-	{
-		return CraftingBookCategory.EQUIPMENT;
-	}
-	
-	/** The shaped recipe format. */
-	public static class Serializer implements RecipeSerializer<PoweredShieldUpgradeRecipe>
-	{
-		private static final MapCodec<PoweredShieldUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-				Codec.STRING.optionalFieldOf("group", "").forGetter(ShapedRecipe::group),
-				CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(r -> CraftingBookCategory.MISC),
-				ShapedRecipePattern.MAP_CODEC.forGetter(r -> r.recipePattern),
-				ItemStack.STRICT_CODEC.fieldOf("result").forGetter(r -> r.recipeResult),
-				Codec.BOOL.optionalFieldOf("show_notification", true).forGetter(ShapedRecipe::showNotification))
-				.apply(builder, PoweredShieldUpgradeRecipe::new));
-		private static final StreamCodec<RegistryFriendlyByteBuf, PoweredShieldUpgradeRecipe> STREAM_CODEC = StreamCodec.composite(
-				ByteBufCodecs.STRING_UTF8, ShapedRecipe::group,
-				ShapedRecipePattern.STREAM_CODEC, r -> r.recipePattern,
-				ItemStack.STREAM_CODEC, r -> r.recipeResult,
-				ByteBufCodecs.BOOL, ShapedRecipe::showNotification,
-				(group, pattern, result, notify) -> new PoweredShieldUpgradeRecipe(group, CraftingBookCategory.MISC, pattern, result, notify));
-
-		@Override
-		public MapCodec<PoweredShieldUpgradeRecipe> codec()
-		{
-			return CODEC;
-		}
-
-		@Override
-		public StreamCodec<RegistryFriendlyByteBuf, PoweredShieldUpgradeRecipe> streamCodec()
-		{
-			return STREAM_CODEC;
-		}
+		return (RecipeSerializer)SERIALIZER;
 	}
 }

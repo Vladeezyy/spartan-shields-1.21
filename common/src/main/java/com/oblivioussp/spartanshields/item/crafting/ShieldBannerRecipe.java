@@ -2,10 +2,8 @@ package com.oblivioussp.spartanshields.item.crafting;
 
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
-import com.oblivioussp.spartanshields.init.ModRecipes;
 import com.oblivioussp.spartanshields.item.ShieldBaseItem;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -30,8 +28,14 @@ public class ShieldBannerRecipe extends CustomRecipe
 
 	public ShieldBannerRecipe(Item shield)
 	{
-		super(CraftingBookCategory.EQUIPMENT);
 		shieldItem = shield;
+	}
+
+	// 26.1: CustomRecipe has no constructor; its book category is MISC unless overridden
+	@Override
+	public CraftingBookCategory category()
+	{
+		return CraftingBookCategory.EQUIPMENT;
 	}
 	
 	@Override
@@ -85,7 +89,7 @@ public class ShieldBannerRecipe extends CustomRecipe
      * Returns an Item that is the result of this recipe
      */
 	@Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries)
+    public ItemStack assemble(CraftingInput inv)
     {
         ItemStack itemstack = ItemStack.EMPTY;
         ItemStack itemstack1 = ItemStack.EMPTY;
@@ -122,7 +126,7 @@ public class ShieldBannerRecipe extends CustomRecipe
 	@Override
 	public RecipeSerializer<ShieldBannerRecipe> getSerializer() 
 	{
-		return ModRecipes.SHIELD_BANNER.get();
+		return SERIALIZER;
 	}
 	
 	public Item getShieldItem()
@@ -130,25 +134,11 @@ public class ShieldBannerRecipe extends CustomRecipe
 		return shieldItem;
 	}
 
-	/** {"type": "spartanshields:apply_banner", "shield": "spartanshields:iron_tower_shield"} */
-	public static class Serializer implements RecipeSerializer<ShieldBannerRecipe>
-	{
-		private static final MapCodec<ShieldBannerRecipe> CODEC = BuiltInRegistries.ITEM.byNameCodec()
-				.validate(item -> item instanceof ShieldBaseItem ? DataResult.success(item) : DataResult.error(() -> "Item " + BuiltInRegistries.ITEM.getKey(item) + " is not a valid Shield!"))
-				.fieldOf("shield").xmap(ShieldBannerRecipe::new, ShieldBannerRecipe::getShieldItem);
-		private static final StreamCodec<RegistryFriendlyByteBuf, ShieldBannerRecipe> STREAM_CODEC = ByteBufCodecs.registry(net.minecraft.core.registries.Registries.ITEM)
-				.map(ShieldBannerRecipe::new, ShieldBannerRecipe::getShieldItem);
-
-		@Override
-		public MapCodec<ShieldBannerRecipe> codec()
-		{
-			return CODEC;
-		}
-
-		@Override
-		public StreamCodec<RegistryFriendlyByteBuf, ShieldBannerRecipe> streamCodec()
-		{
-			return STREAM_CODEC;
-		}
-	}
+	/** {"type": "spartanshields:apply_banner", "shield": "spartanshields:iron_tower_shield"} (26.1: a serializer is a record of its codecs) */
+	private static final MapCodec<ShieldBannerRecipe> CODEC = BuiltInRegistries.ITEM.byNameCodec()
+			.validate(item -> item instanceof ShieldBaseItem ? DataResult.success(item) : DataResult.error(() -> "Item " + BuiltInRegistries.ITEM.getKey(item) + " is not a valid Shield!"))
+			.fieldOf("shield").xmap(ShieldBannerRecipe::new, ShieldBannerRecipe::getShieldItem);
+	private static final StreamCodec<RegistryFriendlyByteBuf, ShieldBannerRecipe> STREAM_CODEC = ByteBufCodecs.registry(net.minecraft.core.registries.Registries.ITEM)
+			.map(ShieldBannerRecipe::new, ShieldBannerRecipe::getShieldItem);
+	public static final RecipeSerializer<ShieldBannerRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 }

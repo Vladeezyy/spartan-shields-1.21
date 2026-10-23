@@ -58,10 +58,11 @@ public class ShieldBaseItem extends ShieldItem
 	{
 		return prop.component(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY)
 				.equippableUnswappable(EquipmentSlot.OFFHAND)
-				.component(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks(0.25F, 1.0F,
+				// 26.1: the bypassing damage types are a HolderSet, bound with the registries (as vanilla's shield)
+				.delayedComponent(DataComponents.BLOCKS_ATTACKS, context -> new BlocksAttacks(0.25F, 1.0F,
 						List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
 						damage,
-						Optional.of(DamageTypeTags.BYPASSES_SHIELD), Optional.of(SoundEvents.SHIELD_BLOCK), Optional.of(SoundEvents.SHIELD_BREAK)))
+						Optional.of(context.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)), Optional.of(SoundEvents.SHIELD_BLOCK), Optional.of(SoundEvents.SHIELD_BREAK)))
 				.component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK);
 	}
 

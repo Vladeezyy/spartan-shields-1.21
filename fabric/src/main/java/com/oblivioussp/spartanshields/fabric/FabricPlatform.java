@@ -4,7 +4,7 @@ import com.oblivioussp.spartanshields.platform.Platform;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -45,7 +45,7 @@ public class FabricPlatform implements Platform
 	@Override
 	public CreativeModeTab.Builder creativeTabBuilder()
 	{
-		return FabricItemGroup.builder();
+		return FabricCreativeModeTab.builder();
 	}
 
 	@Override

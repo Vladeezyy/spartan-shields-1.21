@@ -3,7 +3,7 @@ package com.oblivioussp.spartanshields.client.render.item;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.resources.Identifier;
 
 public class TowerShieldRenderInfo
@@ -11,19 +11,19 @@ public class TowerShieldRenderInfo
 	protected final Identifier textureNoPattern;
 	protected final Identifier texturePattern;
 	
-	protected final Material materialNoPattern;
-	protected final Material materialPattern;
+	protected final SpriteId materialNoPattern;
+	protected final SpriteId materialPattern;
 	
 	public TowerShieldRenderInfo(Identifier texNoPattern, Identifier texPattern)
 	{
 		textureNoPattern = texNoPattern;
 		texturePattern = texPattern;
 		
-		materialNoPattern = new Material(Sheets.SHIELD_SHEET, textureNoPattern);
-		materialPattern = new Material(Sheets.SHIELD_SHEET, texturePattern);
+		materialNoPattern = new SpriteId(Sheets.SHIELD_SHEET, textureNoPattern);
+		materialPattern = new SpriteId(Sheets.SHIELD_SHEET, texturePattern);
 	}
 	
-	public Material getMaterial(boolean isPatterned)
+	public SpriteId getMaterial(boolean isPatterned)
 	{
 		return isPatterned ? materialPattern : materialNoPattern;
 	}

@@ -34,7 +34,7 @@ public final class FabricSceneHooks
 	{
 		ItemStack shield = entity.getItemBlockingWith();
 		BlocksAttacks blocks = shield == null ? null : shield.get(DataComponents.BLOCKS_ATTACKS);
-		if(blocks == null || blocks.bypassedBy().map(source::is).orElse(false))
+		if(blocks == null || blocks.bypassedBy().map(set -> set.contains(source.typeHolder())).orElse(false))
 			return false;
 		Vec3 from = source.getSourcePosition();
 		double angle = Math.PI;

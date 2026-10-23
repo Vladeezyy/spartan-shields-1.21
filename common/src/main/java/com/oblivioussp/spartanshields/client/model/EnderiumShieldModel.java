@@ -90,7 +90,7 @@ public class EnderiumShieldModel extends ShieldBaseModel
     public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn,
     		int color)
     {
-    	super.render(matrixStack, vertexBuilder, packedLightIn, packedOverlayIn, color);
+    	super.extractRenderState(matrixStack, vertexBuilder, packedLightIn, packedOverlayIn, color);
     	this.plateLeft.render(matrixStack, vertexBuilder, packedLightIn, packedOverlayIn);
     	this.plateRight.render(matrixStack, vertexBuilder, packedLightIn, packedOverlayIn);
     }*/

@@ -118,7 +118,7 @@ public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield
         {
         	// 1.20.1 started using the empty shield anyway (the use animation was NONE, so it did not block)
         	if(level.isClientSide())
-        		player.displayClientMessage(Component.translatable("message." + ModSpartanShields.ID + ".powered_shield_block_fail", stack.getHoverName()).withStyle(ChatFormatting.YELLOW), false);
+        		player.sendSystemMessage(Component.translatable("message." + ModSpartanShields.ID + ".powered_shield_block_fail", stack.getHoverName()).withStyle(ChatFormatting.YELLOW));
         	return InteractionResult.FAIL;
         }
     }
@@ -140,7 +140,7 @@ public class FEPoweredShieldItem extends ShieldBaseItem implements IDamageShield
 		if(currentEnergy == 0)
 		{
 			Level level = player.level();
-			player.playSound(SoundEvents.SHIELD_BREAK.value(), 0.8F, 0.8F + level.random.nextFloat() * 0.4F);
+			player.playSound(SoundEvents.SHIELD_BREAK.value(), 0.8F, 0.8F + level.getRandom().nextFloat() * 0.4F);
 		}
 	}
 	

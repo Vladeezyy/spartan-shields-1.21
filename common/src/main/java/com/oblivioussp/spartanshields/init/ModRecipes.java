@@ -12,6 +12,6 @@ public class ModRecipes
 {
 	public static final Registrar<RecipeSerializer<?>> REGISTER = Registrar.create(Registries.RECIPE_SERIALIZER);
 	
-	public static final Registrar.Entry<RecipeSerializer<?>, ShieldBannerRecipe.Serializer> SHIELD_BANNER = REGISTER.register("apply_banner", ShieldBannerRecipe.Serializer::new);
-	public static final Registrar.Entry<RecipeSerializer<?>, PoweredShieldUpgradeRecipe.Serializer> POWERED_SHIELD_UPGRADE = REGISTER.register("upgrade_powered_shield", PoweredShieldUpgradeRecipe.Serializer::new);
+	public static final Registrar.Entry<RecipeSerializer<?>, RecipeSerializer<ShieldBannerRecipe>> SHIELD_BANNER = REGISTER.register("apply_banner", () -> ShieldBannerRecipe.SERIALIZER);
+	public static final Registrar.Entry<RecipeSerializer<?>, RecipeSerializer<PoweredShieldUpgradeRecipe>> POWERED_SHIELD_UPGRADE = REGISTER.register("upgrade_powered_shield", () -> PoweredShieldUpgradeRecipe.SERIALIZER);
 }

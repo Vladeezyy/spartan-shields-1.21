@@ -45,7 +45,7 @@ public class ClientHelper
 		registrar.accept(PoweredOffProperty.TYPE, PoweredOffProperty.MAP_CODEC);
 	}
 
-	public static void registerSpecialRenderers(BiConsumer<Identifier, MapCodec<? extends SpecialModelRenderer.Unbaked>> registrar)
+	public static void registerSpecialRenderers(BiConsumer<Identifier, MapCodec<? extends SpecialModelRenderer.Unbaked<?>>> registrar)
 	{
 		registrar.accept(TowerShieldSpecialRenderer.TYPE, TowerShieldSpecialRenderer.Unbaked.MAP_CODEC);
 	}
