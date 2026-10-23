@@ -337,6 +337,9 @@ public final class StressScene
 		player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.IRON_TOWER_SHIELD.get()));
 		player.teleportTo(level, stage.getX() + 0.5, stage.getY(), stage.getZ() + 0.5, java.util.Set.of(), 0.0F, 10.0F, true);
 		player.setHealth(player.getMaxHealth());
+		// 26.3: the husk walks around to the side more (MeleeAttackGoal's reach), and the side hits killed the test player,
+		// which failed everything after; the check counts the hits from the front
+		player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.RESISTANCE, 700, 4, false, false));
 	}
 
 	/** A husk with its AI attacks the player, who already holds the shield up, for 30 s. */

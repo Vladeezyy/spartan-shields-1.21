@@ -288,3 +288,15 @@ NeoForge 26.2.0.93, Fabric Loader 0.19.5 + Fabric API 0.161.0, Forge Config API 
   real NeoForge 26.2.0.93 server and a dedicated Fabric server; scene and stress scene on a Fabric production client;
   compatibility runs with Sodium 0.9.2, Iris 1.11.4, Lithium 0.25.3, FerriteCore 9.0.0, Jade 26.2, JEI 30.47: Fabric with
   the Complementary shaders, NeoForge without a shader pack. No stress scene with FPS numbers (owner's call).
+
+## 26.3 (branch mc/26.3, 2026-10-23, 3.1.1.5+26.3)
+
+NeoForge 26.3.0.95, Fabric Loader 0.19.5 + Fabric API 0.165.0, Forge Config API Port 26.3.1, Java 25, Fabric Loom 1.18. Team Reborn Energy 5.0.0. Mekanism, Ender IO and Botania have no 26.3 version: their shields stay off.
+
+- **Data in the 26.3 formats** (`tools/port/convert_263.py`): the recipe advancements take `recipes`.
+- Tower shields: the glint is `RenderTypes.patternedShieldGlint()`, ordered after the banner layers as vanilla's
+  shield; `submitModelPart` and `BannerRenderer.submitPatterns` lost their crumbling argument.
+- Shield Bash: `swing(hand, SwingAnimation.DEFAULT, true)`; `ModConfig.Type.LOCAL` (was COMMON) with the old file
+  name `spartanshields-common.toml`; SDL input in the scenes.
+- Stress scene: in 26.3 the husk walks around to the side more, and its side hits killed the test player, which failed
+  every check after it; the player gets Resistance V there, as in the 60 husks test. The blocking itself is unchanged.
