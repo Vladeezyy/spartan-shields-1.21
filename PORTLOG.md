@@ -274,3 +274,17 @@ version; Ender IO has only an alpha (9.0.6), not tested here. Their shields stay
   compatibility runs with Sodium 0.9.2, Iris 1.11.4, Lithium 0.24.7, FerriteCore 9.0.0, Jade 26.1 (+ ModernFix 5.27.24
   on NeoForge): Fabric with the Complementary shaders, NeoForge without a shader pack (Iris 1.11.4's NeoForge shadow
   pass crashes on enchanted items). No stress scene with FPS numbers (owner's call).
+
+## 26.2 (branch mc/26.2, 2026-10-23, 3.1.1.5+26.2)
+
+NeoForge 26.2.0.93, Fabric Loader 0.19.5 + Fabric API 0.161.0, Forge Config API Port 26.2.1, Java 25, Fabric Loom 1.18. Team Reborn Energy 5.0.0. Mekanism, Ender IO and Botania have no 26.2 version: their shields stay off.
+
+- **Tower shield glint**: `submitModelPart` has no foil flag in 26.2; the glint is the plate again with
+  `RenderTypes.entityGlint()`, ordered over the banner layers as vanilla's shield.
+- Shield Bash knockback takes the damage source: `knockback(power, x, z, source, damage)`.
+- Coloured blocks and items are collections (`Items.BANNER.red()`); `Minecraft.gui` holds the screen and the HUD.
+- `bannerFile` instead of the deprecated `logoFile`; the scenes go on past NeoForge's load warnings screen.
+- **Verified**: client scene 22 checks on both loaders, all pass; the tower shields look as on 26.1.2; release jar on a
+  real NeoForge 26.2.0.93 server and a dedicated Fabric server; scene and stress scene on a Fabric production client;
+  compatibility runs with Sodium 0.9.2, Iris 1.11.4, Lithium 0.25.3, FerriteCore 9.0.0, Jade 26.2, JEI 30.47: Fabric with
+  the Complementary shaders, NeoForge without a shader pack. No stress scene with FPS numbers (owner's call).

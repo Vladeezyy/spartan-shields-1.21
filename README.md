@@ -2,18 +2,18 @@
 
 <img src="docs/images/logo.png" width="160" alt="Spartan Shields logo">
 
-# Spartan Shields — NeoForge & Fabric 26.1.2
+# Spartan Shields — NeoForge & Fabric 26.2
 
 **Raise your shield. Then hit them with it.**
 
-[![Minecraft 26.1.2](https://img.shields.io/badge/Minecraft-26.1.2-3c8527)](https://www.minecraft.net)
-[![NeoForge 26.1](https://img.shields.io/badge/NeoForge-26.1.2.122%2B-e0682b)](https://neoforged.net)
+[![Minecraft 26.2](https://img.shields.io/badge/Minecraft-26.2-3c8527)](https://www.minecraft.net)
+[![NeoForge 26.2](https://img.shields.io/badge/NeoForge-26.2.0.93%2B-e0682b)](https://neoforged.net)
 [![Fabric 0.19](https://img.shields.io/badge/Fabric-0.19.5%2B-dbd0b4)](https://fabricmc.net)
 [![License LGPL-3.0](https://img.shields.io/badge/license-LGPL--3.0-blue)](LICENSE)
 
 An unofficial port of **[Spartan Shields](https://www.curseforge.com/minecraft/mc-mods/spartan-shields)** 3.1.1
-by **ObliviousSpartan** from Minecraft 1.20.1 (Forge) to **NeoForge and Fabric 26.1.2**, with all of its content. This is the 26.1.2
-branch; 1.21.1 is on [`main`](../../tree/main), 1.21.11 on [`mc/1.21.11`](../../tree/mc/1.21.11).
+by **ObliviousSpartan** from Minecraft 1.20.1 (Forge) to **NeoForge and Fabric 26.2**, with all of its content. This is the 26.2
+branch; 1.21.1 is on [`main`](../../tree/main), 1.21.11 on [`mc/1.21.11`](../../tree/mc/1.21.11), 26.1.2 on [`mc/26.1.2`](../../tree/mc/26.1.2).
 
 </div>
 
@@ -68,23 +68,22 @@ The modded shields appear only when their material exists: a shield made of tin 
 Manasteel, Terrasteel and Elementium shields need **Botania**. Until then their recipe is off and the tooltip says what is
 missing. Shields of a mod that is not installed, and shields you disable in the config, are left out of the creative tab
 and JEI. Powered shields are charged like any other energy item (Mekanism, Ender IO, …) and keep their charge when
-upgraded. Mekanism and Botania have no 26.1.2 version, so on 26.1.2 their shields stay off. Ender IO has only an alpha
-for 26.1.2 (9.0.6, NeoForge): with it the Dark Steel shields turn on, but they are not tested on 26.1.2. The
+upgraded. Mekanism, Ender IO and Botania have no 26.2 version, so on 26.2 their shields stay off; the
 powered shields take the energy of other tech mods (NeoForge energy, on Fabric Team Reborn Energy).
 
 ## 📦 Installation
 
 **NeoForge**
 
-1. Install **NeoForge 26.1.2.122** or newer for Minecraft **26.1.2**.
-2. Put `spartanshields-neoforge-3.1.1.5+26.1.2.jar` from the [releases](../../releases) into `mods`.
+1. Install **NeoForge 26.2.0.93** or newer for Minecraft **26.2**.
+2. Put `spartanshields-neoforge-3.1.1.5+26.2.jar` from the [releases](../../releases) into `mods`.
 
 No other mods needed.
 
 **Fabric**
 
-1. Install **Fabric Loader 0.19.5** or newer for Minecraft **26.1.2**.
-2. Put into `mods`: `spartanshields-fabric-3.1.1.5+26.1.2.jar` from the [releases](../../releases),
+1. Install **Fabric Loader 0.19.5** or newer for Minecraft **26.2**.
+2. Put into `mods`: `spartanshields-fabric-3.1.1.5+26.2.jar` from the [releases](../../releases),
    **[Fabric API](https://modrinth.com/mod/fabric-api)** and
    **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 or newer (the settings).
 
@@ -116,15 +115,15 @@ The full list, with the reasons and what 1.21 changed, is in **[PORTLOG.md](PORT
 
 ## ✅ Tested
 
-- **Functional** (22 checks, on NeoForge 26.1.2.122 and Fabric Loader 0.19.5 with Fabric API 0.155.3): all recipes, Shield
+- **Functional** (22 checks, on NeoForge 26.2.0.93 and Fabric Loader 0.19.5 with Fabric API 0.161.0): all recipes, Shield
   Bash, the three enchantments, banners, energy, config; tower shields with banners and light layers look as on 1.21.1.
-- **Release jar** on a real NeoForge 26.1.2.122 server and a dedicated Fabric server; the scene on a Fabric production
+- **Release jar** on a real NeoForge 26.2.0.93 server and a dedicated Fabric server; the scene on a Fabric production
   client.
-- **Compatibility**: Sodium 0.9.2, Iris 1.11.4, Lithium 0.24.7, FerriteCore 9.0.0, Jade 26.1, ModernFix 5.27 (NeoForge).
+- **Compatibility**: Sodium 0.9.2, Iris 1.11.4, Lithium 0.25.3, FerriteCore 9.0.0, Jade 26.2, JEI 30.47.
   On Fabric with the Complementary shaders on; on NeoForge with the shader pack off, as Iris 1.11.4 for NeoForge crashes
   on any enchanted item in hand (vanilla's too) in its shadow pass.
-- Not on 26.1.2: Mekanism, Botania (no 26.1.2 versions), so their shields stay off; Ender IO (an alpha only), so its
-  shields are not tested. No stress scene for 26.1.2 yet.
+- Not on 26.2: Mekanism, Ender IO, Botania (no 26.2 versions), so their shields stay off; ModernFix. No stress
+  scene for 26.2 yet.
 
 ## ❤️ Credits
 
@@ -132,7 +131,7 @@ The full list, with the reasons and what 1.21 changed, is in **[PORTLOG.md](PORT
   [CurseForge](https://www.curseforge.com/minecraft/mc-mods/spartan-shields) ·
   [Modrinth](https://modrinth.com/mod/spartan-shields) ·
   [source](https://github.com/ObliviousSpartan/SpartanShields). All the content, art and ideas are theirs.
-- **Port** to NeoForge and Fabric 1.21.1, 1.21.11 and 26.1.2 — [Vladeezyy](https://github.com/Vladeezyy).
+- **Port** to NeoForge and Fabric 1.21.1, 1.21.11, 26.1.2 and 26.2 — [Vladeezyy](https://github.com/Vladeezyy).
 - Bugs of **this port**: [issues](../../issues). Please don't report port bugs to the original author.
 
 ### License
@@ -154,8 +153,8 @@ Please download the mod only from the official pages.
 **Поднимите щит. А потом ударьте им.**
 
 Неофициальный порт мода **[Spartan Shields](https://www.curseforge.com/minecraft/mc-mods/spartan-shields)** 3.1.1
-от **ObliviousSpartan** с Minecraft 1.20.1 (Forge) на **NeoForge и Fabric 26.1.2** — со всем содержимым. Это ветка 26.1.2; 1.21.1 — в
-[`main`](../../tree/main), 1.21.11 — в [`mc/1.21.11`](../../tree/mc/1.21.11).
+от **ObliviousSpartan** с Minecraft 1.20.1 (Forge) на **NeoForge и Fabric 26.2** — со всем содержимым. Это ветка 26.2; 1.21.1 — в
+[`main`](../../tree/main), 1.21.11 — в [`mc/1.21.11`](../../tree/mc/1.21.11), 26.1.2 — в [`mc/26.1.2`](../../tree/mc/26.1.2).
 
 <details>
 <summary><b>🛡️ О моде</b></summary>
@@ -201,9 +200,8 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 щитам механика — **Mekanism**, щитам спецназа из тёмной стали — **Ender IO**, щитам из манастали, террастали и
 элементиума — **Botania**. До этого их рецепт выключен, а в подсказке написано, чего не хватает. Энергетические щиты
 заряжаются как любой энергетический предмет (Mekanism, Ender IO, …) и сохраняют заряд при улучшении. Щиты
-неустановленных модов и щиты, отключённые в конфиге, не показываются в творческой вкладке и в JEI. У Mekanism и Botania
-нет версий под 26.1.2, поэтому на 26.1.2 их щиты выключены. У Ender IO под 26.1.2 только альфа (9.0.6, NeoForge): с ней
-щиты из тёмной стали включаются, но на 26.1.2 не проверены. Щиты с питанием заряжаются от других технических модов
+неустановленных модов и щиты, отключённые в конфиге, не показываются в творческой вкладке и в JEI. У Mekanism, Ender IO и Botania
+нет версий под 26.2, поэтому на 26.2 их щиты выключены; щиты с питанием заряжаются от других технических модов
 (энергия NeoForge, на Fabric — Team Reborn Energy).
 
 </details>
@@ -213,15 +211,15 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 
 **NeoForge**
 
-1. Установите **NeoForge 26.1.2.122** или новее для Minecraft **26.1.2**.
-2. Положите `spartanshields-neoforge-3.1.1.5+26.1.2.jar` из [релизов](../../releases) в папку `mods`.
+1. Установите **NeoForge 26.2.0.93** или новее для Minecraft **26.2**.
+2. Положите `spartanshields-neoforge-3.1.1.5+26.2.jar` из [релизов](../../releases) в папку `mods`.
 
 Других модов не нужно.
 
 **Fabric**
 
-1. Установите **Fabric Loader 0.19.5** или новее для Minecraft **26.1.2**.
-2. Положите в `mods`: `spartanshields-fabric-3.1.1.5+26.1.2.jar` из [релизов](../../releases),
+1. Установите **Fabric Loader 0.19.5** или новее для Minecraft **26.2**.
+2. Положите в `mods`: `spartanshields-fabric-3.1.1.5+26.2.jar` из [релизов](../../releases),
    **[Fabric API](https://modrinth.com/mod/fabric-api)** и
    **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 или новее (настройки).
 
@@ -259,14 +257,14 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 <details>
 <summary><b>✅ Проверено</b></summary>
 
-- **Функционально** (22 проверки, на NeoForge 26.1.2.122 и Fabric Loader 0.19.5 с Fabric API 0.155.3): все рецепты, удар
+- **Функционально** (22 проверки, на NeoForge 26.2.0.93 и Fabric Loader 0.19.5 с Fabric API 0.161.0): все рецепты, удар
   щитом, три зачарования, баннеры, энергия, конфиг; башенные щиты, баннеры и световые слои выглядят как на 1.21.1.
-- **Release jar** на настоящем сервере NeoForge 26.1.2.122 и выделенном сервере Fabric; сцена на production-клиенте Fabric.
-- **Совместимость**: Sodium 0.9.2, Iris 1.11.4, Lithium 0.24.7, FerriteCore 9.0.0, Jade 26.1, ModernFix 5.27 (NeoForge).
+- **Release jar** на настоящем сервере NeoForge 26.2.0.93 и выделенном сервере Fabric; сцена на production-клиенте Fabric.
+- **Совместимость**: Sodium 0.9.2, Iris 1.11.4, Lithium 0.25.3, FerriteCore 9.0.0, Jade 26.2, JEI 30.47.
   На Fabric — с шейдерами Complementary; на NeoForge — без шейдерпака: Iris 1.11.4 для NeoForge падает в своём проходе
   теней на любом зачарованном предмете в руке (и ванильном тоже).
-- Нет на 26.1.2: Mekanism, Botania (версий под 26.1.2 нет), поэтому их щиты выключены; Ender IO (только альфа), поэтому
-  его щиты не проверены. Стресс-сцены для 26.1.2 пока не было.
+- Нет на 26.2: Mekanism, Ender IO, Botania (версий под 26.2 нет), поэтому их щиты выключены; ModernFix. Стресс-сцены
+  для 26.2 пока не было.
 
 </details>
 
@@ -277,7 +275,7 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
   [CurseForge](https://www.curseforge.com/minecraft/mc-mods/spartan-shields) ·
   [Modrinth](https://modrinth.com/mod/spartan-shields) ·
   [исходники](https://github.com/ObliviousSpartan/SpartanShields). Всё содержимое, графика и идеи принадлежат им.
-- **Порт** на NeoForge и Fabric 1.21.1, 1.21.11 и 26.1.2 — [Vladeezyy](https://github.com/Vladeezyy).
+- **Порт** на NeoForge и Fabric 1.21.1, 1.21.11, 26.1.2 и 26.2 — [Vladeezyy](https://github.com/Vladeezyy).
 - Ошибки **этого порта**: [issues](../../issues). Пожалуйста, не сообщайте об ошибках порта автору оригинала.
 
 **Лицензия.** Порт выходит под **GNU LGPL 3.0 only** ([LICENSE](LICENSE), и GPL 3.0, на которую она ссылается,
