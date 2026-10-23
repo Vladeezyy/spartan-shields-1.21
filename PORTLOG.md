@@ -300,3 +300,7 @@ NeoForge 26.3.0.95, Fabric Loader 0.19.5 + Fabric API 0.165.0, Forge Config API 
   name `spartanshields-common.toml`; SDL input in the scenes.
 - Stress scene: in 26.3 the husk walks around to the side more, and its side hits killed the test player, which failed
   every check after it; the player gets Resistance V there, as in the 60 husks test. The blocking itself is unchanged.
+- **Verified**: client scene 22 checks on both loaders, all pass; the tower shields look as on 26.2; release jar on a
+  real NeoForge 26.3.0.95 server and a dedicated Fabric server; scene and stress scene on a Fabric production client;
+  compatibility runs with Sodium 0.9.3 beta, Iris 1.11.7, Lithium 0.26.2, FerriteCore 9.0.0, Jade 26.3, JEI 31.16: Fabric
+  with the Complementary shaders, NeoForge without a shader pack. No stress scene with FPS numbers.
