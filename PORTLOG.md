@@ -249,3 +249,28 @@ without those mods.
   shields: c:obsidians). On a first load the named tag sets are unbound while the recipe conditions run, so their size
   is not known there (asking for it threw for a tag nobody declares). The condition now reads the tags of the reload,
   kept by a mixin into MappedRegistry#prepareTagReload (both loaders); the scene checks the obsidian shield recipes.
+
+## 26.1.2 (branch mc/26.1.2, 2026-10-23, 3.1.1.5+26.1.2)
+
+NeoForge 26.1.2.122, Fabric Loader 0.19.5 + Fabric API 0.155.3, Forge Config API Port 26.1.5, Team Reborn Energy 5.0.0,
+Java 25, Fabric Loom 1.18 (26.x has no obfuscation: no mappings, no remapped jar). Mekanism and Botania have no 26.1.2
+version; Ender IO has only an alpha (9.0.6), not tested here. Their shields stay off without those mods, as before.
+
+- **Recipes**: serializers are records of the two codecs (`new RecipeSerializer<>(MapCodec, StreamCodec)`); the banner
+  recipe is a CustomRecipe without constructor arguments, with its category as a method; the powered shield upgrade is
+  a ShapedRecipe of `Recipe.CommonInfo` / `CraftingRecipe.CraftingBookInfo` / pattern / `ItemStackTemplate`;
+  `assemble` has no registries.
+- **blocks_attacks** names the bypassing damage types as a HolderSet: the component is a delayed component that takes
+  the `minecraft:bypasses_shield` tag from the registry context.
+- **Tower shields**: `SpriteId` / `SpriteGetter` instead of Material / MaterialSet; `BannerRenderer.submitPatterns` no
+  longer draws the base, so the plate is submitted first, then the patterns. The special renderer's `submit` has no
+  ItemDisplayContext.
+- Messages: `sendSystemMessage` / `sendOverlayMessage`; `level.getRandom()`.
+- `CreativeModeTab.Output` is protected in vanilla: a compile-time access transformer for the common project.
+- Fabric API 0.155: `KeyMappingHelper`, `ModelLayerRegistry`, `FabricCreativeModeTab` (creativetab.v1),
+  `PayloadTypeRegistry.serverboundPlay()` / `clientboundPlay()`.
+- **Verified**: client scene 22 checks on both loaders, all pass; the tower shields look as on 1.21.11; release jar on a
+  real NeoForge 26.1.2.122 server and a dedicated Fabric server; scene and stress scene on a Fabric production client;
+  compatibility runs with Sodium 0.9.2, Iris 1.11.4, Lithium 0.24.7, FerriteCore 9.0.0, Jade 26.1 (+ ModernFix 5.27.24
+  on NeoForge): Fabric with the Complementary shaders, NeoForge without a shader pack (Iris 1.11.4's NeoForge shadow
+  pass crashes on enchanted items). No stress scene with FPS numbers (owner's call).

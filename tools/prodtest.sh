@@ -13,6 +13,7 @@ for dir in prodtest/*/; do
 	[ -f "$dir/run.sh" ] || continue
 	find "$dir/mods" -iname "$MOD-neoforge-*.jar" -delete 2>/dev/null
 	find "$dir/mods" -iname "SpartanShields-neoforge-*.jar" -delete 2>/dev/null
+	mkdir -p "$dir/mods"
 	cp "$JAR" "$dir/mods/"
 	echo "=== NeoForge server $(grep -o 'neoforge/[0-9.]*' "$dir/run.sh" | head -1): $(ls "$dir/mods" | tr '\n' ' ')"
 	(cd "$dir" && sh ../serve.sh)
