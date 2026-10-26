@@ -71,21 +71,18 @@ and JEI. Powered shields are charged like any other energy item (Mekanism, Ender
 upgraded. Mekanism, Ender IO and Botania have no 26.3 version, so on 26.3 their shields stay off; the
 powered shields take the energy of other tech mods (NeoForge energy, on Fabric Team Reborn Energy).
 
-## 📦 Installation
+## 📦 Requirements
 
 **NeoForge**
 
-1. Install **NeoForge 26.3.0.95** or newer for Minecraft **26.3**.
-2. Put `spartanshields-neoforge-3.1.1.5+26.3.jar` from the [releases](../../releases) into `mods`.
+- **NeoForge 26.3.0.95** or newer for Minecraft **26.3**.
 
 No other mods needed.
 
 **Fabric**
 
-1. Install **Fabric Loader 0.19.5** or newer for Minecraft **26.3**.
-2. Put into `mods`: `spartanshields-fabric-3.1.1.5+26.3.jar` from the [releases](../../releases),
-   **[Fabric API](https://modrinth.com/mod/fabric-api)** and
-   **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 or newer (the settings).
+- **Fabric Loader 0.19.5** or newer for Minecraft **26.3**.
+- **[Fabric API](https://modrinth.com/mod/fabric-api)** and **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 or newer (the settings).
 
 On Fabric the powered shields store **Team Reborn Energy** (the energy of Fabric tech mods, included in the jar).
 
@@ -207,21 +204,18 @@ Spartan Shields добавляет в Minecraft целый арсенал щит
 </details>
 
 <details>
-<summary><b>📦 Установка</b></summary>
+<summary><b>📦 Требования</b></summary>
 
 **NeoForge**
 
-1. Установите **NeoForge 26.3.0.95** или новее для Minecraft **26.3**.
-2. Положите `spartanshields-neoforge-3.1.1.5+26.3.jar` из [релизов](../../releases) в папку `mods`.
+- **NeoForge 26.3.0.95** или новее для Minecraft **26.3**.
 
 Других модов не нужно.
 
 **Fabric**
 
-1. Установите **Fabric Loader 0.19.5** или новее для Minecraft **26.3**.
-2. Положите в `mods`: `spartanshields-fabric-3.1.1.5+26.3.jar` из [релизов](../../releases),
-   **[Fabric API](https://modrinth.com/mod/fabric-api)** и
-   **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 или новее (настройки).
+- **Fabric Loader 0.19.5** или новее для Minecraft **26.3**.
+- **[Fabric API](https://modrinth.com/mod/fabric-api)** и **[Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)** 21.11.1 или новее (настройки).
 
 На Fabric щиты с питанием хранят энергию **Team Reborn Energy** (энергия технических модов Fabric, входит в jar).
 
